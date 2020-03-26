@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ "${MODE}" == "development" ]; then
+	cd web && npm run serve >/dev/null &
+	exec watchexec -e go,graphql -r -s SIGTERM "make ${GOPATH}/bin/web && exec ${GOPATH}/bin/web"
+else
+	exec ${GOPATH}/bin/web
+fi

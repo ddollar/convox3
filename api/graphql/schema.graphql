@@ -1,0 +1,67 @@
+schema {
+  query: Query
+}
+
+type Query {
+  organizations: [Organization!]!
+  organization(id: ID!): Organization!
+}
+
+type App {
+  name: String!
+  status: AppStatus!
+}
+
+enum AppStatus {
+  converging
+  creating
+  deleting
+  failed
+  rollback
+  running
+  unknown
+  updating
+}
+
+type Member {
+  access: MemberAccess!
+  user: User!
+}
+
+enum MemberAccess {
+  administrator
+  developer
+  operator
+}
+
+type Organization {
+  id: ID!
+  locked: Boolean!
+  members: [Member!]!
+  name: String!
+  rack(id: ID!): Rack!
+  racks: [Rack!]!
+}
+
+type Rack {
+  id: ID!
+  apps: [App!]!
+  name: String!
+  status: RackStatus!
+}
+
+enum RackStatus {
+  converging
+  creating
+  deleting
+  failed
+  rollback
+  running
+  unknown
+  updating
+}
+
+type User {
+  id: ID!
+  email: String!
+}

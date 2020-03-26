@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    command: bin/web
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_REGION
+      - AWS_SECRET_ACCESS_KEY
+      - RACK_KEY
+      - TABLE_PREFIX
+    health: /check
+    port: https:3000
