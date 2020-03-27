@@ -8,30 +8,13 @@
 </template>
 
 <script>
+import Organization from "@/mixins/Organization";
 import { accessible } from "@/scripts/access";
 
 export default {
-  apollo: {
-    organization: {
-      query: require("@/queries/Organization.graphql"),
-      variables() {
-        return {
-          id: this.$route.params.oid
-        };
-      },
-      skip() {
-        return !this.$route.params.oid;
-      }
-    }
-  },
-  data() {
-    return {
-      organization: {}
-    };
-  },
   methods: {
     accessible(name) {
-      if (!this.$route.params.oid) {
+      if (!this.organization.id) {
         return false;
       }
 
@@ -42,10 +25,11 @@ export default {
     route(name) {
       return {
         name: `organization/${name}`,
-        params: { oid: this.$route.params.oid }
+        params: { oid: this.organization.id }
       };
     }
   },
+  mixins: [Organization],
   props: ["icon", "to"]
 };
 </script>

@@ -15,6 +15,8 @@
   </nav>
 </template>
 
+<style lang="scss" src="@/styles/sidebar.scss"></style>
+
 <script>
 import SidebarLink from "@/components/SidebarLink.vue";
 

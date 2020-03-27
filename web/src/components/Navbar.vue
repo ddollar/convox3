@@ -2,10 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <a class="navbar-brand" href="/">
-        <img
-          src="/images/logo.png"
-          style="height:32px; margin-top:-6px; margin-bottom:-4px; margin-left: -2px;"
-        />
+        <img src="/images/logo.png" style="height:32px; margin-top:-6px; margin-bottom:-4px; margin-left: -2px;" />
       </a>
       <button
         class="navbar-toggler"
@@ -70,3 +67,9 @@
     </nav>
   </header>
 </template>
+
+<style lang="scss">
+nav.bg-dark {
+  background-color: #101921 !important;
+}
+</style>

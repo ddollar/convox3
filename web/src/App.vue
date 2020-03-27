@@ -1,23 +1,6 @@
 <template>
   <div id="app">
-    <div class="d-flex" style="min-height:100%;">
-      <Sidebar></Sidebar>
-
-      <main role="main" class="p-4 pt-4 flex-grow-1">
-        <!-- {{ range flashes }}
-				<div class="alert alert-{{.Kind}} alert-dismissible fade show" role="alert">
-					<strong>{{ .Message }}</strong>
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-			{{ end }} -->
-
-        <router-view />
-      </main>
-
-      <div class="infobar d-none flex-shrink-0" style="width: 300px;"></div>
-    </div>
+    <router-view></router-view>
   </div>
 
   <!-- <div class="modal fade" id="organization-create" tabindex="-1" role="dialog">
@@ -64,16 +47,8 @@
 @import "~bootstrap-vue";
 
 @import "@/styles/body.scss";
-@import "@/styles/nav.scss";
-@import "@/styles/sidebar.scss";
 </style>
 
 <script>
-import Sidebar from "@/components/Sidebar.vue";
-
-export default {
-  components: {
-    Sidebar
-  }
-};
+export default {};
 </script>

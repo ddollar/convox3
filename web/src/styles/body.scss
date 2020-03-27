@@ -1,3 +1,7 @@
+html {
+  overflow-y: hidden;
+}
+
 body {
   background-color: #e3e6e9;
   padding-top: 3rem;
@@ -8,15 +12,4 @@ body,
 .container-fluid,
 .container-fluid > .row {
   height: 100%;
-}
-
-html {
-  overflow-y: hidden;
-}
-
-main {
-  height: 100vh;
-  margin-top: 10px;
-  overflow-y: auto;
-  position: relative;
 }
