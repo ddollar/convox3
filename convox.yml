@@ -8,5 +8,9 @@ services:
       - AWS_SECRET_ACCESS_KEY
       - RACK_KEY
       - TABLE_PREFIX
+      - VUE_APP_GRAPHQL_HTTP
+      - VUE_APP_GRAPHQL_WS
     health: /check
     port: https:3000
+    scale:
+      memory: 1000

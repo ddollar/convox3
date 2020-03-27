@@ -28,9 +28,11 @@ func run() error {
 
 	s := stdapi.New("web", "console.convox")
 
-	if err := a.Route(s); err != nil {
-		return err
-	}
+	s.Router.HandleFunc("/graphql", a.Handler())
+
+	// if err := a.Route(s); err != nil {
+	// 	return err
+	// }
 
 	if settings.Development {
 		if err := routeWebDevelopment(s); err != nil {

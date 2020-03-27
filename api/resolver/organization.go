@@ -17,6 +17,24 @@ func (o *Organization) Id() graphql.ID {
 	return graphql.ID(o.Organization.ID)
 }
 
+func (o *Organization) Access(ctx context.Context) (string, error) {
+	uid, err := cuid(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	switch {
+	case common.SliceContains(o.Organization.Administrators, uid):
+		return "administrator", nil
+	case common.SliceContains(o.Organization.Operators, uid):
+		return "operator", nil
+	case common.SliceContains(o.Organization.Users, uid):
+		return "developer", nil
+	default:
+		return "", fmt.Errorf("no access")
+	}
+}
+
 func (o *Organization) Members(ctx context.Context) ([]*Member, error) {
 	m, err := cmodel(ctx)
 	if err != nil {

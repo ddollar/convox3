@@ -1,0 +1,6 @@
+projects:
+  web:
+   includes: ["web/src/queries/*.graphql"]
+   extensions:
+     endpoints:
+       default: https://web.console3.dev.convox/graphql

@@ -29,12 +29,13 @@ type Member {
 }
 
 enum MemberAccess {
-  administrator
   developer
   operator
+  administrator
 }
 
 type Organization {
+  access: MemberAccess!
   id: ID!
   locked: Boolean!
   members: [Member!]!
