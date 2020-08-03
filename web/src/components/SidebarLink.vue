@@ -20,6 +20,7 @@ export default {
 
       const { role } = this.$router.resolve(this.route(name)).route.meta;
 
+      console.log(name, role, this.organization.access);
       return accessible(role, this.organization.access);
     },
     route(name) {

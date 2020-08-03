@@ -8,15 +8,17 @@
         class="dropdown-item text-light bg-dark"
         v-for="organization in organizations"
         :to="{
-          name: 'organization/dashboard',
+          name: 'organization/racks',
           params: { oid: organization.id }
         }"
         :key="organization.id"
-      >
-        {{ organization.name }}
-      </router-link>
+      >{{ organization.name }}</router-link>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item text-light bg-dark" data-toggle="modal" data-target="#organization-create">
+      <a
+        class="dropdown-item text-light bg-dark"
+        data-toggle="modal"
+        data-target="#organization-create"
+      >
         <i class="fa fa-plus-circle pr-1" aria-hidden="true"></i>
         Create Organization
       </a>

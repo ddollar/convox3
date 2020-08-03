@@ -3,9 +3,11 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
+
+	"github.com/convox/console/api/resolver"
 )
 
 type Handler struct {
@@ -24,12 +26,13 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) context(r *http.Request) context.Context {
-	fmt.Printf("r.Header: %+v\n", r.Header)
-
 	ctx := r.Context()
 
-	ctx = context.WithValue(ctx, "model", h.api.model)
-	ctx = context.WithValue(ctx, "uid", "f8abd4df-f8b4-4cb9-9514-6395e7907f2b")
+	ctx = context.WithValue(ctx, resolver.ContextModel, h.api.model)
+
+	if parts := strings.Fields(r.Header.Get("Authorization")); len(parts) == 2 && parts[0] == "Bearer" {
+		ctx = context.WithValue(ctx, resolver.ContextToken, parts[1])
+	}
 
 	return ctx
 }
@@ -37,9 +40,9 @@ func (h *Handler) context(r *http.Request) context.Context {
 func (h *Handler) query(w http.ResponseWriter, r *http.Request, q Query) error {
 	res := h.api.schema.Exec(h.context(r), q.Query, "", q.Variables)
 
-	if len(res.Errors) > 0 {
-		w.WriteHeader(403)
-	}
+	// if len(res.Errors) > 0 {
+	// 	w.WriteHeader(403)
+	// }
 
 	data, err := json.Marshal(res)
 	if err != nil {

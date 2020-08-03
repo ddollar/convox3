@@ -38,6 +38,12 @@
               Documentation
             </a>
           </li>
+          <li class="nav-item pr-4" v-show="authenticated">
+            <a class="nav-link" href="/logout" @click="logout">
+              <i class="fa fa-sign-out mr-1" aria-hidden="true"></i>
+              Logout
+            </a>
+          </li>
           <!-- {{ if authenticated }}
 					{{ if forums }}
 						<li class="nav-item pr-4">
@@ -53,14 +59,6 @@
 							Account
 						</a>
 					</li>
-					{{ if allow_logout }}
-						<li class="nav-item pr-4">
-							<a class="nav-link" href="/logout">
-								<i class="fa fa-sign-out mr-1" aria-hidden="true"></i>
-								Logout
-							</a>
-						</li>
-					{{ end }}
 				{{ end }} -->
         </ul>
       </div>
@@ -73,3 +71,11 @@ nav.bg-dark {
   background-color: #101921 !important;
 }
 </style>
+
+<script>
+import Authentication from "@/mixins/Authentication";
+
+export default {
+  mixins: [Authentication],
+};
+</script>

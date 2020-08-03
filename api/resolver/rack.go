@@ -46,6 +46,16 @@ func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 	return ras, nil
 }
 
+func (r *Rack) Runtime() *graphql.ID {
+	if r.Rack.Runtime == "" {
+		return nil
+	}
+
+	id := graphql.ID(r.Rack.Runtime)
+
+	return &id
+}
+
 func (r *Rack) Status(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()

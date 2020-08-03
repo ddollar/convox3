@@ -2,54 +2,81 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/convox/console/pkg/common"
 	"github.com/graph-gophers/graphql-go"
 )
 
 type Root struct {
 }
 
+type LoginArgs struct {
+	Email    string
+	Password string
+}
+
+func (r *Root) Login(ctx context.Context, args LoginArgs) (*Authentication, error) {
+	mu, err := cmodel(ctx).UserAuthenticatePassword(args.Email, args.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	u := User{
+		id:    mu.ID,
+		email: mu.Email,
+	}
+
+	a := &Authentication{
+		user: u,
+	}
+
+	return a, nil
+}
+
+type SignupArgs struct {
+	Email    string
+	Password string
+}
+
+// func (r *Root) Signup(ctx context.Context, args SignupArgs) (*Authentication, error) {
+// 	mu, err := cmodel(ctx).UserCreate(args.Email, args.Password)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	u := User{
+// 		id:    mu.Id,
+// 		email: mu.Email,
+// 	}
+
+// 	a := &Authentication{
+// 		user: u,
+// 	}
+
+// 	return a, nil
+// }
+
 type OrganizationArgs struct {
 	Id graphql.ID
 }
 
 func (r *Root) Organization(ctx context.Context, args OrganizationArgs) (*Organization, error) {
-	m, err := cmodel(ctx)
+	o, err := corg(ctx, string(args.Id))
 	if err != nil {
 		return nil, err
 	}
 
-	o, err := m.OrganizationGet(string(args.Id))
-	if err != nil {
-		return nil, err
-	}
+	ro := &Organization{*o}
 
-	uid, err := cuid(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if !common.SliceContains(o.Users, uid) {
-		return nil, fmt.Errorf("invalid user")
-	}
-
-	return &Organization{*o}, nil
+	return ro, nil
 }
 
 func (r *Root) Organizations(ctx context.Context) ([]*Organization, error) {
-	m, err := cmodel(ctx)
+	u, err := cuser(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	uid, err := cuid(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	os, err := m.UserOrganizations(uid)
+	os, err := cmodel(ctx).UserOrganizations(u.id)
 	if err != nil {
 		return nil, err
 	}
@@ -61,4 +88,8 @@ func (r *Root) Organizations(ctx context.Context) ([]*Organization, error) {
 	}
 
 	return ros, nil
+}
+
+type RacksArgs struct {
+	Oid graphql.ID
 }

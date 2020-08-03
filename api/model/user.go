@@ -2,8 +2,11 @@ package model
 
 import (
 	"sort"
+	"strings"
 
+	"github.com/convox/console/pkg/storage"
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -11,9 +14,34 @@ type User struct {
 
 	Email           string   `dynamo:"email"`
 	OrganizationIDs []string `dynamo:"organization-ids"`
+
+	passwordHash string `dynamo:"password_hash" json:"-"`
 }
 
 type Users []User
+
+func (m *Model) UserAuthenticatePassword(email, password string) (*User, error) {
+	var us Users
+
+	if err := m.storage.GetIndex("users", "email-index", map[string]string{"email": email}, &us); err != nil {
+		return nil, errors.WithStack(err)
+	}
+	if len(us) < 1 {
+		return nil, storage.NotFound("invalid authentication")
+	}
+
+	u := us[0]
+
+	if strings.TrimSpace(u.passwordHash) == "" {
+		return nil, storage.NotFound("invalid authentication")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(u.passwordHash), []byte(password)); err != nil {
+		return nil, storage.NotFound("invalid authentication")
+	}
+
+	return &u, nil
+}
 
 func (m *Model) UserGet(id string) (*User, error) {
 	u := &User{}

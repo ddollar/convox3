@@ -1,10 +1,22 @@
 schema {
+  mutation: Mutation
   query: Query
 }
 
+type Mutation {
+  login(email: String!, password: String!): Authentication
+  # signup(email: String!, password: String!): Authentication
+}
+
 type Query {
-  organizations: [Organization!]!
   organization(id: ID!): Organization!
+  organizations: [Organization!]!
+}
+
+enum Access {
+  developer
+  operator
+  administrator
 }
 
 type App {
@@ -23,20 +35,30 @@ enum AppStatus {
   updating
 }
 
-type Member {
-  access: MemberAccess!
+type Authentication {
+  token: String!
   user: User!
 }
 
-enum MemberAccess {
-  developer
-  operator
-  administrator
+type Member {
+  access: Access!
+  user: User!
+}
+
+type Integration {
+  id: ID!
+  provider: String!
+  title: String!
+}
+
+enum IntegrationKind {
+  runtime
 }
 
 type Organization {
-  access: MemberAccess!
+  access: Access!
   id: ID!
+  integrations(kind: IntegrationKind!): [Integration!]!
   locked: Boolean!
   members: [Member!]!
   name: String!
@@ -48,6 +70,7 @@ type Rack {
   id: ID!
   apps: [App!]!
   name: String!
+  runtime: ID
   status: RackStatus!
 }
 

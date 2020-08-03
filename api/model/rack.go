@@ -11,8 +11,8 @@ type Rack struct {
 
 	Creator      string `dynamo:"creator"`
 	Install      string `dynamo:"install-id"`
-	Integration  string `dynamo:"integration-id"`
 	Organization string `dynamo:"organization-id"`
+	Runtime      string `dynamo:"integration-id"`
 	Uninstall    string `dynamo:"uninstall-id"`
 
 	Created          time.Time         `dynamo:"created"`

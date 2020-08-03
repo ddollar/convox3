@@ -36,6 +36,16 @@ func (m *Model) OrganizationGet(id string) (*Organization, error) {
 	return o, nil
 }
 
+func (m *Model) OrganizationIntegrations(oid string) (Integrations, error) {
+	var is Integrations
+
+	if err := m.storage.GetIndex("integrations", "organization-id-index", map[string]string{"organization-id": oid}, &is); err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return is, nil
+}
+
 func (m *Model) OrganizationRacks(oid string) (Racks, error) {
 	var rs Racks
 

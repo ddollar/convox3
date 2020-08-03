@@ -1,0 +1,10 @@
+query Integrations($oid: ID!, $kind: IntegrationKind!) {
+  organization(id: $oid) {
+    id
+    integrations(kind: $kind) {
+      id
+      provider
+      title
+    }
+  }
+}

@@ -2,8 +2,12 @@ query Racks($oid: ID!) {
   organization(id: $oid) {
     id
     racks {
+      apps {
+        name
+      }
       id
       name
+      runtime
     }
   }
 }

@@ -6,7 +6,7 @@ import { createApolloClient, restartWebsockets } from "vue-cli-plugin-apollo/gra
 Vue.use(VueApollo);
 
 // Name of the localStorage item
-const AUTH_TOKEN = "apollo-token";
+const AUTH_TOKEN = "token";
 
 // Http endpoint
 const httpEndpoint = process.env.VUE_APP_GRAPHQL_HTTP || "https://" + window.location.host + "/graphql";
@@ -65,12 +65,17 @@ export function createProvider(options = {}) {
     defaultClient: apolloClient,
     defaultOptions: {
       $query: {
+        errorPolicy: "all",
         // fetchPolicy: "cache-and-network"
       },
     },
     errorHandler(error) {
+      error.graphQLErrors.forEach((error) => {
+        if (error.extensions?.code == "UNAUTHENTICATED") {
+          return this.$router.push({ name: "login" });
+        }
+      });
       // eslint-disable-next-line no-console
-      console.log(JSON.stringify(error));
       console.log(
         "%cError",
         "background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;",

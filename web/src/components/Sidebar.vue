@@ -1,7 +1,6 @@
 <template>
   <nav id="sidebar" class="d-none d-md-block flex-shrink-0">
     <ul class="nav flex-column">
-      <SidebarLink icon="fa-dashboard" to="dashboard">Dashboard</SidebarLink>
       <SidebarLink icon="fa-server" to="racks">Racks</SidebarLink>
       <SidebarLink icon="fa-check-square-o" to="workflows">Workflows</SidebarLink>
       <SidebarLink icon="fa-wrench" to="jobs">Jobs</SidebarLink>

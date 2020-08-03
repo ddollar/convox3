@@ -12,5 +12,5 @@ func (m *Member) Access() string {
 }
 
 func (m *Member) User() *User {
-	return &User{m.user}
+	return &User{id: m.user.ID, email: m.user.Email}
 }
