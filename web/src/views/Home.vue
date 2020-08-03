@@ -12,7 +12,7 @@ export default {
     ).data.organizations;
     if (orgs.length > 0) {
       this.$router.push({
-        name: "organization/racks",
+        name: "organization/dashboard",
         params: { oid: orgs[0].id }
       });
     }

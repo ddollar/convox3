@@ -23,14 +23,14 @@
 						</div>
 					</div>
 				</div>
-			</div> -->
+  </div>-->
 
   <!-- <div id="nav">
 			<router-link to="/">Home</router-link> |
 			<router-link to="/about">About</router-link> |
 			<router-link to="/test">Test</router-link>
 		</div>
-		<router-view /> -->
+  <router-view />-->
   <!-- </div> -->
 </template>
 
@@ -42,11 +42,19 @@
 //   text-align: center;
 //   color: #2c3e50;
 // }
+@import "@/styles/bootstrap.scss";
 
 @import "~bootstrap";
 @import "~bootstrap-vue";
 
 @import "@/styles/body.scss";
+
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+@import "~@fortawesome/fontawesome-free/scss/v4-shims";
 </style>
 
 <script>

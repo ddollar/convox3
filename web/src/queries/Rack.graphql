@@ -1,0 +1,8 @@
+query Rack($oid: ID!, $id: ID!) {
+  organization(id: $oid) {
+    id
+    rack(id: $id) {
+      name
+    }
+  }
+}

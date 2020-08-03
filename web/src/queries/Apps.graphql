@@ -1,0 +1,11 @@
+query Apps($oid: ID!, $rid: ID!) {
+  organization(id: $oid) {
+    id
+    rack(id: $rid) {
+      id
+      apps {
+        name
+      }
+    }
+  }
+}

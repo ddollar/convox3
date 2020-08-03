@@ -68,6 +68,42 @@ const routes = [
         component: Racks
       },
       {
+        path: "racks/:rid",
+        name: "organization/rack",
+        component: Racks,
+        children: [
+          {
+            path: "apps",
+            name: "organization/rack/apps",
+            component: Racks,
+            meta: { expand: true }
+          },
+          {
+            path: "instances",
+            name: "organization/rack/instances",
+            component: Racks,
+            meta: { expand: true }
+          },
+          {
+            path: "resources",
+            name: "organization/rack/resources",
+            component: Racks,
+            meta: { expand: true }
+          },
+          {
+            path: "settings",
+            name: "organization/rack/settings",
+            component: Racks
+          },
+          {
+            path: "updates",
+            name: "organization/rack/updates",
+            component: Racks,
+            meta: { expand: true }
+          }
+        ]
+      },
+      {
         path: "settings",
         name: "organization/settings",
         component: Dashboard,
@@ -110,6 +146,10 @@ const apollo = createProvider().defaultClient;
 
 router.beforeEach(async (to, from, next) => {
   const { role } = to.meta;
+
+  if (!to.params.oid) {
+    next();
+  }
 
   const { organization } = (
     await apollo.query({
