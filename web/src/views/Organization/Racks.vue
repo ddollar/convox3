@@ -17,17 +17,18 @@
           <div class="dropdown-menu">
             <a class="dropdown-item" @click="filter(null)" href="#">All Racks</a>
 
-            <div class="dropdown-divider"></div>
-
-            <a
-              v-for="integration in integrations"
-              :key="integration.id"
-              class="dropdown-item"
-              @click="filter(integration)"
-              href="#"
-            >
-              <Provider :kind="integration.provider" :text="integration.title" />
-            </a>
+            <div v-if="integrations.length > 0">
+              <div class="dropdown-divider"></div>
+              <a
+                v-for="integration in integrations"
+                :key="integration.id"
+                class="dropdown-item"
+                @click="filter(integration)"
+                href="#"
+              >
+                <Provider :kind="integration.provider" :text="integration.title" />
+              </a>
+            </div>
           </div>
         </span>
       </div>
@@ -38,16 +39,17 @@
             Install
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a
-              v-for="integration in integrations"
-              :key="integration.id"
-              class="dropdown-item"
-              href="#"
-            >
-              <!-- data-toggle="modal.lazy"
-              data-target="#runtime-1df0909d-f5bb-4eba-8df7-6e72655086b3"-->
-              <Provider :kind="integration.provider" :text="integration.title" />
-            </a>
+            <div v-if="integrations.length == 0" class="dropdown-item">No Runtime Integrations</div>
+            <div v-else>
+              <a
+                v-for="integration in integrations"
+                :key="integration.id"
+                class="dropdown-item"
+                href="#"
+              >
+                <Provider :kind="integration.provider" :text="integration.title" />
+              </a>
+            </div>
           </div>
 
           <a
@@ -69,28 +71,6 @@
     </div>
     <Rack v-else v-for="rack in filteredRacks" :key="rack.id" :rack="rack" />
   </div>
-  <!-- <div class="row">
-    <div class="col-12 col-xxl-8 offset-xxl-2">
-      <div id="racks" class="card">
-        <ul class="list-group list-group-flush">
-          <div v-for="rack in racks" :key="rack.id">
-            <li class="list-group-item rack" @click="toggle(rack.id)">
-              <div class="flex-grow-1">
-                <h5 class="mb-0 text-dark">
-                  <i class="fas fa-check-square text-success mr-3"></i>
-                  <span style="font-weight:650;letter-spacing:0.01em;">{{ rack.name }}</span>
-                </h5>
-              </div>
-              <button class="btn btn-primary btn-sm ml-2" v-if="!expanded(rack.id)" @click.stop="settings(rack.id)">
-                <i class="fa fa-cog"></i>
-              </button>
-            </li>
-            <Rack v-if="expanded(rack.id)" :id="rack.id" :oid="organization.id" />
-          </div>
-        </ul>
-      </div>
-    </div>
-  </div>-->
 </template>
 
 <style lang="scss" src="@/styles/rack.scss"></style>
