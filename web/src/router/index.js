@@ -167,8 +167,6 @@ router.beforeEach(async (to, from, next) => {
   if (to.meta.public) {
     return next();
   }
-  console.log("store.getters.token", store.getters.token);
-
   try {
     if (!to.params.oid) {
       return next({ name: "login" });
