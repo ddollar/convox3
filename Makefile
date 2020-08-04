@@ -1,6 +1,7 @@
-.PHONY: all build clean clean-package compress mocks package release test
+.PHONY: all build clean clean-package compress dist mocks package release test
 
 commands = web
+dist = $(wildcard web/dist/*)
 webpack  = public/assets.js
 
 assets   = $(wildcard assets/*)
@@ -21,6 +22,9 @@ clean-package:
 compress: $(binaries)
 	upx-ucl -1 $^
 
+dist:
+	cd web && npm run build
+
 mocks:
 	# make -C models mocks
 	# make -C pkg/storage mocks
@@ -39,7 +43,4 @@ test:
 $(binaries): $(GOPATH)/bin/%: $(sources)
 	go install -mod=vendor --ldflags="-s -w" ./cmd/$*
 
-# $(GOPATH)/bin/web: $(webpack)
-
-$(webpack): $(assets)
-	node webpack/node_modules/webpack/bin/webpack.js --config webpack/webpack.config.js --mode $(MODE)
+$(GOPATH)/bin/web: dist

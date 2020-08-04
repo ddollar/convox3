@@ -15,6 +15,7 @@ require (
 	github.com/digitalocean/godo v1.42.0
 	github.com/fsouza/go-dockerclient v1.6.3 // indirect
 	github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.2
+	github.com/gobuffalo/packr v1.30.1
 	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.5 // indirect

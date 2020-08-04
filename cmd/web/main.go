@@ -11,6 +11,7 @@ import (
 	"github.com/convox/console/pkg/settings"
 	"github.com/convox/console/pkg/storage"
 	"github.com/convox/stdapi"
+	"github.com/gobuffalo/packr"
 )
 
 func main() {
@@ -35,7 +36,11 @@ func run() error {
 	// }
 
 	if settings.Development {
-		if err := routeWebDevelopment(s); err != nil {
+		if err := routeAssetsDevelopment(s); err != nil {
+			return err
+		}
+	} else {
+		if err := routeAssetsProduction(s); err != nil {
 			return err
 		}
 	}
@@ -47,7 +52,7 @@ func run() error {
 	return nil
 }
 
-func routeWebDevelopment(s *stdapi.Server) error {
+func routeAssetsDevelopment(s *stdapi.Server) error {
 	u, err := url.Parse("http://localhost:3001")
 	if err != nil {
 		return err
@@ -56,6 +61,27 @@ func routeWebDevelopment(s *stdapi.Server) error {
 	rp := httputil.NewSingleHostReverseProxy(u)
 
 	s.Router.Handle("/{path:.*}", rp)
+
+	return nil
+}
+
+func routeAssetsProduction(s *stdapi.Server) error {
+	assets := packr.NewBox("../../web/dist")
+
+	s.Router.Route("GET", "/", func(c *stdapi.Context) error {
+		data, err := assets.Find("index.html")
+		if err != nil {
+			return stdapi.Errorf(404, "index not found")
+		}
+
+		if _, err := c.Response().Write(data); err != nil {
+			return err
+		}
+
+		return nil
+	})
+
+	s.Router.Static("", assets)
 
 	return nil
 }
