@@ -1,18 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Home from "@/views/Home.vue";
-import Test from "@/views/Test.vue";
-
-import Public from "@/views/Public.vue";
-import Login from "@/views/Public/Login.vue";
-
-import Organization from "@/views/Organization.vue";
 import Blank from "@/views/Organization/Blank.vue";
-import Integrations from "@/views/Organization/Integrations.vue";
-import Rack from "@/views/Organization/Rack.vue";
-import Racks from "@/views/Organization/Racks.vue";
-import Users from "@/views/Organization/Users.vue";
 
 Vue.use(VueRouter);
 
@@ -20,39 +9,25 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home,
+    component: () => import(/* webpackChunkName: "home" */ "@/views/Home.vue"),
     meta: { public: true },
   },
   {
     path: "/",
-    component: Public,
+    component: () => import(/* webpackChunkName: "public" */ "@/views/Public.vue"),
     children: [
       {
         path: "/login",
         name: "login",
-        component: Login,
+        component: () => import(/* webpackChunkName: "public/login" */ "@/views/Public/Login.vue"),
         meta: { public: true },
       },
     ],
   },
-  // {
-  //   path: "/about",
-  //   name: "About",
-  //   // route level code-splitting
-  //   // this generates a separate chunk (about.[hash].js) for this route
-  //   // which is lazy-loaded when the route is visited.
-  //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/About.vue")
-  // },
-  {
-    path: "/test",
-    name: "Test",
-    component: Test,
-  },
   {
     path: "/organizations/:oid",
     name: "organization",
-    component: Organization,
+    component: () => import(/* webpackChunkName: "organization" */ "@/views/Organization.vue"),
     children: [
       {
         path: "audits",
@@ -69,7 +44,7 @@ const routes = [
       {
         path: "integrations",
         name: "organization/integrations",
-        component: Integrations,
+        component: () => import(/* webpackChunkName: "organization/integrations" */ "@/views/Organization/Integrations.vue"),
         meta: { role: "operator" },
       },
       {
@@ -81,13 +56,14 @@ const routes = [
       {
         path: "racks",
         name: "organization/racks",
-        component: Racks,
+        component: () => import(/* webpackChunkName: "organization/racks" */ "@/views/Organization/Racks.vue"),
         meta: { role: "developer" },
       },
       {
         path: "racks/:rid",
         name: "organization/rack",
-        component: Rack,
+        component: () => import(/* webpackChunkName: "organization/rack" */ "@/views/Organization/Rack.vue"),
+        meta: { role: "developer" },
         children: [
           {
             path: "apps",
@@ -136,7 +112,7 @@ const routes = [
       {
         path: "users",
         name: "organization/users",
-        component: Users,
+        component: () => import(/* webpackChunkName: "organization/users" */ "@/views/Organization/Users.vue"),
         meta: { role: "administrator" },
       },
       {

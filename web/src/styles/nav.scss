@@ -1,0 +1,28 @@
+.nav-pills {
+  background-color: $light;
+  border-radius: 4px;
+
+  .nav-link {
+    border-radius: 0;
+    border: 1px #ddd solid;
+    border-right: 0;
+    color: $dark;
+    padding-left: 24px;
+    padding-right: 24px;
+
+    &:hover:not(.active) {
+      background-color: #f2f2f2;
+    }
+
+    &:first-child {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      border-right: 1px #ddd solid;
+    }
+  }
+}

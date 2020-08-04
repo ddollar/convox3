@@ -87,13 +87,14 @@ export default {
   },
   computed: {
     filteredRacks() {
-      return this.racks?.filter((rack) => {
+      return (this.racks || []).filter((rack) => {
         return this.runtime === null ? true : rack.runtime == this.runtime.id;
       });
     },
   },
   data: function() {
     return {
+      integrations: [],
       runtime: null,
     };
   },

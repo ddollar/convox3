@@ -49,6 +49,8 @@
 
 @import "@/styles/body.scss";
 @import "@/styles/card.scss";
+@import "@/styles/clickable.scss";
+@import "@/styles/nav.scss";
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";

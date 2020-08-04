@@ -4,11 +4,3 @@ li.rack {
   display: flex;
   height: 60px;
 }
-
-.rack {
-  cursor: pointer;
-
-  &:hover {
-    filter: brightness(97%);
-  }
-}

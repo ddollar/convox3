@@ -55,6 +55,10 @@ func (m *Model) OrganizationRacks(oid string) (Racks, error) {
 
 	sort.Slice(rs, rs.Less)
 
+	// if len(rs) > 0 {
+	// 	rs = append(rs, rs[0], rs[0], rs[0], rs[0], rs[0])
+	// }
+
 	return rs, nil
 }
 

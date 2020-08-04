@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 col-xl-6 col-xxl-4 rack">
+  <div class="col-12 col-xl-6 col-xxl-4 rack clickable" @click="goto()">
     <div class="card mb-4 border-bottom-0">
       <div class="card-header d-flex">
         <div class="flex-grow-1">{{ rack.name }}</div>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import Organization from "@/mixins/Organization";
+
 const prettyBytes = require("pretty-bytes");
 
 export default {
@@ -55,7 +57,14 @@ export default {
     capacity_bytes(num) {
       return prettyBytes(num * 1000000);
     },
+    goto() {
+      this.$router.push({
+        name: "organization/rack",
+        params: { oid: this.organization.id, rid: this.rack.id },
+      });
+    },
   },
+  mixins: [Organization],
   props: ["rack"],
 };
 </script>
