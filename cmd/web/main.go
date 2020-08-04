@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
@@ -11,7 +12,7 @@ import (
 	"github.com/convox/console/pkg/settings"
 	"github.com/convox/console/pkg/storage"
 	"github.com/convox/stdapi"
-	"github.com/gobuffalo/packr"
+	"github.com/gobuffalo/packr/v2"
 )
 
 func main() {
@@ -22,7 +23,7 @@ func main() {
 }
 
 func run() error {
-	a, err := api.New(model.New(storage.New("dynamo")))
+	a, err := api.New(model.New(storage.New("dynamo")), packr.New("graphql", "../../api/graphql"))
 	if err != nil {
 		return err
 	}
@@ -66,22 +67,19 @@ func routeAssetsDevelopment(s *stdapi.Server) error {
 }
 
 func routeAssetsProduction(s *stdapi.Server) error {
-	assets := packr.NewBox("../../web/dist")
-
-	s.Router.Route("GET", "/", func(c *stdapi.Context) error {
-		data, err := assets.Find("index.html")
-		if err != nil {
-			return stdapi.Errorf(404, "index not found")
-		}
-
-		if _, err := c.Response().Write(data); err != nil {
-			return err
-		}
-
-		return nil
-	})
-
-	s.Router.Static("", assets)
+	s.Router.Static("", spaFileSystem{packr.New("dist", "../../web/dist")})
 
 	return nil
+}
+
+type spaFileSystem struct {
+	http.FileSystem
+}
+
+func (fs spaFileSystem) Open(name string) (http.File, error) {
+	if file, err := fs.FileSystem.Open(name); err == nil {
+		return file, nil
+	} else {
+		return fs.FileSystem.Open("index.html")
+	}
 }

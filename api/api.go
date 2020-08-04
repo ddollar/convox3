@@ -11,6 +11,7 @@ import (
 )
 
 type Api struct {
+	box    *packr.Box
 	model  model.Interface
 	schema *graphql.Schema
 }
@@ -20,8 +21,9 @@ type Query struct {
 	Variables map[string]interface{} `json:"variables"`
 }
 
-func New(m model.Interface) (*Api, error) {
+func New(m model.Interface, box *packr.Box) (*Api, error) {
 	a := &Api{
+		box:   box,
 		model: m,
 	}
 
@@ -46,9 +48,7 @@ func (a *Api) Handler() http.HandlerFunc {
 func (a *Api) initializeGraphql() error {
 	r := resolver.New()
 
-	box := packr.New("graphql", "./graphql")
-
-	schema, err := box.FindString("schema.graphql")
+	schema, err := a.box.FindString("schema.graphql")
 	if err != nil {
 		return err
 	}

@@ -30,7 +30,7 @@ mocks:
 	# make -C pkg/storage mocks
 
 package:
-	go run -mod=vendor vendor/github.com/gobuffalo/packr/v2/packr2/main.go
+	cd cmd/web && go run -mod=vendor ../../vendor/github.com/gobuffalo/packr/v2/packr2/main.go
 
 release:
 	test -n "$(VERSION)" # VERSION
@@ -42,5 +42,3 @@ test:
 
 $(binaries): $(GOPATH)/bin/%: $(sources)
 	go install -mod=vendor --ldflags="-s -w" ./cmd/$*
-
-$(GOPATH)/bin/web: dist
