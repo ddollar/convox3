@@ -3,29 +3,15 @@
     <div class="col-12 d-flex mb-4">
       <div class="flex-grow-1">
         <span class="dropdown mr-2">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="dropdownMenuButton"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
             <Provider v-if="runtime" :kind="runtime.provider" :text="runtime.title" />
             <span v-else>All Racks</span>
           </button>
           <div class="dropdown-menu">
             <a class="dropdown-item" @click="filter(null)" href="#">All Racks</a>
-
             <div v-if="integrations.length > 0">
               <div class="dropdown-divider"></div>
-              <a
-                v-for="integration in integrations"
-                :key="integration.id"
-                class="dropdown-item"
-                @click="filter(integration)"
-                href="#"
-              >
+              <a v-for="integration in integrations" :key="integration.id" class="dropdown-item" @click="filter(integration)" href="#">
                 <Provider :kind="integration.provider" :text="integration.title" />
               </a>
             </div>
@@ -41,23 +27,12 @@
           <div class="dropdown-menu dropdown-menu-right">
             <div v-if="integrations.length == 0" class="dropdown-item">No Runtime Integrations</div>
             <div v-else>
-              <a
-                v-for="integration in integrations"
-                :key="integration.id"
-                class="dropdown-item"
-                href="#"
-              >
+              <a v-for="integration in integrations" :key="integration.id" class="dropdown-item" href="#">
                 <Provider :kind="integration.provider" :text="integration.title" />
               </a>
             </div>
           </div>
-
-          <a
-            class="btn btn-success ml-2"
-            href="#"
-            data-toggle="modal"
-            data-target="#rack-add-manual"
-          >
+          <a class="btn btn-success ml-2" href="#" data-toggle="modal" data-target="#rack-add-manual">
             <i class="fas fa-plus-circle mr-1"></i>
             Import
           </a>
@@ -85,41 +60,41 @@ export default {
       skip() {
         return !this.organization.id;
       },
-      update: data => data.organization?.integrations,
+      update: (data) => data.organization?.integrations,
       variables() {
         return {
           kind: "runtime",
-          oid: this.organization.id
+          oid: this.organization.id,
         };
-      }
+      },
     },
     racks: {
       query: require("@/queries/Racks.graphql"),
       skip() {
         return !this.organization.id;
       },
-      update: data => data.organization?.racks,
+      update: (data) => data.organization?.racks,
       variables() {
         return {
-          oid: this.organization.id
+          oid: this.organization.id,
         };
-      }
-    }
+      },
+    },
   },
   components: {
     Provider: () => import("@/components/Provider"),
-    Rack: () => import("@/components/Rack")
+    Rack: () => import("@/components/Rack"),
   },
   computed: {
     filteredRacks() {
-      return this.racks?.filter(rack => {
+      return this.racks?.filter((rack) => {
         return this.runtime === null ? true : rack.runtime == this.runtime.id;
       });
-    }
+    },
   },
   data: function() {
     return {
-      runtime: null
+      runtime: null,
     };
   },
   methods: {
@@ -132,23 +107,23 @@ export default {
     settings(rid) {
       this.$router.push({
         name: "organization/rack/settings",
-        params: { oid: this.organization.id, rid: rid }
+        params: { oid: this.organization.id, rid: rid },
       });
     },
     toggle(rid) {
       if (this.expanded(rid)) {
         this.$router.push({
           name: "organization/racks",
-          params: { oid: this.organization.id }
+          params: { oid: this.organization.id },
         });
       } else {
         this.$router.push({
           name: "organization/rack/apps",
-          params: { oid: this.organization.id, rid: rid }
+          params: { oid: this.organization.id, rid: rid },
         });
       }
-    }
+    },
   },
-  mixins: [Organization]
+  mixins: [Organization],
 };
 </script>

@@ -5,6 +5,16 @@ query Racks($oid: ID!) {
       apps {
         name
       }
+      capacity {
+        cpu {
+          total
+          used
+        }
+        mem {
+          total
+          used
+        }
+      }
       id
       name
       runtime

@@ -40,6 +40,16 @@ type Authentication {
   user: User!
 }
 
+type Capacity {
+  cpu: CapacityMetric!
+  mem: CapacityMetric!
+}
+
+type CapacityMetric {
+  total: Int!
+  used: Int!
+}
+
 type Member {
   access: Access!
   user: User!
@@ -71,6 +81,7 @@ type Organization {
 type Rack {
   id: ID!
   apps: [App!]!
+  capacity: Capacity!
   name: String!
   runtime: ID
   status: RackStatus!

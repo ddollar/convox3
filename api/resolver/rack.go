@@ -46,6 +46,34 @@ func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 	return ras, nil
 }
 
+func (r *Rack) Capacity(ctx context.Context) (*Capacity, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	c, err := r.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	sc, err := c.CapacityGet()
+	if err != nil {
+		return nil, err
+	}
+
+	cc := &Capacity{
+		cpu: CapacityMetric{
+			total: int32(sc.ClusterCPU),
+			used:  int32(sc.ProcessCPU),
+		},
+		mem: CapacityMetric{
+			total: int32(sc.ClusterMemory),
+			used:  int32(sc.ProcessMemory),
+		},
+	}
+
+	return cc, nil
+}
+
 func (r *Rack) Runtime() *graphql.ID {
 	if r.Rack.Runtime == "" {
 		return nil
