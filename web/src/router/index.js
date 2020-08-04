@@ -12,6 +12,7 @@ import Blank from "@/views/Organization/Blank.vue";
 import Integrations from "@/views/Organization/Integrations.vue";
 import Rack from "@/views/Organization/Rack.vue";
 import Racks from "@/views/Organization/Racks.vue";
+import Users from "@/views/Organization/Users.vue";
 
 Vue.use(VueRouter);
 
@@ -135,7 +136,7 @@ const routes = [
       {
         path: "users",
         name: "organization/users",
-        component: Blank,
+        component: Users,
         meta: { role: "administrator" },
       },
       {

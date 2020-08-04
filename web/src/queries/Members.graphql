@@ -1,0 +1,12 @@
+query Members($oid: ID!) {
+  organization(id: $oid) {
+    id
+    members {
+      access
+      user {
+        email
+        id
+      }
+    }
+  }
+}

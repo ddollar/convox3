@@ -99,6 +99,6 @@ enum RackStatus {
 }
 
 type User {
-  id: ID!
   email: String!
+  id: ID!
 }

@@ -48,7 +48,6 @@ func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) 
 	ris := []*Integration{}
 
 	for _, i := range is {
-		fmt.Printf("i.Kind: %+v\n", i.Kind)
 		if i.Kind == args.Kind {
 			ris = append(ris, &Integration{i})
 		}
