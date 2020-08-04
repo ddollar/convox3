@@ -19,7 +19,7 @@
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
-            <div>{{ rack.capacity.mem.used }} / {{ rack.capacity.mem.total }}</div>
+            <div>{{ capacity_bytes(rack.capacity.mem.used) }} / {{ capacity_bytes(rack.capacity.mem.total) }}</div>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -48,7 +48,14 @@
 </template>
 
 <script>
+const prettyBytes = require("pretty-bytes");
+
 export default {
+  methods: {
+    capacity_bytes(num) {
+      return prettyBytes(num * 1000000);
+    },
+  },
   props: ["rack"],
 };
 </script>

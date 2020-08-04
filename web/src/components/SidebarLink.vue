@@ -1,7 +1,7 @@
 <template>
   <li class="nav-item" v-if="accessible(to)">
     <router-link class="nav-link" :to="route(to)">
-      <i :class="`fa ${icon}`" aria-hidden="true"></i>
+      <i :class="`fa ${icon} fa-fw mr-2`" aria-hidden="true"></i>
       <slot></slot>
     </router-link>
   </li>
@@ -20,17 +20,16 @@ export default {
 
       const { role } = this.$router.resolve(this.route(name)).route.meta;
 
-      console.log(name, role, this.organization.access);
       return accessible(role, this.organization.access);
     },
     route(name) {
       return {
         name: `organization/${name}`,
-        params: { oid: this.organization.id }
+        params: { oid: this.organization.id },
       };
-    }
+    },
   },
   mixins: [Organization],
-  props: ["icon", "to"]
+  props: ["icon", "to"],
 };
 </script>
