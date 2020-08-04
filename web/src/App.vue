@@ -48,6 +48,7 @@
 @import "~bootstrap-vue";
 
 @import "@/styles/body.scss";
+@import "@/styles/card.scss";
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";

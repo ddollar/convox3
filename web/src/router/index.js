@@ -9,6 +9,7 @@ import Login from "@/views/Public/Login.vue";
 
 import Organization from "@/views/Organization.vue";
 import Blank from "@/views/Organization/Blank.vue";
+import Integrations from "@/views/Organization/Integrations.vue";
 import Rack from "@/views/Organization/Rack.vue";
 import Racks from "@/views/Organization/Racks.vue";
 
@@ -67,7 +68,7 @@ const routes = [
       {
         path: "integrations",
         name: "organization/integrations",
-        component: Blank,
+        component: Integrations,
         meta: { role: "operator" },
       },
       {

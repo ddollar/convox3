@@ -85,13 +85,7 @@ export default {
       skip() {
         return !this.organization.id;
       },
-      update: data =>
-        data.organization?.integrations.sort((a, b) => {
-          return (
-            a.provider.localeCompare(b.provider) ||
-            a.title.localeCompare(b.title)
-          );
-        }),
+      update: data => data.organization?.integrations,
       variables() {
         return {
           kind: "runtime",

@@ -52,7 +52,9 @@ type Integration {
 }
 
 enum IntegrationKind {
+  notification
   runtime
+  source
 }
 
 type Organization {
