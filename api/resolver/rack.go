@@ -23,6 +23,29 @@ func (r *Rack) Name() string {
 	return r.Rack.Name
 }
 
+type AppArgs struct {
+	Name string
+}
+
+func (r *Rack) App(ctx context.Context, args AppArgs) (*App, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	c, err := r.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	a, err := c.AppGet(args.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	ra := &App{App: *a, rack: r}
+
+	return ra, nil
+}
+
 func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -40,7 +63,7 @@ func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 	ras := []*App{}
 
 	for _, a := range as {
-		ras = append(ras, &App{a})
+		ras = append(ras, &App{App: a, rack: r})
 	}
 
 	return ras, nil

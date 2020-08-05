@@ -21,6 +21,7 @@ enum Access {
 
 type App {
   name: String!
+  processes: [Process!]!
   status: AppStatus!
 }
 
@@ -78,8 +79,14 @@ type Organization {
   racks: [Rack!]!
 }
 
+type Process {
+  id: ID!
+  service: String!
+}
+
 type Rack {
   id: ID!
+  app(name: String!): App!
   apps: [App!]!
   capacity: Capacity!
   name: String!

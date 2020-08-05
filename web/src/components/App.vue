@@ -11,7 +11,7 @@
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Processes</div>
-            <div>0</div>
+            <div>{{ processes.length }}</div>
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
@@ -51,6 +51,19 @@
 const prettyBytes = require("pretty-bytes");
 
 export default {
+  apollo: {
+    processes: {
+      query: require("@/queries/Processes.graphql"),
+      update: (data) => data.organization?.rack?.app?.processes,
+      variables() {
+        return {
+          oid: this.$route.params.oid,
+          rid: this.$route.params.rid,
+          app: this.app.name,
+        };
+      },
+    },
+  },
   methods: {
     capacity_bytes(num) {
       return prettyBytes(num * 1000000);
