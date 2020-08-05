@@ -40,7 +40,7 @@ func (a *App) Processes(ctx context.Context) ([]*Process, error) {
 }
 
 func (a *App) Services(ctx context.Context) ([]*Service, error) {
-	ctx, cancel := context.WithTimeout(ctx, 15*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
 	c, err := a.rack.client(ctx)

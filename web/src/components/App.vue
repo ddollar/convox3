@@ -11,15 +11,18 @@
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Processes</div>
-            <div>{{ processes.length }}</div>
+            <i v-if="$apollo.queries.processes.loading" class="fas fa-circle-notch fa-spin text-secondary"></i>
+            <div v-else>{{ processes.length }}</div>
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
-            <div>{{ services.reduce((ax, s) => ax + s.cpu * s.count, 0) }}</div>
+            <i v-if="$apollo.queries.services.loading" class="fas fa-circle-notch fa-spin text-secondary"></i>
+            <div v-else>{{ cpu }}</div>
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
-            <div>{{ pretty_memory(services.reduce((ax, s) => ax + s.mem * s.count, 0)) }}</div>
+            <i v-if="$apollo.queries.services.loading" class="fas fa-circle-notch fa-spin text-secondary"></i>
+            <div v-else>{{ mem }}</div>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -73,6 +76,14 @@ export default {
           app: this.app.name,
         };
       },
+    },
+  },
+  computed: {
+    cpu() {
+      return this.services.reduce((ax, s) => ax + s.cpu * s.count, 0);
+    },
+    mem() {
+      return this.pretty_memory(this.services.reduce((ax, s) => ax + s.mem * s.count, 0));
     },
   },
   data() {
