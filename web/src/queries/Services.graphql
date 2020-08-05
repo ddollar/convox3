@@ -1,15 +1,15 @@
-query Processes($oid: ID!, $rid: ID!, $app: String!) {
+query Services($oid: ID!, $rid: ID!, $app: String!) {
   organization(id: $oid) {
     id
     rack(id: $rid) {
       id
       app(name: $app) {
         name
-        processes {
+        services {
+          count
           cpu
-          id
           mem
-          service
+          name
         }
       }
     }

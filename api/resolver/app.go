@@ -39,6 +39,29 @@ func (a *App) Processes(ctx context.Context) ([]*Process, error) {
 	return rps, nil
 }
 
+func (a *App) Services(ctx context.Context) ([]*Service, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	c, err := a.rack.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ss, err := c.ServiceList(a.App.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	rss := []*Service{}
+
+	for _, s := range ss {
+		rss = append(rss, &Service{s})
+	}
+
+	return rss, nil
+}
+
 func (a *App) Status() string {
 	return a.App.Status
 }

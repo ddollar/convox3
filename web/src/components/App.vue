@@ -15,11 +15,11 @@
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
-            <div>0</div>
+            <div>{{ services.reduce((ax, s) => ax + s.cpu * s.count, 0) }}</div>
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
-            <div>{{ capacity_bytes(0) }}</div>
+            <div>{{ pretty_memory(services.reduce((ax, s) => ax + s.mem * s.count, 0)) }}</div>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -63,9 +63,26 @@ export default {
         };
       },
     },
+    services: {
+      query: require("@/queries/Services.graphql"),
+      update: (data) => data.organization?.rack?.app?.services,
+      variables() {
+        return {
+          oid: this.$route.params.oid,
+          rid: this.$route.params.rid,
+          app: this.app.name,
+        };
+      },
+    },
+  },
+  data() {
+    return {
+      processes: [],
+      services: [],
+    };
   },
   methods: {
-    capacity_bytes(num) {
+    pretty_memory(num) {
       return prettyBytes(num * 1000000);
     },
   },

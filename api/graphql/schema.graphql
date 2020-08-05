@@ -22,6 +22,7 @@ enum Access {
 type App {
   name: String!
   processes: [Process!]!
+  services: [Service!]!
   status: AppStatus!
 }
 
@@ -80,7 +81,9 @@ type Organization {
 }
 
 type Process {
+  cpu: Int!
   id: ID!
+  mem: Int!
   service: String!
 }
 
@@ -103,6 +106,14 @@ enum RackStatus {
   running
   unknown
   updating
+}
+
+type Service {
+  count: Int!
+  cpu: Int!
+  domain: String!
+  mem: Int!
+  name: ID!
 }
 
 type User {
