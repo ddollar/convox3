@@ -8,7 +8,7 @@
         </router-link>
       </div>
       <div class="flex-fill ml-4 mr-4 mb-4 order-1">
-        <h4 class="font-weight-bold mb-0">production</h4>
+        <h4 class="font-weight-bold mb-0">{{ rack.name }}</h4>
       </div>
       <div class="mr-4 mb-4 order-3 order-lg-2">
         <nav class="nav nav-pills flex-nowrap">
