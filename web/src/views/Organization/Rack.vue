@@ -12,10 +12,11 @@
       </div>
       <div class="mr-4 mb-4 order-3 order-lg-2">
         <nav class="nav nav-pills flex-nowrap">
-          <a class="nav-item nav-link active" href="#">Dashboard</a>
-          <a class="nav-item nav-link" href="#">Apps</a>
-          <a class="nav-item nav-link" href="#">Instances</a>
-          <a class="nav-item nav-link" href="#">Logs</a>
+          <router-link :to="route('apps')" class="nav-item nav-link">Apps</router-link>
+          <router-link :to="route('instances')" class="nav-item nav-link">Instances</router-link>
+          <router-link :to="route('logs')" class="nav-item nav-link">Logs</router-link>
+          <router-link :to="route('resources')" class="nav-item nav-link">Resources</router-link>
+          <router-link :to="route('updates')" class="nav-item nav-link">Updates</router-link>
         </nav>
       </div>
       <div class="mb-4 order-2 order-lg-3">
@@ -24,21 +25,38 @@
         </button>
       </div>
     </div>
+
+    <router-view />
   </div>
 </template>
 
 <script>
 import Organization from "@/mixins/Organization";
+import Rack from "@/mixins/Rack";
 
 export default {
   methods: {
     back() {
       return {
         name: "organization/racks",
-        params: { oid: this.organization.id },
+        params: { oid: this.$route.params.oid },
+      };
+    },
+    route(page) {
+      return {
+        name: `organization/rack/${page}`,
+        params: { oid: this.$route.params.oid, rid: this.$route.params.rid },
       };
     },
   },
-  mixins: [Organization],
+  mixins: [Organization, Rack],
+  mounted() {
+    if (this.$route.name == "organization/rack") {
+      this.$router.push({
+        name: "organization/rack/apps",
+        params: { oid: this.$route.params.oid, rid: this.$route.params.rid },
+      });
+    }
+  },
 };
 </script>
