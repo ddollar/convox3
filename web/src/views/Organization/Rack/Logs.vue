@@ -33,7 +33,7 @@ export default {
   },
   mounted() {
     this.$el.addEventListener("scroll", this.scrollMonitor);
-    this.scrollMonitor();
+    this.$el.dataset.bottom = true;
   },
   updated() {
     const el = this.$el;
