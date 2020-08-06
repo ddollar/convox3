@@ -1,5 +1,5 @@
 <template>
-  <div class="logs">{{ logs }}</div>
+  <div class="logs" id="rlt">{{ logs }}</div>
 </template>
 
 <script>
@@ -22,8 +22,26 @@ export default {
   },
   data: function() {
     return {
-      logs: "",
+      logs:
+        "1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n",
     };
+  },
+  methods: {
+    scrollMonitor: function() {
+      const el = this.$el;
+      el.dataset.bottom = el.scrollTop === el.scrollHeight - el.offsetHeight;
+    },
+  },
+  mounted() {
+    this.$el.addEventListener("scroll", this.scrollMonitor);
+    this.scrollMonitor();
+  },
+  updated() {
+    const el = this.$el;
+
+    if (el.dataset.bottom === "true") {
+      el.scrollTop = el.scrollHeight;
+    }
   },
 };
 </script>

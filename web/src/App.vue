@@ -62,5 +62,21 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 </style>
 
 <script>
+// var scrollMonitorTop = 0;
+// var scrollMonitorEnd = true;
+
+// $.initialize(".scroll-monitor", function() {
+//   var monitor = $(this);
+//   if (scrollMonitorEnd) {
+//     monitor.prop("scrollTop", monitor.prop("scrollHeight"));
+//   } else {
+//     monitor.prop("scrollTop", scrollMonitorTop);
+//   }
+//   monitor.on("scroll", function() {
+//     scrollMonitorTop = $(this).prop("scrollTop");
+//     scrollMonitorEnd = $(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight;
+//   });
+// });
+
 export default {};
 </script>
