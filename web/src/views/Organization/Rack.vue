@@ -15,6 +15,7 @@
           <router-link :to="route('apps')" class="nav-item nav-link">Apps</router-link>
           <router-link :to="route('instances')" class="nav-item nav-link">Instances</router-link>
           <router-link :to="route('logs')" class="nav-item nav-link">Logs</router-link>
+          <router-link :to="route('processes')" class="nav-item nav-link">Processes</router-link>
           <router-link :to="route('resources')" class="nav-item nav-link">Resources</router-link>
           <router-link :to="route('updates')" class="nav-item nav-link">Updates</router-link>
         </nav>

@@ -15,15 +15,37 @@ type Handler struct {
 }
 
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		h.queryGet(w, r)
-	case http.MethodPost:
-		h.queryPost(w, r)
-	default:
-		http.Error(w, "invalid method", http.StatusMethodNotAllowed)
+	var params struct {
+		Query         string                 `json:"query"`
+		OperationName string                 `json:"operationName"`
+		Variables     map[string]interface{} `json:"variables"`
 	}
+	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	response := h.api.schema.Exec(h.context(r), params.Query, params.OperationName, params.Variables)
+	responseJSON, err := json.Marshal(response)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(responseJSON)
 }
+
+// func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+// 	switch r.Method {
+// 	case http.MethodGet:
+// 		h.queryGet(w, r)
+// 	case http.MethodPost:
+// 		h.queryPost(w, r)
+// 	default:
+// 		http.Error(w, "invalid method", http.StatusMethodNotAllowed)
+// 	}
+// }
 
 func (h *Handler) context(r *http.Request) context.Context {
 	ctx := r.Context()

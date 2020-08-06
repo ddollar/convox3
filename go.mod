@@ -11,13 +11,13 @@ require (
 	github.com/containerd/containerd v1.3.3 // indirect
 	github.com/containerd/continuity v0.0.0-20200228182428-0f16d7a0959c // indirect
 	github.com/convox/convox v0.0.0-20200319135330-fa65d5bb20ba
-	github.com/convox/rack v0.0.0-20200720124016-e57ae50684af
+	github.com/convox/rack v0.0.0-20200720124016-e57ae50684af // indirect
 	github.com/convox/stdapi v1.0.0
-	github.com/convox/stdsdk v0.0.0-20190422120437-3e80a397e377
+	github.com/convox/stdsdk v0.0.0-20190422120437-3e80a397e377 // indirect
 	github.com/digitalocean/godo v1.42.0
 	github.com/fsouza/go-dockerclient v1.6.3 // indirect
 	github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.2
-	github.com/gobuffalo/packr v1.30.1
+	github.com/gobuffalo/packr v1.30.1 // indirect
 	github.com/gobuffalo/packr/v2 v2.8.0
 	github.com/gogo/protobuf v1.3.1 // indirect
 	github.com/golang/protobuf v1.3.5 // indirect
@@ -45,3 +45,5 @@ require (
 	google.golang.org/grpc v1.28.0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
+
+replace github.com/graph-gophers/graphql-transport-ws => github.com/convox/graphql-transport-ws v0.0.2

@@ -132,15 +132,11 @@ github.com/fsouza/go-dockerclient
 # github.com/gbrlsnchs/jwt/v3 v3.0.0-rc.2
 github.com/gbrlsnchs/jwt/v3
 github.com/gbrlsnchs/jwt/v3/internal
-# github.com/gobuffalo/envy v1.7.0
-github.com/gobuffalo/envy
 # github.com/gobuffalo/logger v1.0.3
 github.com/gobuffalo/logger
 # github.com/gobuffalo/packd v1.0.0
 github.com/gobuffalo/packd
 github.com/gobuffalo/packd/internal/takeon/github.com/markbates/errx
-# github.com/gobuffalo/packr v1.30.1
-github.com/gobuffalo/packr
 # github.com/gobuffalo/packr/v2 v2.8.0
 github.com/gobuffalo/packr/v2
 github.com/gobuffalo/packr/v2/file
@@ -204,8 +200,9 @@ github.com/graph-gophers/graphql-go/internal/schema
 github.com/graph-gophers/graphql-go/internal/validation
 github.com/graph-gophers/graphql-go/introspection
 github.com/graph-gophers/graphql-go/log
+github.com/graph-gophers/graphql-go/relay
 github.com/graph-gophers/graphql-go/trace
-# github.com/graph-gophers/graphql-transport-ws v0.0.0-20190611222414-40c048432299
+# github.com/graph-gophers/graphql-transport-ws v0.0.0-20190611222414-40c048432299 => github.com/convox/graphql-transport-ws v0.0.2
 github.com/graph-gophers/graphql-transport-ws/graphqlws
 github.com/graph-gophers/graphql-transport-ws/graphqlws/internal/connection
 # github.com/hashicorp/golang-lru v0.5.1
@@ -222,8 +219,6 @@ github.com/hashicorp/hcl/v2/json
 github.com/inconshreveable/mousetrap
 # github.com/jmespath/go-jmespath v0.0.0-20180206201540-c2b33e8439af
 github.com/jmespath/go-jmespath
-# github.com/joho/godotenv v1.3.0
-github.com/joho/godotenv
 # github.com/karrick/godirwalk v1.15.5
 github.com/karrick/godirwalk
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2

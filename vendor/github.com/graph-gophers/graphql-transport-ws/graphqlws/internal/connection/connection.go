@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -22,6 +23,12 @@ const (
 	typeError               operationMessageType = "error"
 	typeStart               operationMessageType = "start"
 	typeStop                operationMessageType = "stop"
+)
+
+type ContextKey int
+
+const (
+	ContextAuthorization ContextKey = iota
 )
 
 type wsConnection interface {
@@ -47,7 +54,7 @@ type startMessagePayload struct {
 	Variables     map[string]interface{} `json:"variables"`
 }
 
-type initMessagePayload struct{}
+type initMessagePayload interface{}
 
 // GraphQLService interface
 type GraphQLService interface {
@@ -77,7 +84,7 @@ func WriteTimeout(d time.Duration) func(conn *connection) {
 
 // Connect implements the apollographql subscriptions-transport-ws protocol@v0.9.4
 // https://github.com/apollographql/subscriptions-transport-ws/blob/v0.9.4/PROTOCOL.md
-func Connect(ws wsConnection, service GraphQLService, options ...func(conn *connection)) func() {
+func Connect(ctx context.Context, ws wsConnection, service GraphQLService, options ...func(conn *connection)) func() {
 	conn := &connection{
 		service: service,
 		ws:      ws,
@@ -156,6 +163,7 @@ func (conn *connection) readLoop(ctx context.Context, send sendFunc) {
 		if err != nil {
 			return
 		}
+		fmt.Printf("msg: %+v\n", msg)
 
 		switch msg.Type {
 		case typeConnectionInit:
@@ -164,6 +172,19 @@ func (conn *connection) readLoop(ctx context.Context, send sendFunc) {
 				ep := errPayload(fmt.Errorf("invalid payload for type: %s", msg.Type))
 				send("", typeConnectionError, ep)
 				continue
+			}
+			switch t := initMsg.(type) {
+			case map[string]interface{}:
+				if ai, ok := t["Authorization"]; ok {
+					if auth, ok := ai.(string); ok {
+						if parts := strings.Fields(auth); len(parts) == 2 && parts[0] == "Bearer" {
+							ctx = context.WithValue(ctx, ContextAuthorization, parts[1])
+						}
+					}
+				}
+				fmt.Printf("t: %+v\n", t)
+			default:
+				fmt.Printf("type = %T\n", t)
 			}
 			send("", typeConnectionAck, nil)
 
@@ -199,6 +220,7 @@ func (conn *connection) readLoop(ctx context.Context, send sendFunc) {
 				for {
 					select {
 					case <-opCtx.Done():
+						fmt.Println("done")
 						return
 					case payload, more := <-c:
 						if !more {

@@ -1,10 +1,10 @@
 <template>
   <div class="col-12 col-xl-6 col-xxl-4 app clickable">
     <div class="card mb-4 border-bottom-0">
-      <div class="card-header d-flex">
+      <div class="card-header d-flex bg-info border-info">
         <div class="flex-grow-1">{{ app.name }}</div>
         <div class="flex-shrink-0">
-          <i class="fa fa-check-square text-success"></i>
+          <i class="fa fa-check-square"></i>
         </div>
       </div>
       <ul class="list-group list-group-flush">

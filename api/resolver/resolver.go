@@ -1,5 +1,7 @@
 package resolver
 
-func New() *Root {
-	return &Root{}
+import "github.com/convox/console/api/model"
+
+func New(model model.Interface) *Root {
+	return &Root{model: model}
 }

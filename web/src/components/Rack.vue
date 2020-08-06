@@ -1,10 +1,10 @@
 <template>
   <div class="col-12 col-xl-6 col-xxl-4 rack clickable" @click="goto()">
     <div class="card mb-4 border-bottom-0">
-      <div class="card-header d-flex">
+      <div class="card-header d-flex bg-primary text-light">
         <div class="flex-grow-1">{{ rack.name }}</div>
         <div class="flex-shrink-0">
-          <i class="fa fa-check-square text-success"></i>
+          <i class="fa fa-check-square"></i>
         </div>
       </div>
       <ul class="list-group list-group-flush">

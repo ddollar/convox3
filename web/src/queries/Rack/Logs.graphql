@@ -1,0 +1,5 @@
+subscription Logs($oid: ID!, $rid: ID!, $since: Int) {
+  rack_logs(oid: $oid, rid: $rid, since: $since) {
+    line
+  }
+}

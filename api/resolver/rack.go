@@ -42,6 +42,7 @@ func (r *Rack) App(ctx context.Context, args AppArgs) (*App, error) {
 	}
 
 	ra := &App{App: *a, rack: r}
+	
 
 	return ra, nil
 }

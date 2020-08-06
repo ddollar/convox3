@@ -7,6 +7,7 @@ import (
 	"github.com/convox/console/api/resolver"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go/relay"
 	"github.com/graph-gophers/graphql-transport-ws/graphqlws"
 )
 
@@ -35,7 +36,7 @@ func New(m model.Interface, box *packr.Box) (*Api, error) {
 }
 
 func (a *Api) Handler() http.HandlerFunc {
-	return graphqlws.NewHandlerFunc(a.schema, &Handler{api: a})
+	return graphqlws.NewHandlerFunc(a.schema, &relay.Handler{Schema: a.schema})
 }
 
 // func (a *Api) Route(s *stdapi.Server) error {
@@ -46,7 +47,7 @@ func (a *Api) Handler() http.HandlerFunc {
 // }
 
 func (a *Api) initializeGraphql() error {
-	r := resolver.New()
+	r := resolver.New(a.model)
 
 	schema, err := a.box.FindString("schema.graphql")
 	if err != nil {

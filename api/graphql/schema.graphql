@@ -1,6 +1,7 @@
 schema {
   mutation: Mutation
   query: Query
+  subscription: Subscription
 }
 
 type Mutation {
@@ -11,6 +12,14 @@ type Mutation {
 type Query {
   organization(id: ID!): Organization!
   organizations: [Organization!]!
+}
+
+type Subscription {
+  rack_logs(oid: ID!, rid: ID!, since: Int): RackLog!
+}
+
+type RackLog {
+  line: String!
 }
 
 enum Access {

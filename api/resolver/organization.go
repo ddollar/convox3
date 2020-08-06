@@ -11,6 +11,7 @@ import (
 
 type Organization struct {
 	model.Organization
+	model model.Interface
 }
 
 func (o *Organization) Id() graphql.ID {
@@ -40,7 +41,7 @@ type IntegrationsArgs struct {
 }
 
 func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) ([]*Integration, error) {
-	is, err := cmodel(ctx).OrganizationIntegrations(o.Organization.ID)
+	is, err := o.model.OrganizationIntegrations(o.Organization.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +58,7 @@ func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) 
 }
 
 func (o *Organization) Members(ctx context.Context) ([]*Member, error) {
-	us, err := cmodel(ctx).UserGetBatch(o.Organization.Users)
+	us, err := o.model.UserGetBatch(o.Organization.Users)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +90,7 @@ func (o *Organization) Name() string {
 }
 
 func (o *Organization) Racks(ctx context.Context) ([]*Rack, error) {
-	rs, err := cmodel(ctx).OrganizationRacks(o.Organization.ID)
+	rs, err := o.model.OrganizationRacks(o.Organization.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +109,7 @@ type RackArgs struct {
 }
 
 func (o *Organization) Rack(ctx context.Context, args RackArgs) (*Rack, error) {
-	r, err := cmodel(ctx).RackGet(string(args.Id))
+	r, err := o.model.RackGet(string(args.Id))
 	if err != nil {
 		return nil, err
 	}
