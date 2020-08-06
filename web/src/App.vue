@@ -50,6 +50,7 @@
 @import "@/styles/body.scss";
 @import "@/styles/card.scss";
 @import "@/styles/clickable.scss";
+@import "@/styles/logs.scss";
 @import "@/styles/nav.scss";
 
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";

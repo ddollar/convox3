@@ -42,7 +42,7 @@ export default {
   components: {
     Navbar,
     OrganizationPicker,
-    Sidebar
-  }
+    Sidebar,
+  },
 };
 </script>

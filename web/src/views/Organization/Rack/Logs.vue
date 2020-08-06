@@ -1,5 +1,5 @@
 <template>
-  <textarea class="bg-dark text-light" style="width: 100%; height: 100%;" v-model="logs"></textarea>
+  <div class="logs">{{ logs }}</div>
 </template>
 
 <script>
@@ -15,16 +15,14 @@ export default {
           };
         },
         result({ data }) {
-          console.log("data", data);
-          console.log("dd", this);
-          this.data.logs += `${data}\n"`;
+          this.logs += `${data.rack_logs.line}\n`;
         },
       },
     },
   },
   data: function() {
     return {
-      logs: "foo\n",
+      logs: "",
     };
   },
 };

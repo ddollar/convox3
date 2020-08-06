@@ -42,7 +42,6 @@ func (r *Rack) App(ctx context.Context, args AppArgs) (*App, error) {
 	}
 
 	ra := &App{App: *a, rack: r}
-	
 
 	return ra, nil
 }
@@ -65,6 +64,12 @@ func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 
 	for _, a := range as {
 		ras = append(ras, &App{App: a, rack: r})
+	}
+
+	if len(ras) > 0 {
+		for i := 0; i < 20; i++ {
+			ras = append(ras, ras[0])
+		}
 	}
 
 	return ras, nil
