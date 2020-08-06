@@ -46,4 +46,4 @@ require (
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
 
-replace github.com/graph-gophers/graphql-transport-ws => github.com/convox/graphql-transport-ws v0.0.2
+replace github.com/graph-gophers/graphql-transport-ws => github.com/convox/graphql-transport-ws v0.0.3

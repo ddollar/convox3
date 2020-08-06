@@ -108,11 +108,6 @@ type RackLogsArgs struct {
 }
 
 func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *RackLog, error) {
-	fmt.Printf("ctx: %+v\n", ctx)
-
-	xx := ctx.Value(ContextModel)
-	fmt.Printf("xx: %+v\n", xx)
-
 	o, err := r.authenticatedOrganization(ctx, string(args.Oid))
 	if err != nil {
 		return nil, err
@@ -123,15 +118,11 @@ func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *RackLog, 
 		return nil, err
 	}
 
-	fmt.Printf("rr: %+v\n", rr)
-
 	if rr.Organization != o.ID {
 		return nil, fmt.Errorf("invalid organization")
 	}
 
 	ch := make(chan *RackLog)
-
-	fmt.Printf("ch: %+v\n", ch)
 
 	go rackLogs(ctx, &Rack{*rr}, ch)
 

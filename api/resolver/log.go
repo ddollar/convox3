@@ -3,7 +3,6 @@ package resolver
 import (
 	"bufio"
 	"context"
-	"fmt"
 
 	"github.com/convox/convox/pkg/structs"
 )
@@ -14,15 +13,11 @@ func rackLogs(ctx context.Context, r *Rack, ch chan *RackLog) error {
 		return err
 	}
 
-	fmt.Printf("c: %+v\n", c)
-
 	rc, err := c.SystemLogs(structs.LogsOptions{})
 	if err != nil {
 		return err
 	}
 	defer rc.Close()
-
-	fmt.Printf("rc: %+v\n", rc)
 
 	s := bufio.NewScanner(rc)
 
@@ -33,12 +28,8 @@ func rackLogs(ctx context.Context, r *Rack, ch chan *RackLog) error {
 		default:
 		}
 
-		fmt.Printf("s.Text(): %+v\n", s.Text())
-
 		ch <- &RackLog{line: s.Text()}
 	}
-
-	fmt.Println("done")
 
 	return nil
 }

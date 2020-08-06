@@ -202,7 +202,7 @@ github.com/graph-gophers/graphql-go/introspection
 github.com/graph-gophers/graphql-go/log
 github.com/graph-gophers/graphql-go/relay
 github.com/graph-gophers/graphql-go/trace
-# github.com/graph-gophers/graphql-transport-ws v0.0.0-20190611222414-40c048432299 => github.com/convox/graphql-transport-ws v0.0.2
+# github.com/graph-gophers/graphql-transport-ws v0.0.0-20190611222414-40c048432299 => github.com/convox/graphql-transport-ws v0.0.3
 github.com/graph-gophers/graphql-transport-ws/graphqlws
 github.com/graph-gophers/graphql-transport-ws/graphqlws/internal/connection
 # github.com/hashicorp/golang-lru v0.5.1

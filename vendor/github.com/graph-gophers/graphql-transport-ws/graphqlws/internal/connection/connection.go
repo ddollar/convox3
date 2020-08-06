@@ -163,7 +163,6 @@ func (conn *connection) readLoop(ctx context.Context, send sendFunc) {
 		if err != nil {
 			return
 		}
-		fmt.Printf("msg: %+v\n", msg)
 
 		switch msg.Type {
 		case typeConnectionInit:
@@ -182,9 +181,6 @@ func (conn *connection) readLoop(ctx context.Context, send sendFunc) {
 						}
 					}
 				}
-				fmt.Printf("t: %+v\n", t)
-			default:
-				fmt.Printf("type = %T\n", t)
 			}
 			send("", typeConnectionAck, nil)
 
@@ -220,7 +216,6 @@ func (conn *connection) readLoop(ctx context.Context, send sendFunc) {
 				for {
 					select {
 					case <-opCtx.Done():
-						fmt.Println("done")
 						return
 					case payload, more := <-c:
 						if !more {
