@@ -1,8 +1,6 @@
 package resolver
 
 import (
-	"fmt"
-
 	"github.com/convox/convox/pkg/structs"
 	"github.com/convox/rack/pkg/options"
 	"github.com/graph-gophers/graphql-go"
@@ -41,7 +39,6 @@ func (i *Instance) Started() int32 {
 }
 
 func (i *Instance) Status() string {
-	fmt.Printf("i.Instance.Status: %+v\n", i.Instance.Status)
 	switch i.Instance.Status {
 	case "active", "draining":
 		return i.Instance.Status
