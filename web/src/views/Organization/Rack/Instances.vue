@@ -1,6 +1,6 @@
 <template>
-  <table class="table table-light">
-    <thead class="thead-dark" style="border-top-left-radius: 4px;">
+  <table class="table">
+    <thead>
       <tr>
         <th scope="col" class="expand">ID</th>
         <th scope="col">CPU</th>

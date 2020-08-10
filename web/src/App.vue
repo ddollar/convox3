@@ -54,6 +54,8 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 @import "~@fortawesome/fontawesome-free/scss/v4-shims";
 
+@import "@/styles/constant.scss";
+@import "@/styles/color.scss";
 @import "@/styles/body.scss";
 @import "@/styles/card.scss";
 @import "@/styles/clickable.scss";

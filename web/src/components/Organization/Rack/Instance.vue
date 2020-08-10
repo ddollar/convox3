@@ -3,11 +3,11 @@
     <td>
       <code>{{ instance.id }}</code>
     </td>
-    <td>{{ instance.cpu }}</td>
-    <td>{{ instance.mem }}</td>
+    <td><Progress :current="instance.cpu" max="1" color="#0DA542" style="width:100px;" /></td>
+    <td><Progress :current="instance.mem" max="1" style="width:100px;" /></td>
     <td>{{ instance.private }}</td>
     <td>{{ instance.public }}</td>
-    <td>{{ instance.started }}</td>
+    <td>{{ timeago(instance.started * 1000) }}</td>
     <td>
       <button class="btn btn-danger btn-sm">
         <i class="fa fa-times"></i>
@@ -65,6 +65,17 @@ export default {
   //     return prettyBytes(num * 1000000);
   //   }
   // },
+  components: {
+    Progress: () => import("@/components/Progress.vue"),
+  },
+  methods: {
+    percent(value) {
+      return `${(value * 100).toFixed(1)}%`;
+    },
+    timeago(value) {
+      return new Date(value);
+    },
+  },
   props: ["instance"],
 };
 </script>

@@ -1,4 +1,25 @@
 table.table {
+  background-color: $light;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+
+  thead {
+    background-color: $dark;
+    border-top-left-radius: $border-radius;
+    border-top-right-radius: $border-radius;
+    color: $light;
+
+    th:first-child {
+      border-top-left-radius: $border-radius;
+    }
+
+    th:last-child {
+      border-top-right-radius: $border-radius;
+    }
+  }
+
   th[scope="col"] {
     white-space: nowrap;
 
@@ -9,5 +30,6 @@ table.table {
 
   td {
     vertical-align: middle;
+    white-space: nowrap;
   }
 }
