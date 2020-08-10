@@ -2,8 +2,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
-	"net/url"
 	"time"
 
 	"github.com/convox/console/api/model"
@@ -120,11 +118,8 @@ func (r *Rack) Instances(ctx context.Context) ([]*Instance, error) {
 	ris := []*Instance{}
 
 	for _, i := range is {
-		fmt.Printf("i: %+v\n", i)
 		ris = append(ris, &Instance{Instance: i})
 	}
-
-	fmt.Printf("ris: %+v\n", ris)
 
 	return ris, nil
 }
@@ -157,22 +152,5 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 }
 
 func (r *Rack) client(ctx context.Context) (*sdk.Client, error) {
-	if r.Rack.Host == "" {
-		return nil, fmt.Errorf("no host")
-	}
-
-	u := url.URL{
-		Host:   r.Rack.Host,
-		Scheme: "https",
-		User:   url.UserPassword("convox", r.Password),
-	}
-
-	s, err := sdk.New(u.String())
-	if err != nil {
-		return nil, err
-	}
-
-	s.Client = s.Client.WithContext(ctx)
-
-	return s, nil
+	return rackClient(ctx, r.Host, r.Password)
 }

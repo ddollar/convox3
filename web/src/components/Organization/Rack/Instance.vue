@@ -3,13 +3,14 @@
     <td>
       <code>{{ instance.id }}</code>
     </td>
-    <td><Progress :current="instance.cpu" max="1" color="#0DA542" style="width:100px;" /></td>
-    <td><Progress :current="instance.mem" max="1" style="width:100px;" /></td>
+    <td>{{ instance.status }}</td>
+    <td><Progress :current="instance.cpu" color="#0DA542" style="width:100px;" /></td>
+    <td><Progress :current="instance.mem" style="width:100px;" /></td>
     <td>{{ instance.private }}</td>
     <td>{{ instance.public }}</td>
     <td><Timeago :datetime="datetime" /></td>
     <td>
-      <button class="btn btn-danger btn-sm">
+      <button class="btn btn-danger btn-sm" @click="terminate(instance.id)">
         <i class="fa fa-times"></i>
       </button>
     </td>
@@ -74,6 +75,22 @@ export default {
     },
     percent(value) {
       return `${(value * 100).toFixed(1)}%`;
+    },
+  },
+  methods: {
+    terminate(id) {
+      this.$apollo
+        .mutate({
+          mutation: require("@/queries/Organization/Rack/Instance/Terminate.graphql"),
+          variables: {
+            oid: this.$route.params.oid,
+            rid: this.$route.params.rid,
+            iid: id,
+          },
+        })
+        .then(() => {
+          this.$parent.$apollo.queries.instances.refresh();
+        });
     },
   },
   props: ["instance"],

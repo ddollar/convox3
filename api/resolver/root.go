@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/convox/console/api/model"
-	"github.com/convox/console/pkg/common"
 	"github.com/graph-gophers/graphql-go"
 )
 
@@ -16,6 +15,30 @@ type Root struct {
 type LoginArgs struct {
 	Email    string
 	Password string
+}
+
+type InstanceLoginArgs struct {
+	Oid graphql.ID
+	Rid graphql.ID
+	Iid graphql.ID
+}
+
+func (r *Root) InstanceTerminate(ctx context.Context, args InstanceLoginArgs) (string, error) {
+	rr, err := authenticatedRack(ctx, r.model, string(args.Oid), string(args.Rid))
+	if err != nil {
+		return "", err
+	}
+
+	c, err := rackClient(ctx, rr.Host, rr.Password)
+	if err != nil {
+		return "", err
+	}
+
+	if err := c.InstanceTerminate(string(args.Iid)); err != nil {
+		return "", err
+	}
+
+	return string(args.Iid), nil
 }
 
 func (r *Root) Login(ctx context.Context, args LoginArgs) (*Authentication, error) {
@@ -64,7 +87,7 @@ type OrganizationArgs struct {
 }
 
 func (r *Root) Organization(ctx context.Context, args OrganizationArgs) (*Organization, error) {
-	o, err := r.authenticatedOrganization(ctx, string(args.Id))
+	o, err := authenticatedOrganization(ctx, r.model, string(args.Id))
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +131,7 @@ type RackLogsArgs struct {
 }
 
 func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *RackLog, error) {
-	o, err := r.authenticatedOrganization(ctx, string(args.Oid))
+	o, err := authenticatedOrganization(ctx, r.model, string(args.Oid))
 	if err != nil {
 		return nil, err
 	}
@@ -127,22 +150,4 @@ func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *RackLog, 
 	go rackLogs(ctx, &Rack{*rr}, ch)
 
 	return ch, nil
-}
-
-func (r *Root) authenticatedOrganization(ctx context.Context, oid string) (*model.Organization, error) {
-	o, err := r.model.OrganizationGet(oid)
-	if err != nil {
-		return nil, err
-	}
-
-	u, err := cuser(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if !common.SliceContains(o.Users, u.id) {
-		return nil, fmt.Errorf("invalid authentication")
-	}
-
-	return o, nil
 }

@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th scope="col" class="expand">ID</th>
+        <th scope="col">Status</th>
         <th scope="col">CPU</th>
         <th scope="col">Memory</th>
         <th scope="col">Private</th>
@@ -32,6 +33,7 @@ export default {
   apollo: {
     instances: {
       query: require("@/queries/Organization/Rack/Instances.graphql"),
+      pollInterval: 5000,
       update: (data) => data.organization?.rack?.instances,
       variables() {
         return {

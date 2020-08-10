@@ -10,6 +10,7 @@ query Instances($oid: ID!, $rid: ID!) {
         private
         public
         started
+        status
       }
     }
   }

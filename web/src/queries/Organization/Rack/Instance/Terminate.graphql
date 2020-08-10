@@ -1,0 +1,3 @@
+mutation Terminate($oid: ID!, $rid: ID!, $iid: ID!) {
+  instance_terminate(oid: $oid, rid: $rid, iid: $iid)
+}

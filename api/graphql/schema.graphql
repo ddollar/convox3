@@ -5,6 +5,7 @@ schema {
 }
 
 type Mutation {
+  instance_terminate(oid: ID!, rid: ID!, iid: ID!): String!
   login(email: String!, password: String!): Authentication
   # signup(email: String!, password: String!): Authentication
 }
@@ -73,6 +74,13 @@ type Instance {
   private: String!
   public: String
   started: Int!
+  status: InstanceStatus!
+}
+
+enum InstanceStatus {
+  active
+  draining
+  unknown
 }
 
 type Integration {
