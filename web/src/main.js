@@ -20,3 +20,10 @@ new Vue({
   store,
   apolloProvider: createProvider(),
 }).$mount("#app");
+
+import VueTimeago from "vue-timeago";
+
+Vue.use(VueTimeago, {
+  name: "Timeago",
+  locale: "en",
+});

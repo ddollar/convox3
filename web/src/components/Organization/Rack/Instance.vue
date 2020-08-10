@@ -7,7 +7,7 @@
     <td><Progress :current="instance.mem" max="1" style="width:100px;" /></td>
     <td>{{ instance.private }}</td>
     <td>{{ instance.public }}</td>
-    <td>{{ timeago(instance.started * 1000) }}</td>
+    <td><Timeago :datetime="datetime" /></td>
     <td>
       <button class="btn btn-danger btn-sm">
         <i class="fa fa-times"></i>
@@ -68,12 +68,12 @@ export default {
   components: {
     Progress: () => import("@/components/Progress.vue"),
   },
-  methods: {
+  computed: {
+    datetime() {
+      return new Date(this.instance.started * 1000);
+    },
     percent(value) {
       return `${(value * 100).toFixed(1)}%`;
-    },
-    timeago(value) {
-      return new Date(value);
     },
   },
   props: ["instance"],
