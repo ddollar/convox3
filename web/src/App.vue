@@ -60,6 +60,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "@/styles/logs.scss";
 @import "@/styles/nav.scss";
 @import "@/styles/spinner.scss";
+@import "@/styles/table.scss";
 </style>
 
 <script>

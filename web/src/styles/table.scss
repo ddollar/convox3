@@ -1,0 +1,13 @@
+table.table {
+  th[scope="col"] {
+    white-space: nowrap;
+
+    &.expand {
+      width: 100%;
+    }
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}

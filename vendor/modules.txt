@@ -86,6 +86,8 @@ github.com/convox/convox/pkg/structs
 github.com/convox/convox/sdk
 # github.com/convox/logger v0.0.0-20180522214415-e39179955b52
 github.com/convox/logger
+# github.com/convox/rack v0.0.0-20200720124016-e57ae50684af
+github.com/convox/rack/pkg/options
 # github.com/convox/stdapi v1.0.0
 github.com/convox/stdapi
 # github.com/convox/stdsdk v0.0.0-20190422120437-3e80a397e377

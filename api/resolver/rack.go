@@ -103,6 +103,32 @@ func (r *Rack) Capacity(ctx context.Context) (*Capacity, error) {
 	return cc, nil
 }
 
+func (r *Rack) Instances(ctx context.Context) ([]*Instance, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+	c, err := r.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	is, err := c.InstanceList()
+	if err != nil {
+		return nil, err
+	}
+
+	ris := []*Instance{}
+
+	for _, i := range is {
+		fmt.Printf("i: %+v\n", i)
+		ris = append(ris, &Instance{Instance: i})
+	}
+
+	fmt.Printf("ris: %+v\n", ris)
+
+	return ris, nil
+}
+
 func (r *Rack) Runtime() *graphql.ID {
 	if r.Rack.Runtime == "" {
 		return nil

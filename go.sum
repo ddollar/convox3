@@ -109,6 +109,8 @@ github.com/convox/graphql-transport-ws v0.0.3/go.mod h1:yd7b3Vy81lH6BH89W0IU/YaG
 github.com/convox/inotify v0.0.0-20170313035821-b56f5149b5c6/go.mod h1:JOi7Az72uBLT9D2Qv/6FbUbC9W420st0MMIUgVYUyd0=
 github.com/convox/logger v0.0.0-20180522214415-e39179955b52 h1:HTaloo6by+4NE1A1mRYprWzsOy1PGH2tPGfgZ60dyHU=
 github.com/convox/logger v0.0.0-20180522214415-e39179955b52/go.mod h1:IcbSD+Pq+bQV2z/otiMCHLAYBrDR/jPFopFatrWjlMM=
+github.com/convox/rack v0.0.0-20200720124016-e57ae50684af h1:DYoPTl6b2Xi0LkOjYgO7q54tXo77JYDMaXYxHPGPdC8=
+github.com/convox/rack v0.0.0-20200720124016-e57ae50684af/go.mod h1:2dMGMyJnGzN0JlFFyaXzm+hK47fzNAhBvU9uqJy47jg=
 github.com/convox/stdapi v0.0.0-20190708203955-b81b71b6a680/go.mod h1:NkUGoKf5tAaHq7MW02AF9mSXSIHCZJ0ZG8+NqRI5t38=
 github.com/convox/stdapi v1.0.0 h1:nXlgNbqcask7atEz1cdGDYlU+g2PNh769eikLNwhQcg=
 github.com/convox/stdapi v1.0.0/go.mod h1:Le+fa4fVmWcOmsIgradqVxcPqavh6eVH/CtleQ0mR5o=

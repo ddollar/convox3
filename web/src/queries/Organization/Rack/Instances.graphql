@@ -1,0 +1,16 @@
+query Instances($oid: ID!, $rid: ID!) {
+  organization(id: $oid) {
+    id
+    rack(id: $rid) {
+      id
+      instances {
+        cpu
+        id
+        mem
+        private
+        public
+        started
+      }
+    }
+  }
+}
