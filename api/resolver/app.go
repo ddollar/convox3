@@ -17,7 +17,7 @@ func (a *App) Name() string {
 }
 
 func (a *App) Processes(ctx context.Context) ([]*Process, error) {
-	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 
 	c, err := a.rack.client(ctx)

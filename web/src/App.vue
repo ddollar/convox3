@@ -47,18 +47,19 @@
 @import "~bootstrap";
 @import "~bootstrap-vue";
 
-@import "@/styles/body.scss";
-@import "@/styles/card.scss";
-@import "@/styles/clickable.scss";
-@import "@/styles/logs.scss";
-@import "@/styles/nav.scss";
-
 $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/regular";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 @import "~@fortawesome/fontawesome-free/scss/v4-shims";
+
+@import "@/styles/body.scss";
+@import "@/styles/card.scss";
+@import "@/styles/clickable.scss";
+@import "@/styles/logs.scss";
+@import "@/styles/nav.scss";
+@import "@/styles/spinner.scss";
 </style>
 
 <script>

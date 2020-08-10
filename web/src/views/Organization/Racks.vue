@@ -104,7 +104,7 @@ export default {
   },
   components: {
     Provider: () => import("@/components/Provider"),
-    Rack: () => import("@/components/Rack")
+    Rack: () => import("@/components/Organization/Rack")
   },
   computed: {
     filteredRacks() {

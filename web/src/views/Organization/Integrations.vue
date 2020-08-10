@@ -54,7 +54,7 @@ export default {
     }
   },
   components: {
-    Integrations: () => import("@/components/Integrations")
+    Integrations: () => import("@/components/Organization/Integrations")
   },
   mixins: [Organization]
 };

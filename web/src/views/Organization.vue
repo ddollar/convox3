@@ -1,7 +1,7 @@
 <template>
   <div class="organization">
     <Navbar>
-      <OrganizationPicker />
+      <Picker />
     </Navbar>
     <div class="d-flex" style="min-height:100%;">
       <Sidebar />
@@ -14,7 +14,7 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-			{{ end }} -->
+        {{ end }}-->
 
         <router-view />
       </main>
@@ -34,15 +34,11 @@ main {
 </style>
 
 <script>
-import Navbar from "@/components/Navbar.vue";
-import OrganizationPicker from "@/components/OrganizationPicker.vue";
-import Sidebar from "@/components/Sidebar.vue";
-
 export default {
   components: {
-    Navbar,
-    OrganizationPicker,
-    Sidebar,
-  },
+    Navbar: () => import("@/components/Navbar.vue"),
+    Picker: () => import("@/components/Organization/Picker.vue"),
+    Sidebar: () => import("@/components/Sidebar.vue")
+  }
 };
 </script>

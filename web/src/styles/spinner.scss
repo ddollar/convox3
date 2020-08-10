@@ -1,0 +1,11 @@
+i.spinner {
+  @extend %fa-icon;
+  @extend .fas;
+  @extend .fa-spin;
+
+  color: #bbb;
+
+  &:before {
+    content: fa-content($fa-var-circle-notch);
+  }
+}

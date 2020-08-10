@@ -31,7 +31,7 @@ import Organization from "@/mixins/Organization";
 
 export default {
   apollo: {
-    organizations: require("../queries/Organizations.graphql")
+    organizations: require("@/queries/Organizations.graphql")
   },
   mixins: [Organization]
 };

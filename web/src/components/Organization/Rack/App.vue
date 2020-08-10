@@ -11,26 +11,17 @@
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Processes</div>
-            <i
-              v-if="$apollo.queries.processes.loading"
-              class="fas fa-circle-notch fa-spin text-secondary"
-            ></i>
+            <i v-if="$apollo.queries.processes.loading" class="spinner"></i>
             <div v-else>{{ processes.length }}</div>
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
-            <i
-              v-if="$apollo.queries.services.loading"
-              class="fas fa-circle-notch fa-spin text-secondary"
-            ></i>
+            <i v-if="$apollo.queries.services.loading" class="spinner"></i>
             <div v-else>{{ cpu }}</div>
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
-            <i
-              v-if="$apollo.queries.services.loading"
-              class="fas fa-circle-notch fa-spin text-secondary"
-            ></i>
+            <i v-if="$apollo.queries.services.loading" class="spinner"></i>
             <div v-else>{{ mem }}</div>
           </div>
         </li>

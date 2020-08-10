@@ -19,7 +19,7 @@ export default {
     }
   },
   components: {
-    App: () => import("@/components/App")
+    App: () => import("@/components/Organization/Rack/App")
   }
 };
 </script>
