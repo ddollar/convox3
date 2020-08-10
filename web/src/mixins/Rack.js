@@ -1,7 +1,7 @@
 export default {
   apollo: {
     rack: {
-      query: require("../queries/Rack.graphql"),
+      query: require("../queries/Organization/Rack.graphql"),
       skip() {
         return !(this.$route.params.oid && this.$route.params.rid);
       },

@@ -7,29 +7,29 @@ export default {
   apollo: {
     $subscribe: {
       logs: {
-        query: require("@/queries/Rack/Logs.graphql"),
+        query: require("@/queries/Organization/Rack/Logs.graphql"),
         variables() {
           return {
             oid: this.$route.params.oid,
-            rid: this.$route.params.rid,
+            rid: this.$route.params.rid
           };
         },
         result({ data }) {
           this.logs += `${data.rack_logs.line}\n`;
-        },
-      },
-    },
+        }
+      }
+    }
   },
   data: function() {
     return {
-      logs: "",
+      logs: ""
     };
   },
   methods: {
     scrollMonitor: function() {
       const el = this.$el;
       el.dataset.bottom = el.scrollTop === el.scrollHeight - el.offsetHeight;
-    },
+    }
   },
   mounted() {
     this.$el.addEventListener("scroll", this.scrollMonitor);
@@ -41,6 +41,6 @@ export default {
     if (el.dataset.bottom === "true") {
       el.scrollTop = el.scrollHeight;
     }
-  },
+  }
 };
 </script>

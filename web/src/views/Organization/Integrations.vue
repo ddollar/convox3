@@ -14,7 +14,7 @@ import Organization from "@/mixins/Organization";
 export default {
   apollo: {
     notifications: {
-      query: require("@/queries/Integrations.graphql"),
+      query: require("@/queries/Organization/Integrations.graphql"),
       skip() {
         return !this.organization.id;
       },
@@ -27,7 +27,7 @@ export default {
       }
     },
     runtimes: {
-      query: require("@/queries/Integrations.graphql"),
+      query: require("@/queries/Organization/Integrations.graphql"),
       skip() {
         return !this.organization.id;
       },
@@ -40,7 +40,7 @@ export default {
       }
     },
     sources: {
-      query: require("@/queries/Integrations.graphql"),
+      query: require("@/queries/Organization/Integrations.graphql"),
       skip() {
         return !this.organization.id;
       },
