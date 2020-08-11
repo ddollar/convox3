@@ -49,7 +49,6 @@ export default {
           this.$parent.$apollo.queries.instances.refresh();
         })
         .catch(() => {
-          console.log("error");
           event.target.disabled = false;
         });
     },
