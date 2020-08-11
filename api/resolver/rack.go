@@ -64,11 +64,11 @@ func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 		ras = append(ras, &App{App: a, rack: r})
 	}
 
-	if len(ras) > 0 {
-		for i := 0; i < 20; i++ {
-			ras = append(ras, ras[0])
-		}
-	}
+	// if len(ras) > 0 {
+	// 	for i := 0; i < 20; i++ {
+	// 		ras = append(ras, ras[0])
+	// 	}
+	// }
 
 	return ras, nil
 }
