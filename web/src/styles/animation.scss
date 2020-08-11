@@ -1,0 +1,15 @@
+.animate-delete {
+  animation: 0.5s flash-delete 0.5s normal both ease-in-out;
+}
+
+@keyframes flash-delete {
+  0% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  50% {
+    background-color: $danger;
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+}

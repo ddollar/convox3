@@ -13,3 +13,7 @@ body,
 .container-fluid > .row {
   height: 100%;
 }
+
+button > * {
+  pointer-events: none;
+}
