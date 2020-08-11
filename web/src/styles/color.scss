@@ -2,3 +2,18 @@ code {
   color: $dark;
   font-size: 1em;
 }
+
+.bg-secondary {
+  .text-danger {
+    filter: brightness(300%);
+  }
+  .text-secondary {
+    filter: brightness(200%);
+  }
+  .text-success {
+    filter: brightness(200%) saturate(40%);
+  }
+  .text-warning {
+    filter: brightness(150%);
+  }
+}

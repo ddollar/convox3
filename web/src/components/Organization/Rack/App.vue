@@ -4,7 +4,7 @@
       <div class="card-header d-flex bg-light">
         <div class="flex-grow-1">{{ app.name }}</div>
         <div class="flex-shrink-0">
-          <i class="fa fa-check-square"></i>
+          <Status :status="app.status" color />
         </div>
       </div>
       <ul class="list-group list-group-flush">
@@ -77,6 +77,9 @@ export default {
         };
       },
     },
+  },
+  components: {
+    Status: () => import("@/components/Organization/Rack/App/Status.vue"),
   },
   computed: {
     cpu() {

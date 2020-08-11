@@ -18,6 +18,7 @@ query Racks($oid: ID!) {
       id
       name
       runtime
+      status
     }
   }
 }

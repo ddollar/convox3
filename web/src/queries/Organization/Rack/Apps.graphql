@@ -5,6 +5,7 @@ query Apps($oid: ID!, $rid: ID!) {
       id
       apps {
         name
+        status
       }
     }
   }

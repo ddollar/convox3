@@ -10,7 +10,10 @@
       <div class="flex-fill ml-4 mr-4 mb-4 order-1">
         <h4 class="font-weight-bold mb-0">{{ rack.name }}</h4>
       </div>
-      <div class="mr-4 mb-4 order-3 order-lg-2">
+      <div class="mr-3 mb-4 order-lg-2" style="font-size: 1.4em; font-weight: bold;">
+        <i v-if="$apollo.loading" class="spinner" />
+      </div>
+      <div class="mr-4 mb-4 order-3 order-lg-3">
         <nav class="nav nav-pills flex-nowrap">
           <router-link :to="route('apps')" class="nav-item nav-link">Apps</router-link>
           <router-link :to="route('instances')" class="nav-item nav-link">Instances</router-link>
@@ -20,7 +23,7 @@
           <router-link :to="route('updates')" class="nav-item nav-link">Updates</router-link>
         </nav>
       </div>
-      <div class="mb-4 order-2 order-lg-3">
+      <div class="mb-4 order-2 order-lg-4">
         <button class="btn btn-secondary">
           <i class="fa fa-cog"></i>
         </button>
