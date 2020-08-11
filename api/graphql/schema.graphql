@@ -7,6 +7,7 @@ schema {
 type Mutation {
   instance_terminate(oid: ID!, rid: ID!, iid: ID!): String!
   login(email: String!, password: String!): Authentication
+  process_stop(oid: ID!, rid: ID!, app: String!, pid: ID!): String!
   # signup(email: String!, password: String!): Authentication
 }
 
@@ -106,10 +107,14 @@ type Organization {
 }
 
 type Process {
+  app: String!
   cpu: Int!
   id: ID!
   mem: Int!
+  release: String!
   service: String!
+  started: Int!
+  status: String!
 }
 
 type Rack {
@@ -119,6 +124,7 @@ type Rack {
   capacity: Capacity!
   instances: [Instance!]!
   name: String!
+  processes: [Process!]!
   runtime: ID
   status: RackStatus!
 }

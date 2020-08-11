@@ -12,53 +12,6 @@ type Root struct {
 	model model.Interface
 }
 
-type LoginArgs struct {
-	Email    string
-	Password string
-}
-
-type InstanceLoginArgs struct {
-	Oid graphql.ID
-	Rid graphql.ID
-	Iid graphql.ID
-}
-
-func (r *Root) InstanceTerminate(ctx context.Context, args InstanceLoginArgs) (string, error) {
-	rr, err := authenticatedRack(ctx, r.model, string(args.Oid), string(args.Rid))
-	if err != nil {
-		return "", err
-	}
-
-	c, err := rackClient(ctx, rr.Host, rr.Password)
-	if err != nil {
-		return "", err
-	}
-
-	if err := c.InstanceTerminate(string(args.Iid)); err != nil {
-		return "", err
-	}
-
-	return string(args.Iid), nil
-}
-
-func (r *Root) Login(ctx context.Context, args LoginArgs) (*Authentication, error) {
-	mu, err := r.model.UserAuthenticatePassword(args.Email, args.Password)
-	if err != nil {
-		return nil, err
-	}
-
-	u := User{
-		id:    mu.ID,
-		email: mu.Email,
-	}
-
-	a := &Authentication{
-		user: u,
-	}
-
-	return a, nil
-}
-
 type SignupArgs struct {
 	Email    string
 	Password string

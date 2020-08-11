@@ -1,0 +1,18 @@
+query Processes($oid: ID!, $rid: ID!) {
+  organization(id: $oid) {
+    id
+    rack(id: $rid) {
+      id
+      processes {
+        app
+        cpu
+        id
+        mem
+        release
+        service
+        started
+        status
+      }
+    }
+  }
+}

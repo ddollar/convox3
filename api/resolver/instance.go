@@ -1,8 +1,8 @@
 package resolver
 
 import (
+	"github.com/convox/convox/pkg/options"
 	"github.com/convox/convox/pkg/structs"
-	"github.com/convox/rack/pkg/options"
 	"github.com/graph-gophers/graphql-go"
 )
 

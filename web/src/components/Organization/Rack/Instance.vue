@@ -8,7 +8,7 @@
     <td><Progress :current="instance.mem" style="width:100px;" /></td>
     <td>{{ instance.private }}</td>
     <td>{{ instance.public }}</td>
-    <td><Timeago :datetime="datetime" /></td>
+    <td><Timeago v-if="instance.started > 0" :datetime="datetime" /></td>
     <td>
       <button class="btn btn-danger btn-sm" @click="terminate(instance.id, $event)">
         <i class="fa fa-times"></i>

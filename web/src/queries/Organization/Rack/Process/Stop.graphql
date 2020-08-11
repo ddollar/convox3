@@ -1,0 +1,3 @@
+mutation Stop($oid: ID!, $rid: ID!, $app: String!, $pid: ID!) {
+  process_stop(oid: $oid, rid: $rid, app: $app, pid: $pid)
+}

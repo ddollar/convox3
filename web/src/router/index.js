@@ -86,7 +86,7 @@ const routes = [
           {
             path: "processes",
             name: "organization/rack/processes",
-            component: Blank,
+            component: () => import(/* webpackChunkName: "organization/rack/processes" */ "@/views/Organization/Rack/Processes.vue"),
             meta: { expand: true, role: "developer" },
           },
           {

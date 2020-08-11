@@ -2,9 +2,12 @@ package resolver
 
 import (
 	"context"
+	"sort"
 	"time"
 
 	"github.com/convox/console/api/model"
+	"github.com/convox/convox/pkg/options"
+	"github.com/convox/convox/pkg/structs"
 	"github.com/convox/convox/sdk"
 	"github.com/graph-gophers/graphql-go"
 )
@@ -132,6 +135,39 @@ func (r *Rack) Runtime() *graphql.ID {
 	id := graphql.ID(r.Rack.Runtime)
 
 	return &id
+}
+
+func (r *Rack) Processes(ctx context.Context) ([]*Process, error) {
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+
+	c, err := r.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ps, err := c.SystemProcesses(structs.SystemProcessesOptions{All: options.Bool(true)})
+	if err != nil {
+		return nil, err
+	}
+
+	sort.Slice(ps, func(i, j int) bool {
+		if ps[i].App != ps[j].App {
+			return ps[i].App < ps[j].App
+		}
+		if ps[i].Name != ps[j].Name {
+			return ps[i].Name < ps[j].Name
+		}
+		return ps[i].Id < ps[j].Id
+	})
+
+	rps := []*Process{}
+
+	for _, p := range ps {
+		rps = append(rps, &Process{p})
+	}
+
+	return rps, nil
 }
 
 func (r *Rack) Status(ctx context.Context) (string, error) {

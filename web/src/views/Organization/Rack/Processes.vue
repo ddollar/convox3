@@ -3,17 +3,18 @@
     <thead>
       <tr>
         <th scope="col" class="expand">ID</th>
+        <th scope="col">App</th>
+        <th scope="col">Service</th>
         <th scope="col">Status</th>
+        <th scope="col">Release</th>
         <th scope="col">CPU</th>
         <th scope="col">Memory</th>
-        <th scope="col">Private</th>
-        <th scope="col">Public</th>
-        <th scope="col">Launched</th>
+        <th scope="col">Started</th>
         <th scope="col"></th>
       </tr>
     </thead>
     <tbody>
-      <Instance v-for="instance in instances" :key="instance.id" :instance="instance" />
+      <Process v-for="process in processes" :key="process.id" :process="process" />
     </tbody>
   </table>
   <!-- <div class="row">
@@ -31,10 +32,10 @@
 <script>
 export default {
   apollo: {
-    instances: {
-      query: require("@/queries/Organization/Rack/Instances.graphql"),
+    processes: {
+      query: require("@/queries/Organization/Rack/Processes.graphql"),
       pollInterval: 5000,
-      update: (data) => data.organization?.rack?.instances,
+      update: (data) => data.organization?.rack?.processes,
       variables() {
         return {
           oid: this.$route.params.oid,
@@ -44,7 +45,7 @@ export default {
     },
   },
   components: {
-    Instance: () => import("@/components/Organization/Rack/Instance.vue"),
+    Process: () => import("@/components/Organization/Rack/Process.vue"),
   },
 };
 </script>
