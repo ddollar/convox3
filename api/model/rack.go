@@ -3,6 +3,8 @@ package model
 import (
 	"time"
 
+	"github.com/convox/console/pkg/storage"
+	"github.com/convox/convox/pkg/options"
 	"github.com/pkg/errors"
 )
 
@@ -41,6 +43,22 @@ func (m *Model) RackGet(id string) (*Rack, error) {
 	}
 
 	return r, nil
+}
+
+func (m *Model) RackUpdates(id string) (Updates, error) {
+	opts := storage.QueryOptions{
+		Forward: options.Bool(false),
+		Index:   options.String("rack-id-created-index"),
+		Limit:   options.Int64(10),
+	}
+
+	var us Updates
+
+	if err := m.storage.Query("updates", map[string]string{"rack-id": id}, opts, &us); err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return us, nil
 }
 
 func (rs Racks) Less(i, j int) bool {

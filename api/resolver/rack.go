@@ -170,6 +170,29 @@ func (r *Rack) Processes(ctx context.Context) ([]*Process, error) {
 	return rps, nil
 }
 
+func (r *Rack) Resources(ctx context.Context) ([]*Resource, error) {
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+
+	c, err := r.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	rs, err := c.SystemResourceList()
+	if err != nil {
+		return nil, err
+	}
+
+	rrs := []*Resource{}
+
+	for _, r := range rs {
+		rrs = append(rrs, &Resource{r})
+	}
+
+	return rrs, nil
+}
+
 func (r *Rack) Status(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -185,6 +208,10 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	}
 
 	return s.Status, nil
+}
+
+func (r *Rack) Updates(ctx context.Context) ([]*Update, error) {
+	return nil, nil
 }
 
 func (r *Rack) client(ctx context.Context) (*sdk.Client, error) {

@@ -92,7 +92,7 @@ const routes = [
           {
             path: "resources",
             name: "organization/rack/resources",
-            component: Blank,
+            component: () => import(/* webpackChunkName: "organization/rack/resources" */ "@/views/Organization/Rack/Resources.vue"),
             meta: { expand: true, role: "developer" },
           },
           {
@@ -104,7 +104,7 @@ const routes = [
           {
             path: "updates",
             name: "organization/rack/updates",
-            component: Blank,
+            component: () => import(/* webpackChunkName: "organization/rack/updates" */ "@/views/Organization/Rack/Updates.vue"),
             meta: { expand: true, role: "developer" },
           },
         ],

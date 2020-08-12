@@ -52,8 +52,7 @@ export default {
         .then(() => {
           this.$parent.$apollo.queries.processes.refresh();
         })
-        .catch((error) => {
-          console.log("error", error);
+        .catch(() => {
           event.target.disabled = false;
         });
     },

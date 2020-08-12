@@ -1,0 +1,3 @@
+mutation Delete($oid: ID!, $rid: ID!, $name: ID!) {
+  resource_delete(oid: $oid, rid: $rid, name: $name)
+}

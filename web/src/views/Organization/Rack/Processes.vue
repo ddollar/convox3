@@ -17,16 +17,6 @@
       <Process v-for="process in processes" :key="process.id" :process="process" />
     </tbody>
   </table>
-  <!-- <div class="row">
-    <div class="col-4">
-      <div class="card">
-        <div class="card-header">Foo</div>
-        <ul class="list-group list-group-flush">
-          <Instance v-for="instance in instances" :key="instance.id" :instance="instance" />
-        </ul>
-      </div>
-    </div>
-  </div>-->
 </template>
 
 <script>
