@@ -51,6 +51,7 @@
         </li>
       </ul>
     </div>
+    <Settings :rid="rack.id" />
   </div>
 </template>
 
@@ -102,6 +103,7 @@ export default {
     },
   },
   components: {
+    Settings: () => import("@/components/Organization/Rack/Settings.vue"),
     Status: () => import("@/components/Organization/Rack/Status.vue"),
   },
   computed: {
@@ -126,10 +128,16 @@ export default {
       return prettyBytes(num * 1000000);
     },
     goto() {
-      this.$router.push({
-        name: "organization/rack",
-        params: { oid: this.organization.id, rid: this.rack.id },
-      });
+      switch (this.status) {
+        case "unknown":
+          this.$bvModal.show(`rack-settings-${this.rack.id}`);
+          break;
+        default:
+          this.$router.push({
+            name: "organization/rack",
+            params: { oid: this.organization.id, rid: this.rack.id },
+          });
+      }
     },
   },
   mixins: [Organization],

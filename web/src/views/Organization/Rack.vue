@@ -24,9 +24,8 @@
         </nav>
       </div>
       <div class="mb-4 order-2 order-lg-4">
-        <button class="btn btn-secondary">
-          <i class="fa fa-cog"></i>
-        </button>
+        <b-button variant="secondary" @click="settings()"> <i class="fa fa-cog"></i> </b-button>
+        <Settings :rid="rid" />
       </div>
     </div>
 
@@ -39,6 +38,14 @@ import Organization from "@/mixins/Organization";
 import Rack from "@/mixins/Rack";
 
 export default {
+  components: {
+    Settings: () => import("@/components/Organization/Rack/Settings"),
+  },
+  computed: {
+    rid() {
+      return this.$route.params.rid;
+    },
+  },
   methods: {
     back() {
       return {
@@ -51,6 +58,9 @@ export default {
         name: `organization/rack/${page}`,
         params: { oid: this.$route.params.oid, rid: this.$route.params.rid },
       };
+    },
+    settings() {
+      this.$bvModal.show(`rack-settings-${this.$route.params.rid}`);
     },
   },
   mixins: [Organization, Rack],
