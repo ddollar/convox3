@@ -5,6 +5,7 @@ import (
 
 	"github.com/convox/console/pkg/storage"
 	"github.com/convox/convox/pkg/options"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -59,6 +60,37 @@ func (m *Model) RackUpdates(id string) (Updates, error) {
 	}
 
 	return us, nil
+}
+
+func (m *Model) RackSave(r *Rack) error {
+	if err := m.storage.Put("racks", r); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (r *Rack) Defaults() {
+	if r.ID == "" {
+		r.ID = uuid.New().String()
+	}
+
+	if r.Created.IsZero() {
+		r.Created = time.Now().UTC()
+	}
+}
+
+func (r *Rack) Validate() []error {
+	errs := []error{}
+
+	errs = checkNonzero(errs, r.ID, "id required")
+	errs = checkNonzero(errs, r.Creator, "creator required")
+	errs = checkNonzero(errs, r.Organization, "organization required")
+	errs = checkNonzero(errs, r.Host, "host required")
+	errs = checkNonzero(errs, r.Name, "name required")
+	errs = checkNonzero(errs, r.Password, "password required")
+
+	return errs
 }
 
 func (rs Racks) Less(i, j int) bool {

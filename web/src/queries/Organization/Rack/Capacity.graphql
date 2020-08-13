@@ -1,10 +1,8 @@
-query Rack($oid: ID!, $id: ID!) {
+query Capacity($oid: ID!, $rid: ID!) {
   organization(id: $oid) {
     id
-    rack(id: $id) {
-      apps {
-        name
-      }
+    rack(id: $rid) {
+      id
       capacity {
         cpu {
           total
@@ -15,8 +13,6 @@ query Rack($oid: ID!, $id: ID!) {
           used
         }
       }
-      id
-      name
     }
   }
 }

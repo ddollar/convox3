@@ -5,29 +5,9 @@ import (
 	"github.com/graph-gophers/graphql-go"
 )
 
-const (
-	
-)
-var jwtHash = jwt.NewHS256([]byte("secret"))
-
 type User struct {
 	id    string
 	email string
-}
-
-func UserFromToken(token string) (*User, error) {
-	var data map[string]string
-
-	if _, err := jwt.Verify([]byte(token), jwtHash, &data); err != nil {
-		return nil, err
-	}
-
-	u := &User{
-		id:    data["id"],
-		email: data["email"],
-	}
-
-	return u, nil
 }
 
 func (u User) Id() graphql.ID {

@@ -54,7 +54,7 @@ func (r *Root) Organization(ctx context.Context, args OrganizationArgs) (*Organi
 }
 
 func (r *Root) Organizations(ctx context.Context) ([]*Organization, error) {
-	u, err := cuser(ctx)
+	u, err := currentUser(ctx)
 	if err != nil {
 		return nil, err
 	}

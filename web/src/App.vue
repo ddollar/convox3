@@ -61,6 +61,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "@/styles/card.scss";
 @import "@/styles/clickable.scss";
 @import "@/styles/logs.scss";
+@import "@/styles/modal.scss";
 @import "@/styles/nav.scss";
 @import "@/styles/spinner.scss";
 @import "@/styles/table.scss";

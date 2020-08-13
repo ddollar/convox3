@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/convox/console/api/model"
 	"github.com/graph-gophers/graphql-go"
+	"github.com/pkg/errors"
 )
 
 type InstanceTerminateArgs struct {
@@ -79,4 +81,48 @@ func (r *Root) ProcessStop(ctx context.Context, args ProcessStopArgs) (string, e
 	}
 
 	return string(args.Pid), nil
+}
+
+type RackImportArgs struct {
+	Oid      graphql.ID
+	Name     string
+	Hostname string
+	Password string
+}
+
+func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, error) {
+	u, err := currentUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	o, err := authenticatedOrganization(ctx, r.model, string(args.Oid))
+	if err != nil {
+		return nil, err
+	}
+
+	rs, err := r.model.OrganizationRacks(o.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, r := range rs {
+		if r.Name == args.Name {
+			return nil, fmt.Errorf("rack name already exists")
+		}
+	}
+
+	rr := model.Rack{
+		Creator:      u.id,
+		Organization: o.ID,
+		Name:         args.Name,
+		Host:         args.Hostname,
+		Password:     args.Password,
+	}
+
+	if err := r.model.RackSave(&rr); err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return &Rack{rr}, nil
 }

@@ -62,6 +62,14 @@ func (m *Model) OrganizationRacks(oid string) (Racks, error) {
 	return rs, nil
 }
 
+func (m *Model) OrganizationSave(o *Organization) error {
+	if err := m.storage.Put("organizations", o); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (os Organizations) Less(i, j int) bool {
 	return os[i].Name < os[j].Name
 }

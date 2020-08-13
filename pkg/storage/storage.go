@@ -18,7 +18,7 @@ type Sortable interface {
 }
 
 type Validator interface {
-	Validate() error
+	Validate() []error
 }
 
 func New(provider string) Interface {

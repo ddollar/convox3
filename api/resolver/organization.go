@@ -19,7 +19,7 @@ func (o *Organization) Id() graphql.ID {
 }
 
 func (o *Organization) Access(ctx context.Context) (string, error) {
-	u, err := cuser(ctx)
+	u, err := currentUser(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -109,6 +109,8 @@ type RackArgs struct {
 }
 
 func (o *Organization) Rack(ctx context.Context, args RackArgs) (*Rack, error) {
+	fmt.Printf("args: %+v\n", args)
+
 	r, err := o.model.RackGet(string(args.Id))
 	if err != nil {
 		return nil, err

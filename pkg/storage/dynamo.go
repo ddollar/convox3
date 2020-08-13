@@ -263,6 +263,18 @@ func (d *Dynamo) Put(table string, item interface{}) error {
 		d.Defaults()
 	}
 
+	if v, ok := item.(Validator); ok {
+		if errs := v.Validate(); len(errs) > 0 {
+			msgs := []string{}
+
+			for _, err := range errs {
+				msgs = append(msgs, err.Error())
+			}
+
+			return errors.New(strings.Join(msgs, ", "))
+		}
+	}
+
 	attrs, err := dynamique.Marshal(item, d.key)
 	if err != nil {
 		return errors.WithStack(log.Error(err))

@@ -1,12 +1,5 @@
 package resolver
 
-import (
-	"context"
-	"fmt"
-
-	"github.com/graph-gophers/graphql-transport-ws/graphqlws"
-)
-
 type ContextKey int
 
 const (
@@ -50,16 +43,16 @@ const (
 // 	return uid, nil
 // }
 
-func cuser(ctx context.Context) (*User, error) {
-	token, ok := ctx.Value(graphqlws.ContextAuthorization).(string)
-	if !ok {
-		return nil, AuthenticationError{fmt.Errorf("no token")}
-	}
+// func cuser(ctx context.Context) (*User, error) {
+// 	token, ok := ctx.Value(graphqlws.ContextAuthorization).(string)
+// 	if !ok {
+// 		return nil, AuthenticationError{fmt.Errorf("no token")}
+// 	}
 
-	u, err := UserFromToken(token)
-	if err != nil {
-		return nil, AuthenticationError{err}
-	}
+// 	u, err := UserFromToken(token)
+// 	if err != nil {
+// 		return nil, AuthenticationError{err}
+// 	}
 
-	return u, nil
-}
+// 	return u, nil
+// }

@@ -2,23 +2,9 @@ query Racks($oid: ID!) {
   organization(id: $oid) {
     id
     racks {
-      apps {
-        name
-      }
-      capacity {
-        cpu {
-          total
-          used
-        }
-        mem {
-          total
-          used
-        }
-      }
       id
       name
       runtime
-      status
     }
   }
 }

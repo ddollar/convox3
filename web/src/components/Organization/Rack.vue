@@ -4,22 +4,26 @@
       <div class="card-header d-flex bg-secondary text-light">
         <div class="flex-grow-1">{{ rack.name }}</div>
         <div class="flex-shrink-0">
-          <Status :status="rack.status" color />
+          <i v-if="$apollo.queries.status.loading" class="spinner"></i>
+          <Status v-else :status="status" color />
         </div>
       </div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Apps</div>
-            <div>{{ rack.apps.length }}</div>
+            <i v-if="$apollo.queries.apps.loading" class="spinner"></i>
+            <div v-else>{{ apps.length }}</div>
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
-            <div>{{ rack.capacity.cpu.used }} / {{ rack.capacity.cpu.total }}</div>
+            <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
+            <div v-else>{{ capacity.cpu.used }} / {{ capacity.cpu.total }}</div>
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
-            <div>{{ capacity_bytes(rack.capacity.mem.used) }} / {{ capacity_bytes(rack.capacity.mem.total) }}</div>
+            <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
+            <div v-else>{{ capacity_bytes(capacity.mem.used) }} / {{ capacity_bytes(capacity.mem.total) }}</div>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -53,6 +57,38 @@ import Organization from "@/mixins/Organization";
 const prettyBytes = require("pretty-bytes");
 
 export default {
+  apollo: {
+    apps: {
+      query: require("@/queries/Organization/Rack/Apps.graphql"),
+      update: (data) => data.organization?.rack?.apps,
+      variables() {
+        return {
+          oid: this.$route.params.oid,
+          rid: this.rack.id,
+        };
+      },
+    },
+    capacity: {
+      query: require("@/queries/Organization/Rack/Capacity.graphql"),
+      update: (data) => data.organization?.rack?.capacity,
+      variables() {
+        return {
+          oid: this.$route.params.oid,
+          rid: this.rack.id,
+        };
+      },
+    },
+    status: {
+      query: require("@/queries/Organization/Rack/Status.graphql"),
+      update: (data) => data.organization?.rack?.status,
+      variables() {
+        return {
+          oid: this.$route.params.oid,
+          rid: this.rack.id,
+        };
+      },
+    },
+  },
   components: {
     Status: () => import("@/components/Organization/Rack/Status.vue"),
   },

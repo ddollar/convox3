@@ -1,0 +1,9 @@
+query Status($oid: ID!, $rid: ID!) {
+  organization(id: $oid) {
+    id
+    rack(id: $rid) {
+      id
+      status
+    }
+  }
+}

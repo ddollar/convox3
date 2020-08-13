@@ -1,0 +1,5 @@
+mutation Import($oid: ID!, $name: String!, $hostname: String!, $password: String!) {
+  rack_import(oid: $oid, name: $name, hostname: $hostname, password: $password) {
+    id
+  }
+}
