@@ -5,15 +5,15 @@ code {
 
 .bg-secondary {
   .text-danger {
-    filter: brightness(300%) saturate(80%);
+    color: #ffb3b3 !important;
   }
   .text-secondary {
     filter: brightness(200%);
   }
   .text-success {
-    filter: brightness(200%) saturate(40%);
+    color: #99e699 !important;
   }
   .text-warning {
-    filter: brightness(150%);
+    color: #ffff99 !important;
   }
 }

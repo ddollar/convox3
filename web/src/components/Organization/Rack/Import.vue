@@ -1,5 +1,6 @@
 <template>
-  <b-modal id="rack-import" title="Import Rack">
+  <b-modal id="rack-import" title="Import Rack" @hide="clear()">
+    <div v-if="alert" class="alert alert-danger" role="alert">{{ alert }}</div>
     <div class="form-row">
       <div class="form-group col-12">
         <label for="name">Name</label>
@@ -38,16 +39,23 @@
 </template>
 
 <script>
+import Error from "@/mixins/Error";
+
 export default {
   data() {
     return {
+      alert: "",
       hostname: "",
       name: "",
       password: "",
     };
   },
   methods: {
+    clear() {
+      this.alert = "";
+    },
     submit() {
+      this.alert = "";
       const { name, hostname, password } = this.$data;
       this.$apollo
         .mutate({
@@ -62,8 +70,13 @@ export default {
         .then(() => {
           this.$bvModal.hide("rack-import");
           this.$parent.$apollo.queries.racks.refetch();
+        })
+        .catch((err) => {
+          this.alert = this.graphQLErrors(err);
+          console.log("FOO", this.alert);
         });
     },
   },
+  mixins: [Error],
 };
 </script>

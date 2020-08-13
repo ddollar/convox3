@@ -1,6 +1,12 @@
-li.rack {
-  align-items: center;
-  cursor: pointer;
-  display: flex;
-  height: 60px;
+// li.rack {
+//   align-items: center;
+//   cursor: pointer;
+//   display: flex;
+//   height: 60px;
+// }
+
+.rack {
+  &.status-unknown {
+    filter: brightness(70%);
+  }
 }

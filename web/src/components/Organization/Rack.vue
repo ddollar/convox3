@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 col-xl-6 col-xxl-4 rack clickable" @click="goto()">
+  <div :class="`col-12 col-xl-6 col-xxl-4 rack clickable ${css}`" @click="goto()">
     <div class="card mb-4 border-bottom-0">
       <div class="card-header d-flex bg-secondary text-light">
         <div class="flex-grow-1">{{ rack.name }}</div>
@@ -103,6 +103,11 @@ export default {
   },
   components: {
     Status: () => import("@/components/Organization/Rack/Status.vue"),
+  },
+  computed: {
+    css() {
+      return `status-${this.status}`;
+    },
   },
   data() {
     return {

@@ -56,7 +56,7 @@ export default {
   mixins: [Organization, Rack],
   mounted() {
     if (this.$route.name == "organization/rack") {
-      this.$router.push({
+      this.$router.replace({
         name: "organization/rack/apps",
         params: { oid: this.$route.params.oid, rid: this.$route.params.rid },
       });
