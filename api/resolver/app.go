@@ -26,6 +26,9 @@ func (a *App) Processes(ctx context.Context) ([]*Process, error) {
 	}
 
 	ps, err := c.ProcessList(a.App.Name, structs.ProcessListOptions{})
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +52,9 @@ func (a *App) Services(ctx context.Context) ([]*Service, error) {
 	}
 
 	ss, err := c.ServiceList(a.App.Name)
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}

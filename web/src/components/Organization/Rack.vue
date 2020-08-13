@@ -13,16 +13,19 @@
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Apps</div>
             <i v-if="$apollo.queries.apps.loading" class="spinner"></i>
-            <div v-else>{{ apps.length }}</div>
+            <div v-else-if="appsError">--</div>
+            <div v-else>{{ $apollo.queries.apps.error }} {{ apps.length }}</div>
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
             <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
+            <div v-else-if="capacityError">--</div>
             <div v-else>{{ capacity.cpu.used }} / {{ capacity.cpu.total }}</div>
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
             <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
+            <div v-else-if="statusError">--</div>
             <div v-else>{{ capacity_bytes(capacity.mem.used) }} / {{ capacity_bytes(capacity.mem.total) }}</div>
           </div>
         </li>
@@ -59,6 +62,9 @@ const prettyBytes = require("pretty-bytes");
 export default {
   apollo: {
     apps: {
+      error(error) {
+        this.appsError = error;
+      },
       query: require("@/queries/Organization/Rack/Apps.graphql"),
       update: (data) => data.organization?.rack?.apps,
       variables() {
@@ -69,6 +75,9 @@ export default {
       },
     },
     capacity: {
+      error(error) {
+        this.capacityError = error;
+      },
       query: require("@/queries/Organization/Rack/Capacity.graphql"),
       update: (data) => data.organization?.rack?.capacity,
       variables() {
@@ -79,6 +88,9 @@ export default {
       },
     },
     status: {
+      error(error) {
+        this.statusError = error;
+      },
       query: require("@/queries/Organization/Rack/Status.graphql"),
       update: (data) => data.organization?.rack?.status,
       variables() {
@@ -91,6 +103,18 @@ export default {
   },
   components: {
     Status: () => import("@/components/Organization/Rack/Status.vue"),
+  },
+  data() {
+    return {
+      appsError: null,
+      capacity: {
+        cpu: { total: 0, used: 0 },
+        mem: { total: 0, used: 0 },
+      },
+      capacityError: null,
+      status: "unknown",
+      statusError: null,
+    };
   },
   methods: {
     capacity_bytes(num) {

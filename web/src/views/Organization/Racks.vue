@@ -58,26 +58,21 @@ export default {
   apollo: {
     integrations: {
       query: require("@/queries/Organization/Integrations.graphql"),
-      skip() {
-        return !this.organization.id;
-      },
       update: (data) => data.organization?.integrations,
       variables() {
         return {
           kind: "runtime",
-          oid: this.organization.id,
+          oid: this.$route.params.oid,
         };
       },
     },
     racks: {
       query: require("@/queries/Organization/Racks.graphql"),
-      skip() {
-        return !this.organization.id;
-      },
+      pollInterval: 5000,
       update: (data) => data.organization?.racks,
       variables() {
         return {
-          oid: this.organization.id,
+          oid: this.$route.params.oid,
         };
       },
     },

@@ -33,7 +33,7 @@ export default {
         case "updating":
           return "text-secondary";
         default:
-          return "fas fa-question-circle";
+          return "text-danger";
       }
     },
     status_icon() {

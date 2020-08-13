@@ -5,7 +5,7 @@ code {
 
 .bg-secondary {
   .text-danger {
-    filter: brightness(300%);
+    filter: brightness(300%) saturate(80%);
   }
   .text-secondary {
     filter: brightness(200%);

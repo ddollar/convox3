@@ -59,9 +59,9 @@ export default {
             password,
           },
         })
-        .then((res) => {
-          console.log("res", res);
+        .then(() => {
           this.$bvModal.hide("rack-import");
+          this.$parent.$apollo.queries.racks.refetch();
         });
     },
   },

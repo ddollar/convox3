@@ -74,8 +74,6 @@ func (r *Root) ProcessStop(ctx context.Context, args ProcessStopArgs) (string, e
 		return "", err
 	}
 
-	fmt.Printf("args: %+v\n", args)
-
 	if err := c.ProcessStop(args.App, string(args.Pid)); err != nil {
 		return "", err
 	}

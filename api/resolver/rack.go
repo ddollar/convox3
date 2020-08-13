@@ -38,6 +38,9 @@ func (r *Rack) App(ctx context.Context, args AppArgs) (*App, error) {
 	}
 
 	a, err := c.AppGet(args.Name)
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -57,6 +60,9 @@ func (r *Rack) Apps(ctx context.Context) ([]*App, error) {
 	}
 
 	as, err := c.AppList()
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -86,6 +92,9 @@ func (r *Rack) Capacity(ctx context.Context) (*Capacity, error) {
 	}
 
 	sc, err := c.CapacityGet()
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -114,6 +123,9 @@ func (r *Rack) Instances(ctx context.Context) ([]*Instance, error) {
 	}
 
 	is, err := c.InstanceList()
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -147,6 +159,9 @@ func (r *Rack) Processes(ctx context.Context) ([]*Process, error) {
 	}
 
 	ps, err := c.SystemProcesses(structs.SystemProcessesOptions{All: options.Bool(true)})
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -180,6 +195,9 @@ func (r *Rack) Resources(ctx context.Context) ([]*Resource, error) {
 	}
 
 	rs, err := c.SystemResourceList()
+	if err := timeoutError(err); err != nil {
+		return nil, err
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -203,6 +221,9 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	}
 
 	s, err := c.SystemGet()
+	if err := timeoutError(err); err != nil {
+		return "", err
+	}
 	if err != nil {
 		return "unknown", nil
 	}

@@ -90,3 +90,18 @@ func rackClient(ctx context.Context, host, password string) (*sdk.Client, error)
 
 	return s, nil
 }
+
+func timeoutError(err error) error {
+	if err == context.DeadlineExceeded {
+		return TimeoutError{err}
+	}
+
+	switch t := err.(type) {
+	case *url.Error:
+		if t.Err == context.DeadlineExceeded {
+			return TimeoutError{err}
+		}
+	}
+
+	return nil
+}
