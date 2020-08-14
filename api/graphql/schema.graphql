@@ -99,7 +99,7 @@ enum IntegrationKind {
 type Organization {
   access: Access!
   id: ID!
-  integrations(kind: IntegrationKind!): [Integration!]!
+  integrations(kind: IntegrationKind!, provider: String): [Integration!]!
   locked: Boolean!
   members: [Member!]!
   name: String!
@@ -131,6 +131,7 @@ type Rack {
   instances: [Instance!]!
   name: String!
   processes: [Process!]!
+  provider: String!
   resources: [Resource!]!
   runtime: ID
   status: RackStatus!

@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/convox/console/api/model"
+	"github.com/convox/console/pkg/common"
 	"github.com/convox/convox/pkg/options"
 	"github.com/convox/convox/pkg/structs"
 	"github.com/convox/convox/sdk"
@@ -183,6 +184,10 @@ func (r *Rack) Processes(ctx context.Context) ([]*Process, error) {
 	}
 
 	return rps, nil
+}
+
+func (r *Rack) Provider(ctx context.Context) string {
+	return common.CoalesceString(r.Rack.Provider, "aws")
 }
 
 func (r *Rack) Resources(ctx context.Context) ([]*Resource, error) {

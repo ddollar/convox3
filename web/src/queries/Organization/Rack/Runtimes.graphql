@@ -1,0 +1,10 @@
+query Runtimes($oid: ID!, $provider: String!) {
+  organization(id: $oid) {
+    id
+    integrations(kind: runtime, provider: $provider) {
+      id
+      provider
+      title
+    }
+  }
+}

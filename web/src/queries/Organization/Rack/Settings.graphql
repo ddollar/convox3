@@ -4,6 +4,7 @@ query Rack($oid: ID!, $id: ID!) {
     rack(id: $id) {
       id
       name
+      provider
     }
   }
 }

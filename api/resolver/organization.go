@@ -37,7 +37,8 @@ func (o *Organization) Access(ctx context.Context) (string, error) {
 }
 
 type IntegrationsArgs struct {
-	Kind string
+	Kind     string
+	Provider *string
 }
 
 func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) ([]*Integration, error) {
@@ -48,11 +49,17 @@ func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) 
 
 	ris := []*Integration{}
 
+	fmt.Printf("args: %+v\n", args)
+
 	for _, i := range is {
 		if i.Kind == args.Kind {
-			ris = append(ris, &Integration{i})
+			if args.Provider == nil || *args.Provider == i.Provider {
+				ris = append(ris, &Integration{i})
+			}
 		}
 	}
+
+	fmt.Printf("ris: %+v\n", ris)
 
 	return ris, nil
 }
