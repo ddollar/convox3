@@ -25,7 +25,7 @@
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
             <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
-            <div v-else-if="statusError">--</div>
+            <div v-else-if="capacityError">--</div>
             <div v-else>{{ capacity_bytes(capacity.mem.used) }} / {{ capacity_bytes(capacity.mem.total) }}</div>
           </div>
         </li>
