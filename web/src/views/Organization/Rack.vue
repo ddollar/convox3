@@ -25,6 +25,7 @@
       </div>
       <div class="mb-4 order-2 order-lg-4">
         <b-button variant="secondary" @click="settings()"> <i class="fa fa-cog"></i> </b-button>
+        <Remove :rid="rid" />
         <Settings :rid="rid" />
       </div>
     </div>
@@ -39,6 +40,7 @@ import Rack from "@/mixins/Rack";
 
 export default {
   components: {
+    Remove: () => import("@/components/Organization/Rack/Remove"),
     Settings: () => import("@/components/Organization/Rack/Settings"),
   },
   computed: {

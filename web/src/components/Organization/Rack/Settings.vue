@@ -34,6 +34,20 @@
         </div>
       </b-form-row>
     </b-container>
+    <template v-slot:modal-footer class="d-flex align-items-center">
+      <div class="flex-grow-1">
+        <button class="btn btn-danger" @click="remove()">
+          <i class="fa fa-times mr-1"></i>
+          Remove Rack
+        </button>
+      </div>
+      <div class="flex-shrink-0">
+        <button type="submit" class="btn btn-primary" @click="save()">
+          <i class="fas fa-check mr-1" aria-hidden="true"></i>
+          Save Changes
+        </button>
+      </div>
+    </template>
   </b-modal>
 </template>
 
@@ -68,6 +82,15 @@ export default {
     return {
       rack: {},
     };
+  },
+  methods: {
+    remove() {
+      this.$bvModal.hide(`rack-settings-${this.rid}`);
+      this.$bvModal.show(`rack-remove-${this.rid}`);
+    },
+    save() {
+      this.$bvModal.hide(`rack-settings-${this.rid}`);
+    },
   },
   props: ["rid"],
 };

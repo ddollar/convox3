@@ -51,6 +51,7 @@
         </li>
       </ul>
     </div>
+    <Remove :rid="rack.id" />
     <Settings :rid="rack.id" />
   </div>
 </template>
@@ -103,6 +104,7 @@ export default {
     },
   },
   components: {
+    Remove: () => import("@/components/Organization/Rack/Remove.vue"),
     Settings: () => import("@/components/Organization/Rack/Settings.vue"),
     Status: () => import("@/components/Organization/Rack/Status.vue"),
   },
@@ -130,7 +132,7 @@ export default {
     goto() {
       switch (this.status) {
         case "unknown":
-          this.$bvModal.show(`rack-settings-${this.rack.id}`);
+          this.$bvModal.show(`rack-remove-${this.rack.id}`);
           break;
         default:
           this.$router.push({
