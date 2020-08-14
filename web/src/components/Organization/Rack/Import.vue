@@ -73,7 +73,6 @@ export default {
         })
         .catch((err) => {
           this.alert = this.graphQLErrors(err);
-          console.log("FOO", this.alert);
         });
     },
   },
