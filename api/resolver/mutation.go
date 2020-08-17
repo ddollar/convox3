@@ -125,6 +125,24 @@ func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, erro
 	return &Rack{rr}, nil
 }
 
+type RackRemoveArgs struct {
+	Oid graphql.ID
+	Id  graphql.ID
+}
+
+func (r *Root) RackRemove(ctx context.Context, args RackRemoveArgs) (string, error) {
+	rr, err := authenticatedRack(ctx, r.model, string(args.Oid), string(args.Id))
+	if err != nil {
+		return "", err
+	}
+
+	if err := r.model.RackDelete(rr.ID); err != nil {
+		return "", err
+	}
+
+	return rr.ID, nil
+}
+
 type RackUpdateArgs struct {
 	Oid             graphql.ID
 	Id              graphql.ID
@@ -160,8 +178,6 @@ func (r *Root) RackUpdate(ctx context.Context, args RackUpdateArgs) (string, err
 	} else {
 		rr.Runtime = ""
 	}
-
-	fmt.Printf("rr: %+v\n", rr)
 
 	if err := r.model.RackSave(rr); err != nil {
 		return "", err

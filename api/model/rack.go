@@ -36,6 +36,14 @@ type Rack struct {
 
 type Racks []Rack
 
+func (m *Model) RackDelete(id string) error {
+	if err := m.storage.Delete("racks", id); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (m *Model) RackGet(id string) (*Rack, error) {
 	r := &Rack{}
 

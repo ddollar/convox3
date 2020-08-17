@@ -6,6 +6,7 @@ type Interface interface {
 	OrganizationIntegrations(oid string) (Integrations, error)
 	OrganizationRacks(oid string) (Racks, error)
 	OrganizationSave(o *Organization) error
+	RackDelete(id string) error
 	RackGet(id string) (*Rack, error)
 	RackSave(r *Rack) error
 	UserAuthenticatePassword(email, password string) (*User, error)

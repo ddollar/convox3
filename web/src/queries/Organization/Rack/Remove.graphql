@@ -1,0 +1,3 @@
+mutation Remove($oid: ID!, $id: ID!) {
+  rack_remove(oid: $oid, id: $id)
+}
