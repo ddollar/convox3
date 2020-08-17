@@ -9,6 +9,15 @@ type Mutation {
   login(email: String!, password: String!): Authentication
   process_stop(oid: ID!, rid: ID!, app: String!, pid: ID!): String!
   rack_import(oid: ID!, name: String!, hostname: String!, password: String!): Rack!
+  rack_update(
+    oid: ID!
+    id: ID!
+    name: String!
+    runtime: String!
+    update_day: Int!
+    update_frequency: UpdateFrequency!
+    update_hour: Int!
+  ): String!
   # signup(email: String!, password: String!): Authentication
 }
 
@@ -136,6 +145,9 @@ type Rack {
   runtime: ID
   status: RackStatus!
   updates: [Update!]!
+  update_day: Int!
+  update_frequency: UpdateFrequency!
+  update_hour: Int!
 }
 
 enum RackStatus {
@@ -182,6 +194,13 @@ type Update {
   started: Int
   status: String!
   version: String!
+}
+
+enum UpdateFrequency {
+  never
+  hourly
+  daily
+  weekly
 }
 
 type User {

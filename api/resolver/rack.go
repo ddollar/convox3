@@ -240,6 +240,18 @@ func (r *Rack) Updates(ctx context.Context) ([]*Update, error) {
 	return nil, nil
 }
 
+func (r *Rack) UpdateDay(ctx context.Context) int32 {
+	return int32(r.Rack.UpdateDay)
+}
+
+func (r *Rack) UpdateFrequency(ctx context.Context) string {
+	return common.CoalesceString(r.Rack.UpdateFrequency, "never")
+}
+
+func (r *Rack) UpdateHour(ctx context.Context) int32 {
+	return int32(r.Rack.UpdateHour)
+}
+
 func (r *Rack) client(ctx context.Context) (*sdk.Client, error) {
 	return rackClient(ctx, r.Host, r.Password)
 }

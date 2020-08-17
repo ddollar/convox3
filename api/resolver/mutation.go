@@ -124,3 +124,48 @@ func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, erro
 
 	return &Rack{rr}, nil
 }
+
+type RackUpdateArgs struct {
+	Oid             graphql.ID
+	Id              graphql.ID
+	Name            string
+	Runtime         string
+	UpdateDay       int32
+	UpdateFrequency string
+	UpdateHour      int32
+}
+
+func (r *Root) RackUpdate(ctx context.Context, args RackUpdateArgs) (string, error) {
+	rr, err := authenticatedRack(ctx, r.model, string(args.Oid), string(args.Id))
+	if err != nil {
+		return "", err
+	}
+
+	rr.Name = args.Name
+	rr.UpdateDay = int(args.UpdateDay)
+	rr.UpdateFrequency = args.UpdateFrequency
+	rr.UpdateHour = int(args.UpdateHour)
+
+	if args.Runtime != "" {
+		i, err := r.model.IntegrationGet(args.Runtime)
+		if err != nil {
+			return "", err
+		}
+
+		if i.OrganizationId != string(args.Oid) {
+			return "", fmt.Errorf("invalid runtime")
+		}
+
+		rr.Runtime = args.Runtime
+	} else {
+		rr.Runtime = ""
+	}
+
+	fmt.Printf("rr: %+v\n", rr)
+
+	if err := r.model.RackSave(rr); err != nil {
+		return "", err
+	}
+
+	return rr.ID, nil
+}

@@ -116,15 +116,9 @@ type RackArgs struct {
 }
 
 func (o *Organization) Rack(ctx context.Context, args RackArgs) (*Rack, error) {
-	fmt.Printf("args: %+v\n", args)
-
-	r, err := o.model.RackGet(string(args.Id))
+	r, err := authenticatedRack(ctx, o.model, o.ID, string(args.Id))
 	if err != nil {
 		return nil, err
-	}
-
-	if r.Organization != o.Organization.ID {
-		return nil, fmt.Errorf("invalid organization")
 	}
 
 	return &Rack{*r}, nil

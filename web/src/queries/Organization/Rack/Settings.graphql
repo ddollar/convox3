@@ -1,10 +1,14 @@
-query Rack($oid: ID!, $id: ID!) {
+query Settings($oid: ID!, $id: ID!) {
   organization(id: $oid) {
     id
     rack(id: $id) {
       id
       name
       provider
+      runtime
+      update_frequency
+      update_day
+      update_hour
     }
   }
 }

@@ -84,7 +84,6 @@ func (r *Rack) Validate() []error {
 	errs := []error{}
 
 	errs = checkNonzero(errs, r.ID, "id required")
-	errs = checkNonzero(errs, r.Creator, "creator required")
 	errs = checkNonzero(errs, r.Organization, "organization required")
 	errs = checkNonzero(errs, r.Host, "host required")
 	errs = checkNonzero(errs, r.Name, "name required")

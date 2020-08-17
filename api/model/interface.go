@@ -1,6 +1,7 @@
 package model
 
 type Interface interface {
+	IntegrationGet(iid string) (*Integration, error)
 	OrganizationGet(id string) (*Organization, error)
 	OrganizationIntegrations(oid string) (Integrations, error)
 	OrganizationRacks(oid string) (Racks, error)

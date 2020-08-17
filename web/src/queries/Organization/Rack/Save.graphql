@@ -1,0 +1,19 @@
+mutation Save(
+  $oid: ID!
+  $id: ID!
+  $name: String!
+  $runtime: String!
+  $update_day: Int!
+  $update_frequency: UpdateFrequency!
+  $update_hour: Int!
+) {
+  rack_update(
+    oid: $oid
+    id: $id
+    name: $name
+    runtime: $runtime
+    update_day: $update_day
+    update_frequency: $update_frequency
+    update_hour: $update_hour
+  )
+}
