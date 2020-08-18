@@ -27,9 +27,9 @@
           <div class="dropdown-menu dropdown-menu-right">
             <div v-if="integrations.length == 0" class="dropdown-item">No Runtime Integrations</div>
             <div v-else>
-              <b-dropdown-item v-for="integration in integrations" :key="integration.id" @click="install(integration.provider)">
+              <b-dropdown-item v-for="integration in integrations" :key="integration.id" @click="install(integration.id)">
                 <Provider :kind="integration.provider" :text="integration.title" />
-                <Install :provider="integration.provider" />
+                <Install :iid="integration.id" />
               </b-dropdown-item>
             </div>
           </div>
@@ -104,8 +104,8 @@ export default {
     filter(iid) {
       this.runtime = iid;
     },
-    install(provider) {
-      this.$bvModal.show(`rack-install-${provider}`);
+    install(id) {
+      this.$bvModal.show(`rack-install-${id}`);
     },
     settings(rid) {
       this.$router.push({

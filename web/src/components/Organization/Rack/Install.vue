@@ -17,14 +17,16 @@
             pattern="[a-z0-9-]+"
           />
         </div>
-        <div class="flex-shrink-0 ml-2" v-if="engines.length > 0">
+        <div class="flex-shrink-0 ml-2" v-if="runtime.engines.length > 0">
           <label>Engine</label>
-          <b-form-select v-model="engine" :options="engines"></b-form-select>
+          <b-form-select v-model="engine" :options="runtime.engines" value-field="name" text-field="description"></b-form-select>
         </div>
       </div>
       <div class="form-group col-4">
         <label>Region</label>
-        <b-form-select v-model="region"></b-form-select>
+        <b-form-select v-model="region">
+          <b-form-select-option v-for="region in runtime.regions" :key="region" :value="region">{{ region }}</b-form-select-option>
+        </b-form-select>
       </div>
     </div>
     <template v-slot:modal-footer>
@@ -40,28 +42,30 @@
 import Error from "@/mixins/Error";
 
 export default {
-  computed: {
-    engines() {
-      switch (this.provider) {
-        case "aws":
-          return [
-            { value: "v3", text: "EKS (Version 3)" },
-            { value: "v2", text: "ECS (Version 2)" },
-          ];
-        default:
-          return [];
-      }
+  apollo: {
+    runtime: {
+      query: require("@/queries/Organization/Runtime.graphql"),
+      update: (data) => data.organization?.runtime,
+      variables() {
+        return {
+          oid: this.$route.params.oid,
+          id: this.iid,
+        };
+      },
     },
+  },
+  computed: {
     id() {
-      return `rack-install-${this.provider}`;
+      return `rack-install-${this.iid}`;
     },
   },
   data() {
     return {
       alert: "",
-      engine: "",
+      engine: "v3",
       name: "",
       region: "",
+      runtime: { engines: [] },
     };
   },
   methods: {
@@ -91,6 +95,6 @@ export default {
     },
   },
   mixins: [Error],
-  props: ["provider"],
+  props: ["iid"],
 };
 </script>

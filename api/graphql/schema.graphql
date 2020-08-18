@@ -73,6 +73,11 @@ type CapacityMetric {
   used: Int!
 }
 
+type Engine {
+  description: String!
+  name: String!
+}
+
 type Member {
   access: Access!
   user: User!
@@ -115,6 +120,7 @@ type Organization {
   name: String!
   rack(id: ID!): Rack!
   racks: [Rack!]!
+  runtime(id: ID!): Runtime!
 }
 
 type Parameter {
@@ -176,6 +182,14 @@ enum ResourceStatus {
   running
   unknown
   updating
+}
+
+type Runtime {
+  id: ID!
+  engines: [Engine!]!
+  provider: String!
+  regions: [String!]!
+  title: String!
 }
 
 type Service {

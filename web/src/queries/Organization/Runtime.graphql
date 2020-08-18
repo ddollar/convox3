@@ -1,0 +1,14 @@
+query Runtime($oid: ID!, $id: ID!) {
+  organization(id: $oid) {
+    id
+    runtime(id: $id) {
+      id
+      engines {
+        description
+        name
+      }
+      provider
+      regions
+    }
+  }
+}

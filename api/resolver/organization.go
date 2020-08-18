@@ -123,3 +123,22 @@ func (o *Organization) Rack(ctx context.Context, args RackArgs) (*Rack, error) {
 
 	return &Rack{*r}, nil
 }
+
+type RuntimeArgs struct {
+	Id graphql.ID
+}
+
+func (o *Organization) Runtime(ctx context.Context, args RuntimeArgs) (*Runtime, error) {
+	i, err := o.model.IntegrationGet(string(args.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	if i.OrganizationId != o.ID {
+		return nil, fmt.Errorf("invalid runtime")
+	}
+
+	r := &Runtime{Integration: *i}
+
+	return r, nil
+}
