@@ -1,6 +1,6 @@
 .PHONY: all build clean clean-package compress dist mocks package release test
 
-commands = web
+commands = job web worker
 dist = $(wildcard web/dist/*)
 webpack  = public/assets.js
 

@@ -6,9 +6,22 @@ services:
       - AWS_ACCESS_KEY_ID
       - AWS_REGION
       - AWS_SECRET_ACCESS_KEY
+      - LICENSE_KEY
       - RACK_KEY
       - TABLE_PREFIX
+      - WORKER_QUEUE
     health: /check
     port: https:3000
     scale:
       memory: 1500
+  worker:
+    build: .
+    command: bin/worker
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_REGION
+      - AWS_SECRET_ACCESS_KEY
+      - LICENSE_KEY
+      - RACK_KEY
+      - TABLE_PREFIX
+      - WORKER_QUEUE

@@ -2,7 +2,9 @@ package model
 
 import (
 	"sort"
+	"strings"
 
+	"github.com/convox/console/pkg/license"
 	"github.com/pkg/errors"
 )
 
@@ -68,6 +70,56 @@ func (m *Model) OrganizationSave(o *Organization) error {
 	}
 
 	return nil
+}
+
+func (o *Organization) JobConcurrency() int {
+	if o.OverrideConcurrency > 0 {
+		return o.OverrideConcurrency
+	}
+
+	if !license.Current.Public {
+		return 1000
+	}
+
+	switch {
+	case o.PlanPro():
+		return 3
+	case o.PlanEnterprise():
+		return 5
+	default:
+		return 1
+	}
+}
+
+func (o *Organization) PlanEnterprise() bool {
+	return o.PlanEnterpriseDynamic() || o.PlanEnterpriseStatic()
+}
+
+func (o *Organization) PlanEnterpriseDynamic() bool {
+	switch {
+	case strings.HasPrefix(o.Plan, "enterprise-dynamic-"):
+		return true
+	default:
+		return false
+	}
+}
+
+func (o *Organization) PlanEnterpriseStatic() bool {
+	switch o.Plan {
+	case "enterprise":
+		return true
+	default:
+		return false
+	}
+}
+
+func (o *Organization) PlanPro() bool {
+	switch o.Plan {
+	case "pro", "pro-user-month", "pro-v3", "pro-v3-annual", "pro-v3-annual-full", "pro-v3-static":
+		return true
+	default:
+		return false
+	}
 }
 
 func (os Organizations) Less(i, j int) bool {

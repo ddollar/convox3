@@ -5,6 +5,10 @@ import (
 	"fmt"
 
 	"github.com/convox/console/api/model"
+	"github.com/convox/console/pkg/helpers"
+	"github.com/convox/console/pkg/queue"
+	"github.com/convox/console/pkg/settings"
+	"github.com/convox/stdapi"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/pkg/errors"
 )
@@ -127,6 +131,7 @@ func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, erro
 
 type RackInstallArgs struct {
 	Oid        graphql.ID
+	Runtime    graphql.ID
 	Name       string
 	Engine     string
 	Region     string
@@ -149,6 +154,109 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 	for _, p := range args.Parameters {
 		fmt.Printf("p: %+v\n", p)
 	}
+
+	i, err := cn.Models.IntegrationGet(args.Runtime)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if i.OrganizationId != oid {
+		return errors.WithStack(fmt.Errorf("invalid organization"))
+	}
+
+	ii, err := i.Integration()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	status, err := ii.Status()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	if status != "connected" {
+		return stdapi.Errorf(403, "Integration is not connected")
+	}
+
+	name := c.Form("name")
+	region := c.Form("region")
+
+	name = reRackName.ReplaceAllString(name, "")
+
+	rs, err := cn.Models.OrganizationRacks(oid)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	for _, r := range rs {
+		if r.Name == name {
+			return stdapi.Errorf(403, "Duplicate Rack name")
+		}
+	}
+
+	r, err := models.NewRack(oid, name)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	r.CreatorID = uid
+	r.IntegrationID = i.Id
+	r.Region = region
+	r.Stack = name
+
+	r.SetProvider(ii.Slug())
+
+	if err := cn.Models.RackSave(r); err != nil {
+		return errors.WithStack(err)
+	}
+
+	in, err := models.NewInstall(oid, uid, r.ID)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	names := c.Request().PostForm["parameter-name"]
+	values := c.Request().PostForm["parameter-value"]
+
+	if len(names) == len(values) {
+		for i := range names {
+			in.Params[names[i]] = values[i]
+		}
+	}
+
+	provider := ii.Slug()
+
+	backend, err := r.TerraformBackend()
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	in.Backend = backend
+	in.Engine = helpers.CoalesceString(c.Form("engine"), "v3")
+	in.Name = name
+	in.Provider = provider
+	in.Region = region
+	in.Version = helpers.CoalesceString(in.Params["release"], LatestRelease)
+
+	if err := cn.Models.InstallSave(in); err != nil {
+		return errors.WithStack(err)
+	}
+
+	r.InstallID = in.ID
+
+	if err := cn.Models.RackSave(r); err != nil {
+		return errors.WithStack(err)
+	}
+
+	work := map[string]string{
+		"id":   in.ID,
+		"type": "install",
+	}
+
+	if err := queue.New(settings.WorkerQueue).Enqueue(in.ID, oid, work); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return c.Redirect(302, fmt.Sprintf("/organizations/%s/racks", oid))
 
 	return "", nil
 }

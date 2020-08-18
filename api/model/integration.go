@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	"github.com/convox/console/pkg/integration"
 	"github.com/pkg/errors"
 )
@@ -29,4 +31,44 @@ func (m *Model) IntegrationGet(iid string) (*Integration, error) {
 
 func (i *Integration) Integration() (integration.Integration, error) {
 	return integration.New(i.ID, i.OrganizationId, i.Provider, i.AccessToken)
+}
+
+func (i *Integration) Notification() (integration.Notification, error) {
+	ii, err := i.Integration()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	ir, ok := ii.(integration.Notification)
+	if !ok {
+		return nil, errors.WithStack(fmt.Errorf("not a notification integration"))
+	}
+
+	return ir, nil
+}
+
+func (i *Integration) Source() (integration.Source, error) {
+	ii, err := i.Integration()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	is, ok := ii.(integration.Source)
+	if !ok {
+		return nil, errors.WithStack(fmt.Errorf("not a source integration"))
+	}
+
+	return is, nil
+}
+
+func (is Integrations) ByKind(kind string) Integrations {
+	isk := Integrations{}
+
+	for _, i := range is {
+		if i.Kind == kind {
+			isk = append(isk, i)
+		}
+	}
+
+	return isk
 }

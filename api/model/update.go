@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/pkg/errors"
+)
 
 type Update struct {
 	ID string `dynamo:"id"`
@@ -18,3 +22,21 @@ type Update struct {
 }
 
 type Updates []Update
+
+func (m *Model) UpdateGet(id string) (*Update, error) {
+	u := &Update{}
+
+	if err := m.storage.Get("updates", id, u); err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return u, nil
+}
+
+func (m *Model) UpdateSave(u *Update) error {
+	if err := m.storage.Put("updates", u); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}

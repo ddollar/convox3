@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/convox/console/pkg/storage"
@@ -86,6 +87,10 @@ func (r *Rack) Defaults() {
 	if r.Created.IsZero() {
 		r.Created = time.Now().UTC()
 	}
+}
+
+func (r *Rack) URL() (string, error) {
+	return fmt.Sprintf("https://convox:%s@%s", r.Password, r.Host), nil
 }
 
 func (r *Rack) Validate() []error {

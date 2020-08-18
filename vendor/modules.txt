@@ -73,6 +73,7 @@ github.com/aws/aws-sdk-go/service/dynamodb
 github.com/aws/aws-sdk-go/service/dynamodb/dynamodbiface
 github.com/aws/aws-sdk-go/service/ec2
 github.com/aws/aws-sdk-go/service/iam
+github.com/aws/aws-sdk-go/service/sqs
 github.com/aws/aws-sdk-go/service/sts
 github.com/aws/aws-sdk-go/service/sts/stsiface
 # github.com/containerd/containerd v1.3.3
@@ -224,6 +225,8 @@ github.com/inconshreveable/mousetrap
 github.com/jmespath/go-jmespath
 # github.com/karrick/godirwalk v1.15.5
 github.com/karrick/godirwalk
+# github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
+github.com/kballard/go-shellquote
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/magefile/mage v1.9.0
