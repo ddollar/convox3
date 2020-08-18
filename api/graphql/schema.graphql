@@ -9,7 +9,7 @@ type Mutation {
   login(email: String!, password: String!): Authentication
   process_stop(oid: ID!, rid: ID!, app: String!, pid: ID!): String!
   rack_import(oid: ID!, name: String!, hostname: String!, password: String!): Rack!
-  rack_install(oid: ID!, runtime: ID!, name: String!, engine: String!, region: String!, parameters: [ParameterArg!]!): String!
+  rack_install(oid: ID!, iid: ID!, name: String!, engine: String!, region: String!, parameters: [ParameterArg!]!): String!
   rack_remove(oid: ID!, id: ID!): String!
   rack_update(
     oid: ID!

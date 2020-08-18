@@ -17,6 +17,24 @@ import (
 
 var jwtHash = jwt.NewHS256([]byte("secret"))
 
+func authenticatedIntegration(ctx context.Context, model model.Interface, oid, iid string) (*model.Integration, error) {
+	o, err := authenticatedOrganization(ctx, model, oid)
+	if err != nil {
+		return nil, err
+	}
+	
+	i, err := model.IntegrationGet(iid)
+	if err != nil {
+		return nil, err
+	}
+
+	if i.OrganizationID != o.ID {
+		return nil, fmt.Errorf("invalid organization")
+	}
+
+	return i, nil
+}
+
 func authenticatedOrganization(ctx context.Context, model model.Interface, oid string) (*model.Organization, error) {
 	o, err := model.OrganizationGet(oid)
 	if err != nil {

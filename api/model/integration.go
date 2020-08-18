@@ -13,7 +13,7 @@ type Integration struct {
 	AccessToken    string            `dynamo:"access-token,encrypted"`
 	Attributes     map[string]string `dynamo:"attributes" json:"attributes"`
 	Kind           string            `dynamo:"kind" json:"kind"`
-	OrganizationId string            `dynamo:"organization-id" json:"organization-id"`
+	OrganizationID string            `dynamo:"organization-id" json:"organization-id"`
 	Provider       string            `dynamo:"provider" json:"provider"`
 }
 
@@ -30,7 +30,7 @@ func (m *Model) IntegrationGet(iid string) (*Integration, error) {
 }
 
 func (i *Integration) Integration() (integration.Integration, error) {
-	return integration.New(i.ID, i.OrganizationId, i.Provider, i.AccessToken)
+	return integration.New(i.ID, i.OrganizationID, i.Provider, i.AccessToken)
 }
 
 func (i *Integration) Notification() (integration.Notification, error) {

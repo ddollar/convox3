@@ -116,7 +116,7 @@ type RackArgs struct {
 }
 
 func (o *Organization) Rack(ctx context.Context, args RackArgs) (*Rack, error) {
-	r, err := authenticatedRack(ctx, o.model, o.ID, string(args.Id))
+	r, err := authenticatedRack(ctx, o.model, o.Organization.ID, string(args.Id))
 	if err != nil {
 		return nil, err
 	}
@@ -129,13 +129,9 @@ type RuntimeArgs struct {
 }
 
 func (o *Organization) Runtime(ctx context.Context, args RuntimeArgs) (*Runtime, error) {
-	i, err := o.model.IntegrationGet(string(args.Id))
+	i, err := authenticatedIntegration(ctx, o.model, o.Organization.ID, string(args.Id))
 	if err != nil {
 		return nil, err
-	}
-
-	if i.OrganizationId != o.ID {
-		return nil, fmt.Errorf("invalid runtime")
 	}
 
 	r := &Runtime{Integration: *i}

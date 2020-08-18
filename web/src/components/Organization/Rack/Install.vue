@@ -127,6 +127,7 @@ export default {
           mutation: require("@/queries/Organization/Rack/Install.graphql"),
           variables: {
             oid: this.$route.params.oid,
+            iid: this.iid,
             engine: this.engine,
             name: this.name,
             parameters: this.parameters,
@@ -134,10 +135,11 @@ export default {
           },
         })
         .then(() => {
-          this.$bvModal.hide(this.id);
-          this.$parent.$apollo.queries.racks.refetch();
+          // this.$bvModal.hide(this.id);
+          // this.$parent.$apollo.queries.racks.refetch();
         })
         .catch((err) => {
+          console.log("err", err);
           this.alert = this.graphQLErrors(err);
         });
     },

@@ -3,6 +3,7 @@ package model
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -47,4 +48,22 @@ func (m *Model) InstallSave(i *Install) error {
 	}
 
 	return nil
+}
+
+func (i *Install) Defaults() {
+	if i.ID == "" {
+		i.ID = uuid.New().String()
+	}
+
+	if i.Params == nil {
+		i.Params = map[string]string{}
+	}
+
+	if i.Status == "" {
+		i.Status = "pending"
+	}
+
+	if i.Created.IsZero() {
+		i.Created = time.Now().UTC()
+	}
 }

@@ -25,3 +25,5 @@ services:
       - RACK_KEY
       - TABLE_PREFIX
       - WORKER_QUEUE
+    scale:
+      memory: 1500
