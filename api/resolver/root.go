@@ -100,7 +100,7 @@ func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *RackLog, 
 
 	ch := make(chan *RackLog)
 
-	go rackLogs(ctx, &Rack{*rr}, ch)
+	go rackLogs(ctx, &Rack{Rack: *rr, model: r.model}, ch)
 
 	return ch, nil
 }

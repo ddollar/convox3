@@ -165,9 +165,9 @@ type Rack {
 
 enum RackStatus {
   converging
-  creating
   deleting
   failed
+  installing
   rollback
   running
   unknown

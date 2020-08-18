@@ -129,7 +129,7 @@ func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, erro
 		return nil, errors.WithStack(err)
 	}
 
-	return &Rack{rr}, nil
+	return &Rack{Rack: rr, model: r.model}, nil
 }
 
 type RackInstallArgs struct {

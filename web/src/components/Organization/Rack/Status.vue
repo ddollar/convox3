@@ -20,12 +20,12 @@ export default {
       switch (this.status) {
         case "converging":
           return "text-secondary";
-        case "creating":
-          return "text-success";
         case "deleting":
           return "text-danger";
         case "failed":
           return "text-warning";
+        case "installing":
+          return "text-success";
         case "rollback":
           return "text-danger";
         case "running":
@@ -40,12 +40,12 @@ export default {
       switch (this.status) {
         case "converging":
           return "fas fa-sync-alt fa-spin";
-        case "creating":
-          return "fas fa-sync-alt fa-spin";
         case "deleting":
           return "fas fa-sync-alt fa-spin";
         case "failed":
           return "fas fa-check-square";
+        case "installing":
+          return "fas fa-sync-alt fa-spin";
         case "rollback":
           return "fas fa-sync-alt fa-spin";
         case "running":

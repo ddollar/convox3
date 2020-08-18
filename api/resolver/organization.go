@@ -105,7 +105,7 @@ func (o *Organization) Racks(ctx context.Context) ([]*Rack, error) {
 	rrs := []*Rack{}
 
 	for _, r := range rs {
-		rrs = append(rrs, &Rack{r})
+		rrs = append(rrs, &Rack{Rack: r, model: o.model})
 	}
 
 	return rrs, nil
@@ -121,7 +121,7 @@ func (o *Organization) Rack(ctx context.Context, args RackArgs) (*Rack, error) {
 		return nil, err
 	}
 
-	return &Rack{*r}, nil
+	return &Rack{Rack: *r, model: o.model}, nil
 }
 
 type RuntimeArgs struct {

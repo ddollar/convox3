@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"time"
 
@@ -15,6 +16,7 @@ import (
 
 type Rack struct {
 	model.Rack
+	model model.Interface
 }
 
 func (r *Rack) Id() graphql.ID {
@@ -220,6 +222,16 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
+	installing, err := r.statusInstalling()
+	fmt.Printf("r.Rack.Name: %+v\n", r.Rack.Name)
+	fmt.Printf("installing: %+v\n", installing)
+	if err != nil {
+		return "", err
+	}
+	if installing {
+		return "installing", nil
+	}
+
 	c, err := r.client(ctx)
 	if err != nil {
 		return "", err
@@ -254,4 +266,23 @@ func (r *Rack) UpdateHour(ctx context.Context) int32 {
 
 func (r *Rack) client(ctx context.Context) (*sdk.Client, error) {
 	return rackClient(ctx, r.Host, r.Password)
+}
+
+func (r *Rack) statusInstalling() (bool, error) {
+	if r.Rack.Install == "" {
+		return false, nil
+	}
+
+	i, err := r.model.InstallGet(r.Rack.Install)
+	fmt.Printf("i: %+v\n", i)
+	if err != nil {
+		return false, err
+	}
+
+	switch i.Status {
+	case "pending", "starting":
+		return true, nil
+	default:
+		return false, nil
+	}
 }

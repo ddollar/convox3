@@ -71,7 +71,7 @@ COPY bin/web /bin/
 # COPY bin/worker /bin/
 
 COPY --from=package /go/bin/job /go/bin/
-# COPY --from=package /go/bin/rack /go/bin/
+COPY --from=package /go/bin/rack /go/bin/
 # COPY --from=package /go/bin/task /go/bin/
 COPY --from=package /go/bin/web /go/bin/
 COPY --from=package /go/bin/worker /go/bin/

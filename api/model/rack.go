@@ -1,14 +1,20 @@
 package model
 
 import (
+	"context"
 	"fmt"
+	"io/ioutil"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/convox/console/pkg/crypt"
+	"github.com/convox/console/pkg/integration"
 	"github.com/convox/console/pkg/settings"
 	"github.com/convox/console/pkg/storage"
 	"github.com/convox/convox/pkg/options"
+	"github.com/convox/rack/pkg/structs"
+	"github.com/convox/rack/sdk"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
@@ -57,6 +63,64 @@ func (m *Model) RackGet(id string) (*Rack, error) {
 	return r, nil
 }
 
+func (m *Model) RackIntegration(id string) (*Integration, error) {
+	r, err := m.RackGet(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if r.Runtime == "" {
+		return nil, nil
+	}
+
+	return m.IntegrationGet(r.Runtime)
+}
+
+func (m *Model) RackRuntime(id string) (integration.Runtime, error) {
+	i, err := m.RackIntegration(id)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	if i == nil {
+		return nil, nil
+	}
+
+	ii, err := i.Integration()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	ir, ok := ii.(integration.Runtime)
+	if !ok {
+		return nil, errors.WithStack(fmt.Errorf("not a runtime integration"))
+	}
+
+	return ir, nil
+}
+
+func (m *Model) RackState(id string) ([]byte, error) {
+	r, err := m.RackGet(id)
+	if err != nil {
+		return nil, err
+	}
+
+	rr, err := m.rack.ObjectFetch(settings.App, r.stateKey())
+	if err != nil {
+		if strings.Contains(err.Error(), "not found") {
+			return nil, nil
+		}
+		return nil, errors.WithStack(err)
+	}
+	defer rr.Close()
+
+	data, err := ioutil.ReadAll(rr)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return data, nil
+}
+
 func (m *Model) RackUpdates(id string) (Updates, error) {
 	opts := storage.QueryOptions{
 		Forward: options.Bool(false),
@@ -91,6 +155,23 @@ func (r *Rack) Defaults() {
 	}
 }
 
+func (r *Rack) System() (*structs.System, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	c, err := r.client(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	s, err := c.SystemGet()
+	if err != nil {
+		return nil, err
+	}
+
+	return s, nil
+}
+
 func (r *Rack) TerraformBackend() (string, error) {
 	pw, err := crypt.Encrypt(settings.RackKey, []byte(r.ID))
 	if err != nil {
@@ -119,6 +200,26 @@ func (r *Rack) Validate() []error {
 	errs = checkNonzero(errs, r.Name, "name required")
 
 	return errs
+}
+
+func (r *Rack) client(ctx context.Context) (*sdk.Client, error) {
+	url, err := r.URL()
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	s, err := sdk.New(url)
+	if err != nil {
+		return nil, err
+	}
+
+	s.Client = s.Client.WithContext(ctx)
+
+	return s, nil
+}
+
+func (r *Rack) stateKey() string {
+	return fmt.Sprintf("organizations/%s/racks/%s/state", r.Organization, r.ID)
 }
 
 func (rs Racks) Less(i, j int) bool {
