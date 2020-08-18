@@ -46,7 +46,7 @@
     <div v-for="(parameter, index) in parameters" :key="index" class="form-row mt-3">
       <div class="col-6">
         <b-form-select v-model="parameters[index].key">
-          <b-form-select-option v-for="parameter in runtime.parameters" :key="parameter" :value="parameter">
+          <b-form-select-option v-for="parameter in parameters_unused(index)" :key="parameter" :value="parameter">
             {{ parameter }}
           </b-form-select-option>
         </b-form-select>
@@ -105,13 +105,23 @@ export default {
       this.region = "";
     },
     parameter_add() {
-      this.parameters.push({ key: "", value: "" });
+      if (this.parameters.length < this.runtime.parameters.length) {
+        this.parameters.push({ key: "", value: "" });
+      }
     },
     parameter_remove(index) {
       this.parameters.splice(index, 1);
     },
+    parameters_unused(index) {
+      const used = {};
+      for (var i in this.parameters) {
+        if (i != index) {
+          used[this.parameters[i].key] = true;
+        }
+      }
+      return this.runtime.parameters.filter((name) => !used[name]);
+    },
     submit() {
-      this.alert = "";
       this.$apollo
         .mutate({
           mutation: require("@/queries/Organization/Rack/Install.graphql"),
@@ -124,7 +134,7 @@ export default {
           },
         })
         .then(() => {
-          //this.$bvModal.hide(this.id);
+          this.$bvModal.hide(this.id);
           this.$parent.$apollo.queries.racks.refetch();
         })
         .catch((err) => {
