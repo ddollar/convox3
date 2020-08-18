@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
@@ -23,6 +24,22 @@ type Uninstall struct {
 
 type Uninstalls []Uninstall
 
+func (m *Model) UninstallFail(id string, failure error) error {
+	u, err := m.UninstallGet(id)
+	if err != nil {
+		return err
+	}
+
+	u.Finished = time.Now().UTC()
+	u.Status = "failed"
+
+	if err := m.UninstallSave(u); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (m *Model) UninstallGet(id string) (*Uninstall, error) {
 	u := &Uninstall{}
 
@@ -39,4 +56,24 @@ func (m *Model) UninstallSave(u *Uninstall) error {
 	}
 
 	return nil
+}
+
+func (m *Model) UninstallSucceed(id string) error {
+	u, err := m.UninstallGet(id)
+	if err != nil {
+		return err
+	}
+
+	u.Finished = time.Now().UTC()
+	u.Status = "complete"
+
+	if err := m.UninstallSave(u); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (u *Uninstall) Key() string {
+	return fmt.Sprintf("organizations/%s/racks/%s/uninstalls/%s", u.OrganizationID, u.RackID, u.ID)
 }

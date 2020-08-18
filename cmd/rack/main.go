@@ -51,11 +51,11 @@ func run() error {
 
 	switch os.Args[1] {
 	case "install":
-		return handler(os.Args[2], install, installSuccess, installFailure)
+		return handler(os.Args[2], install, m.InstallSucceed, m.InstallFail)
 	case "uninstall":
-		return handler(os.Args[2], uninstall, uninstallSuccess, uninstallFailure)
+		return handler(os.Args[2], uninstall, m.UninstallSucceed, m.UninstallFail)
 	case "update":
-		return handler(os.Args[2], update, updateSuccess, updateFailure)
+		return handler(os.Args[2], update, m.UpdateSucceed, m.UpdateFail)
 	default:
 		return errors.WithStack(fmt.Errorf("unknown job: %s", os.Args[1]))
 	}
@@ -104,23 +104,6 @@ func install(id string) error {
 	return nil
 }
 
-func installFailure(id string, err error) error {
-	if i, err := m.InstallGet(id); err != nil {
-		return errors.WithStack(err)
-	} else {
-		return i.Fail(err)
-	}
-}
-
-func installSuccess(id string) error {
-	i, err := m.InstallGet(id)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	return i.Succeed()
-}
-
 func timeout(d time.Duration) {
 	time.Sleep(d)
 	fmt.Fprintf(os.Stderr, "ERROR: timeout\n")
@@ -143,10 +126,6 @@ func uninstall(id string) error {
 		return writeError(w, err)
 	}
 
-	if err := r.UninstallBlocker(); err != nil {
-		return writeError(w, err)
-	}
-
 	mg, err := manager.New(u.Engine, r.ID)
 	if err != nil {
 		return writeError(w, fmt.Errorf("could not initialize manager"))
@@ -162,23 +141,6 @@ func uninstall(id string) error {
 	}
 
 	return nil
-}
-
-func uninstallFailure(id string, err error) error {
-	if u, err := m.UninstallGet(id); err != nil {
-		return errors.WithStack(err)
-	} else {
-		return u.Fail(err)
-	}
-}
-
-func uninstallSuccess(id string) error {
-	u, err := m.UninstallGet(id)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	return u.Succeed()
 }
 
 func update(id string) error {
@@ -231,23 +193,6 @@ func update(id string) error {
 	}
 
 	return nil
-}
-
-func updateFailure(id string, err error) error {
-	if u, err := m.UpdateGet(id); err != nil {
-		return errors.WithStack(err)
-	} else {
-		return u.Fail(err)
-	}
-}
-
-func updateSuccess(id string) error {
-	u, err := m.UpdateGet(id)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
-	return u.Succeed()
 }
 
 func writer(key string) io.WriteCloser {

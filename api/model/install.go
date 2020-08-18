@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -32,6 +33,22 @@ type Install struct {
 
 type Jobs []Job
 
+func (m *Model) InstallFail(id string, failure error) error {
+	i, err := m.InstallGet(id)
+	if err != nil {
+		return err
+	}
+
+	i.Finished = time.Now().UTC()
+	i.Status = "failed"
+
+	if err := m.InstallSave(i); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (m *Model) InstallGet(id string) (*Install, error) {
 	i := &Install{}
 
@@ -44,6 +61,22 @@ func (m *Model) InstallGet(id string) (*Install, error) {
 
 func (m *Model) InstallSave(i *Install) error {
 	if err := m.storage.Put("installs", i); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (m *Model) InstallSucceed(id string) error {
+	i, err := m.InstallGet(id)
+	if err != nil {
+		return err
+	}
+
+	i.Finished = time.Now().UTC()
+	i.Status = "complete"
+
+	if err := m.InstallSave(i); err != nil {
 		return errors.WithStack(err)
 	}
 
@@ -66,4 +99,8 @@ func (i *Install) Defaults() {
 	if i.Created.IsZero() {
 		i.Created = time.Now().UTC()
 	}
+}
+
+func (i *Install) Key() string {
+	return fmt.Sprintf("organizations/%s/racks/%s/installs/%s", i.OrganizationID, i.RackID, i.ID)
 }

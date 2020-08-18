@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/pkg/errors"
@@ -23,6 +24,22 @@ type Update struct {
 
 type Updates []Update
 
+func (m *Model) UpdateFail(id string, failure error) error {
+	u, err := m.UpdateGet(id)
+	if err != nil {
+		return err
+	}
+
+	u.Finished = time.Now().UTC()
+	u.Status = "failed"
+
+	if err := m.UpdateSave(u); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (m *Model) UpdateGet(id string) (*Update, error) {
 	u := &Update{}
 
@@ -39,4 +56,24 @@ func (m *Model) UpdateSave(u *Update) error {
 	}
 
 	return nil
+}
+
+func (m *Model) UpdateSucceed(id string) error {
+	u, err := m.UpdateGet(id)
+	if err != nil {
+		return err
+	}
+
+	u.Finished = time.Now().UTC()
+	u.Status = "complete"
+
+	if err := m.UpdateSave(u); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (u *Update) Key() string {
+	return fmt.Sprintf("organizations/%s/racks/%s/updates/%s", u.OrganizationID, u.RackID, u.ID)
 }

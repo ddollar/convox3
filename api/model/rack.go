@@ -13,8 +13,8 @@ import (
 	"github.com/convox/console/pkg/settings"
 	"github.com/convox/console/pkg/storage"
 	"github.com/convox/convox/pkg/options"
-	"github.com/convox/rack/pkg/structs"
-	"github.com/convox/rack/sdk"
+	"github.com/convox/convox/pkg/structs"
+	"github.com/convox/convox/sdk"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
