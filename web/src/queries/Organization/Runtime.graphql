@@ -7,6 +7,7 @@ query Runtime($oid: ID!, $id: ID!) {
         description
         name
       }
+      parameters
       provider
       regions
     }

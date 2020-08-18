@@ -9,6 +9,7 @@ type Mutation {
   login(email: String!, password: String!): Authentication
   process_stop(oid: ID!, rid: ID!, app: String!, pid: ID!): String!
   rack_import(oid: ID!, name: String!, hostname: String!, password: String!): Rack!
+  rack_install(oid: ID!, name: String!, engine: String!, region: String!, parameters: [ParameterArg!]!): String!
   rack_remove(oid: ID!, id: ID!): String!
   rack_update(
     oid: ID!
@@ -128,6 +129,11 @@ type Parameter {
   value: String!
 }
 
+input ParameterArg {
+  key: String!
+  value: String!
+}
+
 type Process {
   app: String!
   cpu: Int!
@@ -187,6 +193,7 @@ enum ResourceStatus {
 type Runtime {
   id: ID!
   engines: [Engine!]!
+  parameters: [String!]!
   provider: String!
   regions: [String!]!
   title: String!

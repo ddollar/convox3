@@ -12,3 +12,8 @@ func (p *Parameter) Key() string {
 func (p *Parameter) Value() string {
 	return p.value
 }
+
+type ParameterArg struct {
+	Key   string
+	Value string
+}

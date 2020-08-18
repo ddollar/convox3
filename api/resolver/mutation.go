@@ -125,6 +125,34 @@ func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, erro
 	return &Rack{rr}, nil
 }
 
+type RackInstallArgs struct {
+	Oid        graphql.ID
+	Name       string
+	Engine     string
+	Region     string
+	Parameters []*ParameterArg
+}
+
+func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, error) {
+	errs := []error{}
+
+	errs = checkNonzero(errs, args.Name, "name required")
+	errs = checkNonzero(errs, args.Engine, "engine required")
+	errs = checkNonzero(errs, args.Region, "region required")
+
+	if len(errs) > 0 {
+		return "", collateErrors(errs)
+	}
+
+	fmt.Printf("args: %+v\n", args)
+
+	for _, p := range args.Parameters {
+		fmt.Printf("p: %+v\n", p)
+	}
+
+	return "", nil
+}
+
 type RackRemoveArgs struct {
 	Oid graphql.ID
 	Id  graphql.ID

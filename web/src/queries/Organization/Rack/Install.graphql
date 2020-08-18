@@ -1,0 +1,3 @@
+mutation Install($oid: ID!, $name: String!, $engine: String!, $region: String!, $parameters: [ParameterArg!]!) {
+  rack_install(oid: $oid, name: $name, engine: $engine, region: $region, parameters: $parameters)
+}

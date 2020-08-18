@@ -2,8 +2,11 @@ package resolver
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/url"
+	"reflect"
+	"strings"
 
 	"github.com/convox/console/api/model"
 	"github.com/convox/console/pkg/common"
@@ -48,6 +51,28 @@ func authenticatedRack(ctx context.Context, model model.Interface, oid, rid stri
 	}
 
 	return r, nil
+}
+
+func checkNonzero(errs []error, value interface{}, message string) []error {
+	if reflect.ValueOf(value).IsZero() {
+		errs = append(errs, errors.New(message))
+	}
+
+	return errs
+}
+
+func collateErrors(errs []error) error {
+	if len(errs) == 0 {
+		return nil
+	}
+
+	es := []string{}
+
+	for _, err := range errs {
+		es = append(es, err.Error())
+	}
+
+	return errors.New(strings.Join(es, ", "))
 }
 
 func currentUser(ctx context.Context) (*User, error) {

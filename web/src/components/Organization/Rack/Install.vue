@@ -1,5 +1,5 @@
 <template>
-  <b-modal :id="id" size="lg" title="Install Rack" @hide="clear()">
+  <b-modal :id="id" size="lg" title="Install Rack" @hide="clear()" hide-footer>
     <div v-if="alert" class="alert alert-danger" role="alert">{{ alert }}</div>
     <div class="form-row">
       <div class="form-group col-8 d-flex">
@@ -29,12 +29,39 @@
         </b-form-select>
       </div>
     </div>
-    <template v-slot:modal-footer>
-      <button type="submit" class="btn btn-success" @click="submit()">
-        <i class="fas fa-plus-circle mr-1" aria-hidden="true"></i>
-        Install Rack
-      </button>
-    </template>
+    <div class="d-flex align-items-center">
+      <div class="flex-grow-1">
+        <a class="text-success" href="#" @click="parameter_add()">
+          <i class="fa fas fa-plus-circle" />
+          Add Parameter
+        </a>
+      </div>
+      <div class="flex-shrink-0">
+        <button type="submit" class="btn btn-success" @click="submit()">
+          <i class="fas fa-plus-circle mr-1" aria-hidden="true"></i>
+          Install Rack
+        </button>
+      </div>
+    </div>
+    <div v-for="(parameter, index) in parameters" :key="index" class="form-row mt-3">
+      <div class="col-6">
+        <b-form-select v-model="parameters[index].key">
+          <b-form-select-option v-for="parameter in runtime.parameters" :key="parameter" :value="parameter">
+            {{ parameter }}
+          </b-form-select-option>
+        </b-form-select>
+      </div>
+      <div class="col-6 d-flex">
+        <div class="flex-grow-1">
+          <b-form-input v-model="parameters[index].value" />
+        </div>
+        <div class="flex-shrink-0 ml-2">
+          <b-button variant="danger" @click="parameter_remove(index)">
+            <i class="fa fa-times" />
+          </b-button>
+        </div>
+      </div>
+    </div>
   </b-modal>
 </template>
 
@@ -64,6 +91,7 @@ export default {
       alert: "",
       engine: "v3",
       name: "",
+      parameters: [],
       region: "",
       runtime: { engines: [] },
     };
@@ -71,22 +99,32 @@ export default {
   methods: {
     clear() {
       this.alert = "";
+      this.name = "";
+      this.engine = "v3";
+      this.parameters = [];
+      this.region = "";
+    },
+    parameter_add() {
+      this.parameters.push({ key: "", value: "" });
+    },
+    parameter_remove(index) {
+      this.parameters.splice(index, 1);
     },
     submit() {
       this.alert = "";
-      const { name, hostname, password } = this.$data;
       this.$apollo
         .mutate({
-          mutation: require("@/queries/Organization/Rack/Import.graphql"),
+          mutation: require("@/queries/Organization/Rack/Install.graphql"),
           variables: {
             oid: this.$route.params.oid,
-            name,
-            hostname,
-            password,
+            engine: this.engine,
+            name: this.name,
+            parameters: this.parameters,
+            region: this.region,
           },
         })
         .then(() => {
-          this.$bvModal.hide("rack-import");
+          //this.$bvModal.hide(this.id);
           this.$parent.$apollo.queries.racks.refetch();
         })
         .catch((err) => {

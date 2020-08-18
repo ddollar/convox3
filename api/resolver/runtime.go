@@ -1,6 +1,7 @@
 package resolver
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/convox/console/api/model"
@@ -34,19 +35,30 @@ func (r *Runtime) Id() graphql.ID {
 	return graphql.ID(r.Integration.ID)
 }
 
+func (r *Runtime) Parameters(ctx context.Context) ([]string, error) {
+	ri, err := r.runtime()
+	if err != nil {
+		return nil, err
+	}
+
+	ps, err := ri.ParameterList()
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("ps: %+v\n", ps)
+
+	return ps, nil
+}
+
 func (r *Runtime) Provider() string {
 	return r.Integration.Provider
 }
 
 func (r *Runtime) Regions() ([]string, error) {
-	ii, err := r.Integration.Integration()
+	ri, err := r.runtime()
 	if err != nil {
 		return nil, err
-	}
-
-	ri, ok := ii.(integration.Runtime)
-	if !ok {
-		return nil, fmt.Errorf("invalid runtime")
 	}
 
 	rs, err := ri.RegionList()
@@ -69,4 +81,18 @@ func (r *Runtime) Title() (string, error) {
 	}
 
 	return t, nil
+}
+
+func (r *Runtime) runtime() (integration.Runtime, error) {
+	ii, err := r.Integration.Integration()
+	if err != nil {
+		return nil, err
+	}
+
+	ri, ok := ii.(integration.Runtime)
+	if !ok {
+		return nil, fmt.Errorf("invalid runtime")
+	}
+
+	return ri, nil
 }
