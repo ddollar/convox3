@@ -17,19 +17,37 @@ import (
 
 var jwtHash = jwt.NewHS256([]byte("secret"))
 
+func authenticatedInstall(ctx context.Context, model model.Interface, oid, iid string) (*model.Install, error) {
+	o, err := authenticatedOrganization(ctx, model, oid)
+	if err != nil {
+		return nil, err
+	}
+
+	i, err := model.InstallGet(iid)
+	if err != nil {
+		return nil, err
+	}
+
+	if i.OrganizationID != o.ID {
+		return nil, fmt.Errorf("invalid install")
+	}
+
+	return i, nil
+}
+
 func authenticatedIntegration(ctx context.Context, model model.Interface, oid, iid string) (*model.Integration, error) {
 	o, err := authenticatedOrganization(ctx, model, oid)
 	if err != nil {
 		return nil, err
 	}
-	
+
 	i, err := model.IntegrationGet(iid)
 	if err != nil {
 		return nil, err
 	}
 
 	if i.OrganizationID != o.ID {
-		return nil, fmt.Errorf("invalid organization")
+		return nil, fmt.Errorf("invalid integration")
 	}
 
 	return i, nil
@@ -65,7 +83,7 @@ func authenticatedRack(ctx context.Context, model model.Interface, oid, rid stri
 	}
 
 	if r.Organization != o.ID {
-		return nil, fmt.Errorf("invalid organization")
+		return nil, fmt.Errorf("invalid rack")
 	}
 
 	return r, nil

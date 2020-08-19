@@ -116,6 +116,21 @@ func (r *Rack) Capacity(ctx context.Context) (*Capacity, error) {
 	return cc, nil
 }
 
+func (r *Rack) Install(ctx context.Context) (*Install, error) {
+	if r.Rack.Install == "" {
+		return nil, nil
+	}
+
+	i, err := authenticatedInstall(ctx, r.model, r.Organization, r.Rack.Install)
+	if err != nil {
+		return nil, err
+	}
+
+	ii := &Install{i}
+
+	return ii, nil
+}
+
 func (r *Rack) Instances(ctx context.Context) ([]*Instance, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
@@ -222,14 +237,12 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	installing, err := r.statusInstalling()
-	fmt.Printf("r.Rack.Name: %+v\n", r.Rack.Name)
-	fmt.Printf("installing: %+v\n", installing)
+	status, err := r.statusInstalling()
 	if err != nil {
 		return "", err
 	}
-	if installing {
-		return "installing", nil
+	if status != "" {
+		return status, nil
 	}
 
 	c, err := r.client(ctx)
@@ -268,21 +281,23 @@ func (r *Rack) client(ctx context.Context) (*sdk.Client, error) {
 	return rackClient(ctx, r.Host, r.Password)
 }
 
-func (r *Rack) statusInstalling() (bool, error) {
+func (r *Rack) statusInstalling() (string, error) {
 	if r.Rack.Install == "" {
-		return false, nil
+		return "", nil
 	}
 
 	i, err := r.model.InstallGet(r.Rack.Install)
 	fmt.Printf("i: %+v\n", i)
 	if err != nil {
-		return false, err
+		return "", err
 	}
 
 	switch i.Status {
-	case "pending", "starting":
-		return true, nil
+	case "pending", "running", "starting":
+		return "installing", nil
+	case "failed":
+		return "failed", nil
 	default:
-		return false, nil
+		return "", nil
 	}
 }

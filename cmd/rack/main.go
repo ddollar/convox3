@@ -216,7 +216,8 @@ func write(key string, r io.Reader) {
 
 		buf = append(buf, data[0:n]...)
 
-		fmt.Printf("writing %d bytes\n", len(buf))
+		fmt.Print(string(buf))
+		// fmt.Printf("writing %d bytes\n", len(buf))
 
 		if _, err := rack.ObjectStore(settings.App, key, bytes.NewReader(buf), structs.ObjectStoreOptions{}); err != nil {
 			fmt.Printf("err: %+v\n", err)

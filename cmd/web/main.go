@@ -32,9 +32,7 @@ func run() error {
 
 	s.Router.HandleFunc("/graphql", a.Handler())
 
-	// if err := a.Route(s); err != nil {
-	// 	return err
-	// }
+	a.Route(s)
 
 	if settings.Development {
 		if err := routeAssetsDevelopment(s); err != nil {

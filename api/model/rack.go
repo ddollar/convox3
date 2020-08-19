@@ -1,6 +1,7 @@
 package model
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -76,6 +77,25 @@ func (m *Model) RackIntegration(id string) (*Integration, error) {
 	return m.IntegrationGet(r.Runtime)
 }
 
+func (m *Model) RackLock(id string) error {
+	r, err := m.RackGet(id)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if r.Locked {
+		return errors.WithStack(fmt.Errorf("rack is already locked"))
+	}
+
+	r.Locked = true
+
+	if err := m.RackSave(r); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (m *Model) RackRuntime(id string) (integration.Runtime, error) {
 	i, err := m.RackIntegration(id)
 	if err != nil {
@@ -98,7 +118,7 @@ func (m *Model) RackRuntime(id string) (integration.Runtime, error) {
 	return ir, nil
 }
 
-func (m *Model) RackState(id string) ([]byte, error) {
+func (m *Model) RackStateLoad(id string) ([]byte, error) {
 	r, err := m.RackGet(id)
 	if err != nil {
 		return nil, err
@@ -119,6 +139,38 @@ func (m *Model) RackState(id string) ([]byte, error) {
 	}
 
 	return data, nil
+}
+
+func (m *Model) RackStateStore(id string, state []byte) error {
+	r, err := m.RackGet(id)
+	if err != nil {
+		return err
+	}
+
+	if _, err := m.rack.ObjectStore(settings.App, r.stateKey(), bytes.NewReader(state), structs.ObjectStoreOptions{}); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
+func (m *Model) RackUnlock(id string) error {
+	r, err := m.RackGet(id)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if !r.Locked {
+		return nil
+	}
+
+	r.Locked = false
+
+	if err := m.RackSave(r); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
 
 func (m *Model) RackUpdates(id string) (Updates, error) {

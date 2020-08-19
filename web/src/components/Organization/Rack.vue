@@ -8,7 +8,8 @@
           <Status v-else :status="status" color />
         </div>
       </div>
-      <ul class="list-group list-group-flush">
+      <Installing v-if="installing" :rack="rack" />
+      <ul v-else-if="running" class="list-group list-group-flush">
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Apps</div>
@@ -26,7 +27,9 @@
             <div class="font-weight-bold">Memory</div>
             <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
             <div v-else-if="capacityError">--</div>
-            <div v-else>{{ capacity_bytes(capacity.mem.used) }} / {{ capacity_bytes(capacity.mem.total) }}</div>
+            <div
+              v-else
+            >{{ capacity_bytes(capacity.mem.used) }} / {{ capacity_bytes(capacity.mem.total) }}</div>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -35,17 +38,13 @@
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                CPU/Memory Graph
-              </div>
+              >CPU/Memory Graph</div>
             </div>
             <div class="col-12 col-xxl-6 p-3 border-right border-bottom bg-light">
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                Network Graph
-              </div>
+              >Network Graph</div>
             </div>
           </div>
         </li>
@@ -68,61 +67,79 @@ export default {
         this.appsError = error;
       },
       query: require("@/queries/Organization/Rack/Apps.graphql"),
-      update: (data) => data.organization?.rack?.apps,
+      update: data => data.organization?.rack?.apps,
       variables() {
         return {
           oid: this.$route.params.oid,
-          rid: this.rack.id,
+          rid: this.rack.id
         };
-      },
+      }
     },
     capacity: {
       error(error) {
         this.capacityError = error;
       },
       query: require("@/queries/Organization/Rack/Capacity.graphql"),
-      update: (data) => data.organization?.rack?.capacity,
+      update: data => data.organization?.rack?.capacity,
       variables() {
         return {
           oid: this.$route.params.oid,
-          rid: this.rack.id,
+          rid: this.rack.id
         };
-      },
+      }
     },
     status: {
       error(error) {
         this.statusError = error;
       },
       query: require("@/queries/Organization/Rack/Status.graphql"),
-      update: (data) => data.organization?.rack?.status,
+      update: data => data.organization?.rack?.status,
       variables() {
         return {
           oid: this.$route.params.oid,
-          rid: this.rack.id,
+          rid: this.rack.id
         };
-      },
-    },
+      }
+    }
   },
   components: {
+    Installing: () => import("@/components/Organization/Rack/Installing.vue"),
     Remove: () => import("@/components/Organization/Rack/Remove.vue"),
     Settings: () => import("@/components/Organization/Rack/Settings.vue"),
-    Status: () => import("@/components/Organization/Rack/Status.vue"),
+    Status: () => import("@/components/Organization/Rack/Status.vue")
   },
   computed: {
     css() {
       return `status-${this.status}`;
     },
+    installing() {
+      switch (this.status) {
+        case "failed":
+        case "installing":
+          return true;
+        default:
+          return false;
+      }
+    },
+    running() {
+      switch (this.status) {
+        case "running":
+          return true;
+        default:
+          return false;
+      }
+    }
   },
   data() {
     return {
       appsError: null,
       capacity: {
         cpu: { total: 0, used: 0 },
-        mem: { total: 0, used: 0 },
+        mem: { total: 0, used: 0 }
       },
       capacityError: null,
       status: "unknown",
-      statusError: null,
+      statusError: null
     };
   },
   methods: {
@@ -131,18 +148,19 @@ export default {
     },
     goto() {
       switch (this.status) {
+        case "failed":
         case "unknown":
           this.$bvModal.show(`rack-remove-${this.rack.id}`);
           break;
         default:
           this.$router.push({
             name: "organization/rack",
-            params: { oid: this.organization.id, rid: this.rack.id },
+            params: { oid: this.organization.id, rid: this.rack.id }
           });
       }
-    },
+    }
   },
   mixins: [Organization],
-  props: ["rack"],
+  props: ["rack"]
 };
 </script>

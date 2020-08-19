@@ -2,7 +2,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/convox/console/api/model"
 	"github.com/graph-gophers/graphql-go"
@@ -71,36 +70,4 @@ func (r *Root) Organizations(ctx context.Context) ([]*Organization, error) {
 	}
 
 	return ros, nil
-}
-
-type RackLog struct {
-	line string
-}
-
-type RackLogsArgs struct {
-	Oid   graphql.ID
-	Rid   graphql.ID
-	Since *int32
-}
-
-func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *RackLog, error) {
-	o, err := authenticatedOrganization(ctx, r.model, string(args.Oid))
-	if err != nil {
-		return nil, err
-	}
-
-	rr, err := r.model.RackGet(string(args.Rid))
-	if err != nil {
-		return nil, err
-	}
-
-	if rr.Organization != o.ID {
-		return nil, fmt.Errorf("invalid organization")
-	}
-
-	ch := make(chan *RackLog)
-
-	go rackLogs(ctx, &Rack{Rack: *rr, model: r.model}, ch)
-
-	return ch, nil
 }

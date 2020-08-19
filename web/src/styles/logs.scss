@@ -8,4 +8,10 @@ div.logs {
   width: 100%;
   overflow-y: scroll;
   white-space: pre;
+
+  &.install {
+    border-radius: 0;
+    font-size: 0.8em;
+    height: 193px;
+  }
 }

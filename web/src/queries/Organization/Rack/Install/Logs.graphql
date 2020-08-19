@@ -1,0 +1,5 @@
+subscription Logs($oid: ID!, $iid: ID!) {
+  install_logs(oid: $oid, iid: $iid) {
+    line
+  }
+}

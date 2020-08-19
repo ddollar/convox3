@@ -110,7 +110,7 @@ func (v *V3) sync(rid string, params map[string]string) error {
 		return errors.WithStack(err)
 	}
 
-	data, err := m.RackState(rid)
+	data, err := m.RackStateLoad(rid)
 	if err != nil {
 		return err
 	}

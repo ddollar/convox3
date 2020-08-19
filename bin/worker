@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "${MODE}" == "development" ]; then
-	exec watchexec -e go -r -s SIGTERM --watch api --watch pkg --watch vendor "make $GOPATH/bin/job $GOPATH/bin/rack $GOPATH/bin/worker && $GOPATH/bin/worker"
+	exec watchexec -e go -r -s SIGTERM --watch api --watch cmd --watch pkg --watch vendor "make $GOPATH/bin/job $GOPATH/bin/rack $GOPATH/bin/worker && $GOPATH/bin/worker"
 else
 	exec ${GOPATH}/bin/worker
 fi

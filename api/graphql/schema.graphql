@@ -29,11 +29,8 @@ type Query {
 }
 
 type Subscription {
-  rack_logs(oid: ID!, rid: ID!, since: Int): RackLog!
-}
-
-type RackLog {
-  line: String!
+  install_logs(oid: ID!, iid: ID!): Log!
+  rack_logs(oid: ID!, rid: ID!, since: Int): Log!
 }
 
 enum Access {
@@ -84,6 +81,10 @@ type Member {
   user: User!
 }
 
+type Install {
+  id: ID!
+}
+
 type Instance {
   id: ID!
   cpu: Float!
@@ -110,6 +111,10 @@ enum IntegrationKind {
   notification
   runtime
   source
+}
+
+type Log {
+  line: String!
 }
 
 type Organization {
@@ -151,6 +156,7 @@ type Rack {
   apps: [App!]!
   capacity: Capacity!
   instances: [Instance!]!
+  install: Install
   name: String!
   processes: [Process!]!
   provider: String!

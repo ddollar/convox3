@@ -6,7 +6,8 @@
 // }
 
 .rack {
-  &.status-unknown {
+  &.status-unknown,
+  &.status-failed {
     filter: brightness(70%);
   }
 }

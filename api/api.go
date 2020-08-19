@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/convox/console/api/controller"
 	"github.com/convox/console/api/model"
 	"github.com/convox/console/api/resolver"
 	"github.com/gobuffalo/packr/v2"
@@ -12,9 +13,10 @@ import (
 )
 
 type Api struct {
-	box    *packr.Box
-	model  model.Interface
-	schema *graphql.Schema
+	box        *packr.Box
+	controller controller.Controller
+	model      model.Interface
+	schema     *graphql.Schema
 }
 
 type Query struct {
@@ -24,8 +26,9 @@ type Query struct {
 
 func New(m model.Interface, box *packr.Box) (*Api, error) {
 	a := &Api{
-		box:   box,
-		model: m,
+		box:        box,
+		controller: controller.New(m),
+		model:      m,
 	}
 
 	if err := a.initializeGraphql(); err != nil {
@@ -38,13 +41,6 @@ func New(m model.Interface, box *packr.Box) (*Api, error) {
 func (a *Api) Handler() http.HandlerFunc {
 	return graphqlws.NewHandlerFunc(a.schema, &relay.Handler{Schema: a.schema})
 }
-
-// func (a *Api) Route(s *stdapi.Server) error {
-// 	s.Route("GET", "/graphql", a.QueryGet)
-// 	s.Route("POST", "/graphql", a.QueryPost)
-
-// 	return nil
-// }
 
 func (a *Api) initializeGraphql() error {
 	r := resolver.New(a.model)

@@ -2,10 +2,12 @@ services:
   web:
     build: .
     command: bin/web
+    domain: ${HOST}
     environment:
       - AWS_ACCESS_KEY_ID
       - AWS_REGION
       - AWS_SECRET_ACCESS_KEY
+      - HOST
       - LICENSE_KEY
       - RACK_KEY
       - TABLE_PREFIX
@@ -21,6 +23,7 @@ services:
       - AWS_ACCESS_KEY_ID
       - AWS_REGION
       - AWS_SECRET_ACCESS_KEY
+      - HOST
       - LICENSE_KEY
       - RACK_KEY
       - TABLE_PREFIX

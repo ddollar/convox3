@@ -2,8 +2,10 @@ package model
 
 import (
 	"fmt"
+	"io"
 	"time"
 
+	"github.com/convox/console/pkg/settings"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
@@ -57,6 +59,20 @@ func (m *Model) InstallGet(id string) (*Install, error) {
 	}
 
 	return i, nil
+}
+
+func (m *Model) InstallLogs(id string) (io.ReadCloser, error) {
+	i, err := m.InstallGet(id)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := m.rack.ObjectFetch(settings.App, i.Key())
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
 }
 
 func (m *Model) InstallSave(i *Install) error {

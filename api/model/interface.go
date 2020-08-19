@@ -1,7 +1,10 @@
 package model
 
+import "io"
+
 type Interface interface {
 	InstallGet(id string) (*Install, error)
+	InstallLogs(id string) (io.ReadCloser, error)
 	InstallSave(i *Install) error
 	IntegrationGet(iid string) (*Integration, error)
 	JobFail(id string, err error) error
@@ -16,7 +19,11 @@ type Interface interface {
 	OrganizationSave(o *Organization) error
 	RackDelete(id string) error
 	RackGet(id string) (*Rack, error)
+	RackLock(id string) error
 	RackSave(r *Rack) error
+	RackStateLoad(id string) ([]byte, error)
+	RackStateStore(id string, data []byte) error
+	RackUnlock(id string) error
 	TaskWriter(t Task) (*TaskWriter, error)
 	UninstallGet(id string) (*Uninstall, error)
 	UninstallSave(u *Uninstall) error

@@ -2,7 +2,7 @@
 
 if [ "${MODE}" == "development" ]; then
 	cd web && env HOST=0.0.0.0 PORT=3001 npm run serve >/dev/null &
-	exec watchexec -e go,graphql -r -s SIGTERM --watch api --watch pkg --watch vendor "make ${GOPATH}/bin/web && exec ${GOPATH}/bin/web"
+	exec watchexec -e go,graphql -r -s SIGTERM --watch api --watch cmd --watch pkg --watch vendor "make ${GOPATH}/bin/web && exec ${GOPATH}/bin/web"
 else
 	exec ${GOPATH}/bin/web
 fi

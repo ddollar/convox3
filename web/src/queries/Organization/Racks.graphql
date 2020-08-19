@@ -3,6 +3,9 @@ query Racks($oid: ID!) {
     id
     racks {
       id
+      install {
+        id
+      }
       name
       runtime
     }
