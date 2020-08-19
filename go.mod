@@ -13,7 +13,6 @@ require (
 	github.com/containerd/continuity v0.0.0-20200228182428-0f16d7a0959c // indirect
 	github.com/convox/convox v0.0.0-20200319135330-fa65d5bb20ba
 	github.com/convox/logger v0.0.0-20180522214415-e39179955b52
-	github.com/convox/rack v0.0.0-20200814202755-5c8d54aff12f
 	github.com/convox/raven-go v0.0.0-20181011222347-6ddc934f8a95
 	github.com/convox/stdapi v1.0.0
 	github.com/digitalocean/godo v1.42.0
