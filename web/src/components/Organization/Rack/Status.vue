@@ -59,16 +59,16 @@ export default {
         default:
           return "fas fa-question-circle";
       }
-    }
+    },
   },
   props: {
     color: {
       type: Boolean,
-      default: false
+      default: false,
     },
     status: {
-      type: String
-    }
-  }
+      type: String,
+    },
+  },
 };
 </script>

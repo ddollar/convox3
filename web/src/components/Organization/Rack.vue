@@ -28,9 +28,10 @@
             <div class="font-weight-bold">Memory</div>
             <i v-if="$apollo.queries.capacity.loading" class="spinner"></i>
             <div v-else-if="capacityError">--</div>
-            <div
-              v-else
-            >{{ capacity_bytes(capacity.mem.used) }} / {{ capacity_bytes(capacity.mem.total) }}</div>
+            <div v-else>
+              {{ capacity_bytes(capacity.mem.used) }} /
+              {{ capacity_bytes(capacity.mem.total) }}
+            </div>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -39,13 +40,17 @@
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >CPU/Memory Graph</div>
+              >
+                CPU/Memory Graph
+              </div>
             </div>
             <div class="col-12 col-xxl-6 p-3 border-right border-bottom bg-light">
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >Network Graph</div>
+              >
+                Network Graph
+              </div>
             </div>
           </div>
         </li>
@@ -75,9 +80,9 @@ export default {
       variables() {
         return {
           oid: this.$route.params.oid,
-          rid: this.rack.id
+          rid: this.rack.id,
         };
-      }
+      },
     },
     capacity: {
       error(error) {
@@ -91,9 +96,9 @@ export default {
       variables() {
         return {
           oid: this.$route.params.oid,
-          rid: this.rack.id
+          rid: this.rack.id,
         };
-      }
+      },
     },
     status: {
       error(error) {
@@ -105,18 +110,17 @@ export default {
       variables() {
         return {
           oid: this.$route.params.oid,
-          rid: this.rack.id
+          rid: this.rack.id,
         };
-      }
-    }
+      },
+    },
   },
   components: {
     Installing: () => import("@/components/Organization/Rack/Installing.vue"),
     Remove: () => import("@/components/Organization/Rack/Remove.vue"),
     Settings: () => import("@/components/Organization/Rack/Settings.vue"),
     Status: () => import("@/components/Organization/Rack/Status.vue"),
-    Uninstalling: () =>
-      import("@/components/Organization/Rack/Uninstalling.vue")
+    Uninstalling: () => import("@/components/Organization/Rack/Uninstalling.vue"),
   },
   computed: {
     css() {
@@ -147,18 +151,18 @@ export default {
         default:
           return false;
       }
-    }
+    },
   },
   data() {
     return {
       appsError: null,
       capacity: {
         cpu: { total: 0, used: 0 },
-        mem: { total: 0, used: 0 }
+        mem: { total: 0, used: 0 },
       },
       capacityError: null,
       status: "unknown",
-      statusError: null
+      statusError: null,
     };
   },
   methods: {
@@ -177,12 +181,12 @@ export default {
         default:
           this.$router.push({
             name: "organization/rack",
-            params: { oid: this.organization.id, rid: this.rack.id }
+            params: { oid: this.organization.id, rid: this.rack.id },
           });
       }
-    }
+    },
   },
   mixins: [Organization],
-  props: ["rack"]
+  props: ["rack"],
 };
 </script>

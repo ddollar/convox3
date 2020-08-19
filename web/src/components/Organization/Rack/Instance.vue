@@ -4,7 +4,9 @@
       <code>{{ instance.id }}</code>
     </td>
     <td>{{ instance.status }}</td>
-    <td><Progress :current="instance.cpu" color="#0DA542" style="width:100px;" /></td>
+    <td>
+      <Progress :current="instance.cpu" color="#0DA542" style="width:100px;" />
+    </td>
     <td><Progress :current="instance.mem" style="width:100px;" /></td>
     <td>{{ instance.private }}</td>
     <td>{{ instance.public }}</td>

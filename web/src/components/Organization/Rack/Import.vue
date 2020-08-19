@@ -71,7 +71,7 @@ export default {
           this.$bvModal.hide("rack-import");
           this.$parent.$apollo.queries.racks.refetch();
         })
-        .catch((err) => {
+        .catch(err => {
           this.alert = this.graphQLErrors(err);
         });
     },

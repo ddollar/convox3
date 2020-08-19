@@ -22,9 +22,9 @@ export default {
       variables() {
         return {
           kind: "notification",
-          oid: this.organization.id
+          oid: this.organization.id,
         };
-      }
+      },
     },
     runtimes: {
       query: require("@/queries/Organization/Integrations.graphql"),
@@ -35,9 +35,9 @@ export default {
       variables() {
         return {
           kind: "runtime",
-          oid: this.organization.id
+          oid: this.organization.id,
         };
-      }
+      },
     },
     sources: {
       query: require("@/queries/Organization/Integrations.graphql"),
@@ -48,14 +48,14 @@ export default {
       variables() {
         return {
           kind: "source",
-          oid: this.organization.id
+          oid: this.organization.id,
         };
-      }
-    }
+      },
+    },
   },
   components: {
-    Integrations: () => import("@/components/Organization/Integrations")
+    Integrations: () => import("@/components/Organization/Integrations"),
   },
-  mixins: [Organization]
+  mixins: [Organization],
 };
 </script>

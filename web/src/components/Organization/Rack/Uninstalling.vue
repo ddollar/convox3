@@ -14,25 +14,25 @@ export default {
         variables() {
           return {
             oid: this.$route.params.oid,
-            uid: this.rack.uninstall.id
+            uid: this.rack.uninstall.id,
           };
         },
         result({ data }) {
           this.logs += `${data.uninstall_logs.line}\n`;
-        }
-      }
-    }
+        },
+      },
+    },
   },
   data: function() {
     return {
-      logs: ""
+      logs: "",
     };
   },
   methods: {
     scrollMonitor: function() {
       const el = this.$el;
       el.dataset.bottom = el.scrollTop >= el.scrollHeight - el.offsetHeight;
-    }
+    },
   },
   mounted() {
     this.$el.addEventListener("scroll", this.scrollMonitor);
@@ -45,6 +45,6 @@ export default {
     if (el.dataset.bottom === "true") {
       el.scrollTop = el.scrollHeight;
     }
-  }
+  },
 };
 </script>

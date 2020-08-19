@@ -24,7 +24,9 @@
         </nav>
       </div>
       <div class="mb-4 order-2 order-lg-4">
-        <b-button variant="secondary" @click="settings()"> <i class="fa fa-cog"></i> </b-button>
+        <b-button variant="secondary" @click="settings()">
+          <i class="fa fa-cog"></i>
+        </b-button>
         <Remove :rid="rid" />
         <Settings :rid="rid" />
       </div>

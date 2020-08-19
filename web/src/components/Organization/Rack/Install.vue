@@ -19,22 +19,13 @@
         </div>
         <div class="flex-shrink-0 ml-2" v-if="runtime.engines.length > 0">
           <label>Engine</label>
-          <b-form-select
-            v-model="engine"
-            :options="runtime.engines"
-            value-field="name"
-            text-field="description"
-          ></b-form-select>
+          <b-form-select v-model="engine" :options="runtime.engines" value-field="name" text-field="description"></b-form-select>
         </div>
       </div>
       <div class="form-group col-4">
         <label>Region</label>
         <b-form-select v-model="region">
-          <b-form-select-option
-            v-for="region in runtime.regions"
-            :key="region"
-            :value="region"
-          >{{ region }}</b-form-select-option>
+          <b-form-select-option v-for="region in runtime.regions" :key="region" :value="region">{{ region }}</b-form-select-option>
         </b-form-select>
       </div>
     </div>
@@ -55,11 +46,9 @@
     <div v-for="(parameter, index) in parameters" :key="index" class="form-row mt-3">
       <div class="col-6">
         <b-form-select v-model="parameters[index].key">
-          <b-form-select-option
-            v-for="parameter in parameters_unused(index)"
-            :key="parameter"
-            :value="parameter"
-          >{{ parameter }}</b-form-select-option>
+          <b-form-select-option v-for="parameter in parameters_unused(index)" :key="parameter" :value="parameter">{{
+            parameter
+          }}</b-form-select-option>
         </b-form-select>
       </div>
       <div class="col-6 d-flex">
@@ -87,15 +76,15 @@ export default {
       variables() {
         return {
           oid: this.$route.params.oid,
-          id: this.iid
+          id: this.iid,
         };
-      }
-    }
+      },
+    },
   },
   computed: {
     id() {
       return `rack-install-${this.iid}`;
-    }
+    },
   },
   data() {
     return {
@@ -104,7 +93,7 @@ export default {
       name: "",
       parameters: [],
       region: "",
-      runtime: { engines: [] }
+      runtime: { engines: [] },
     };
   },
   methods: {
@@ -142,8 +131,8 @@ export default {
             engine: this.engine,
             name: this.name,
             parameters: this.parameters,
-            region: this.region
-          }
+            region: this.region,
+          },
         })
         .then(() => {
           this.$bvModal.hide(this.id);
@@ -152,9 +141,9 @@ export default {
         .catch(err => {
           this.alert = this.graphQLErrors(err);
         });
-    }
+    },
   },
   mixins: [Error],
-  props: ["iid"]
+  props: ["iid"],
 };
 </script>

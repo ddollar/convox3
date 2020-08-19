@@ -60,7 +60,7 @@ export default {
         this.update_frequency = rack.update_frequency;
         this.update_hour = rack.update_hour;
       },
-      update: (data) => data.organization?.rack,
+      update: data => data.organization?.rack,
       variables() {
         return {
           oid: this.$route.params.oid,
@@ -73,7 +73,7 @@ export default {
       skip() {
         return this.rack?.provider == null;
       },
-      update: (data) => data.organization?.integrations,
+      update: data => data.organization?.integrations,
       variables() {
         return {
           oid: this.$route.params.oid,
@@ -183,7 +183,7 @@ export default {
           this.$parent.$apollo.queries.rack.refetch();
           this.$bvModal.hide(`rack-settings-${this.rid}`);
         })
-        .catch((err) => {
+        .catch(err => {
           this.alert = this.graphQLErrors(err);
         });
     },

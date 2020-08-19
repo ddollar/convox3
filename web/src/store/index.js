@@ -8,8 +8,8 @@ export default new Vuex.Store({
     token: localStorage.getItem("token"),
   },
   getters: {
-    authenticated: (state) => state.token !== null,
-    token: (state) => state.token,
+    authenticated: state => state.token !== null,
+    token: state => state.token,
   },
   mutations: {
     removeToken(state) {

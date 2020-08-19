@@ -25,7 +25,9 @@
             Install
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <div v-if="integrations.length == 0" class="dropdown-item">No Runtime Integrations</div>
+            <div v-if="integrations.length == 0" class="dropdown-item">
+              No Runtime Integrations
+            </div>
             <div v-else>
               <b-dropdown-item v-for="integration in integrations" :key="integration.id" @click="install(integration.id)">
                 <Provider :kind="integration.provider" :text="integration.title" />
@@ -59,7 +61,7 @@ export default {
   apollo: {
     integrations: {
       query: require("@/queries/Organization/Integrations.graphql"),
-      update: (data) => data.organization?.integrations,
+      update: data => data.organization?.integrations,
       variables() {
         return {
           kind: "runtime",
@@ -70,7 +72,7 @@ export default {
     racks: {
       query: require("@/queries/Organization/Racks.graphql"),
       pollInterval: 5000,
-      update: (data) => data.organization?.racks,
+      update: data => data.organization?.racks,
       variables() {
         return {
           oid: this.$route.params.oid,
@@ -86,7 +88,7 @@ export default {
   },
   computed: {
     filteredRacks() {
-      return (this.racks || []).filter((rack) => {
+      return (this.racks || []).filter(rack => {
         return this.runtime === null ? true : rack.runtime == this.runtime.id;
       });
     },

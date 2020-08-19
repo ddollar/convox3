@@ -10,7 +10,7 @@ export default {
     apps: {
       query: require("@/queries/Organization/Rack/Apps.graphql"),
       pollInterval: 5000,
-      update: (data) => data.organization?.rack?.apps,
+      update: data => data.organization?.rack?.apps,
       variables() {
         return {
           oid: this.$route.params.oid,

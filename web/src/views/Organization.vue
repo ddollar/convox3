@@ -38,7 +38,7 @@ export default {
   components: {
     Navbar: () => import("@/components/Navbar.vue"),
     Picker: () => import("@/components/Organization/Picker.vue"),
-    Sidebar: () => import("@/components/Sidebar.vue")
-  }
+    Sidebar: () => import("@/components/Sidebar.vue"),
+  },
 };
 </script>

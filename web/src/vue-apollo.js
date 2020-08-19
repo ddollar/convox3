@@ -70,17 +70,13 @@ export function createProvider(options = {}) {
       },
     },
     errorHandler(error) {
-      error.graphQLErrors.forEach((error) => {
+      error.graphQLErrors.forEach(error => {
         if (error.extensions?.code == "UNAUTHENTICATED") {
           return this.$router.push({ name: "login" });
         }
       });
       // eslint-disable-next-line no-console
-      console.log(
-        "%cError",
-        "background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;",
-        error.message
-      );
+      console.log("%cError", "background: red; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;", error.message);
     },
   });
 

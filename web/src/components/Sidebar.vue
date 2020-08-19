@@ -19,12 +19,12 @@
 <script>
 export default {
   components: {
-    Nav: () => import("@/components/Sidebar/Nav")
+    Nav: () => import("@/components/Sidebar/Nav"),
   },
   computed: {
     billing() {
       return true;
-    }
-  }
+    },
+  },
 };
 </script>

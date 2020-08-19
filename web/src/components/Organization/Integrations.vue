@@ -12,8 +12,8 @@
 <script>
 export default {
   components: {
-    Provider: () => import("@/components/Provider")
+    Provider: () => import("@/components/Provider"),
   },
-  props: ["integrations", "title"]
+  props: ["integrations", "title"],
 };
 </script>

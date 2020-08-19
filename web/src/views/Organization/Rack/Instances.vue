@@ -34,7 +34,7 @@ export default {
     instances: {
       query: require("@/queries/Organization/Rack/Instances.graphql"),
       pollInterval: 5000,
-      update: (data) => data.organization?.rack?.instances,
+      update: data => data.organization?.rack?.instances,
       variables() {
         return {
           oid: this.$route.params.oid,

@@ -24,7 +24,9 @@
             <a href>Forgot Password</a>
           </div>
           <div class="flex-fill text-right">
-            <button id="login" class="btn btn-primary" @click="submit($event)">Login</button>
+            <button id="login" class="btn btn-primary" @click="submit($event)">
+              Login
+            </button>
           </div>
         </div>
       </div>
@@ -55,11 +57,11 @@ export default {
             password: this.$data.password,
           },
         })
-        .then((result) => {
+        .then(result => {
           this.login(result.data.login.token);
         })
-        .catch((error) => {
-          var message = error.graphQLErrors.map((err) => err.message).join(", ");
+        .catch(error => {
+          var message = error.graphQLErrors.map(err => err.message).join(", ");
           if (message != "") {
             var alert = $("#login-alert");
             alert.html(message);

@@ -175,7 +175,10 @@ router.beforeEach(async (to, from, next) => {
     ).data;
 
     if (!accessible(to.meta.role, organization.access)) {
-      return next({ name: "organization/racks", params: { oid: organization.id } });
+      return next({
+        name: "organization/racks",
+        params: { oid: organization.id },
+      });
     }
 
     next();

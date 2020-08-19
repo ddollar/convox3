@@ -7,14 +7,14 @@ export default {
       },
       variables() {
         return {
-          id: this.$route.params.oid
+          id: this.$route.params.oid,
         };
-      }
-    }
+      },
+    },
   },
   data() {
     return {
-      organization: {}
+      organization: {},
     };
-  }
+  },
 };

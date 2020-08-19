@@ -1,19 +1,13 @@
 <template>
-  <b-modal
-    :id="`rack-remove-${rid}`"
-    :title="title"
-    header-bg-variant="danger"
-    header-text-variant="light"
-  >
+  <b-modal :id="`rack-remove-${rid}`" :title="title" header-bg-variant="danger" header-text-variant="light">
     <div v-if="alert" class="alert alert-danger" role="alert">{{ alert }}</div>
     <div>
       Remove
       <strong>{{ rack.name }}</strong> from this organization?
     </div>
-    <div
-      v-if="rack.uninstallable"
-      class="mt-3 text-danger font-weight-bold"
-    >The underlying infrastructure will be destroyed.</div>
+    <div v-if="rack.uninstallable" class="mt-3 text-danger font-weight-bold">
+      The underlying infrastructure will be destroyed.
+    </div>
     <template v-slot:modal-footer>
       <button class="btn btn-danger" @click="remove()">
         <i class="fa fa-times mr-1"></i>
@@ -34,20 +28,20 @@ export default {
       variables() {
         return {
           oid: this.$route.params.oid,
-          id: this.rid
+          id: this.rid,
         };
-      }
-    }
+      },
+    },
   },
   computed: {
     title() {
       return this.rack.uninstallable ? "Uninstall Rack" : "Remove Rack";
-    }
+    },
   },
   data() {
     return {
       alert: "",
-      rack: {}
+      rack: {},
     };
   },
   methods: {
@@ -57,8 +51,8 @@ export default {
           mutation: require("@/queries/Organization/Rack/Remove.graphql"),
           variables: {
             oid: this.$route.params.oid,
-            id: this.rid
-          }
+            id: this.rid,
+          },
         })
         .then(() => {
           switch (this.$route.name) {
@@ -69,16 +63,16 @@ export default {
             default:
               this.$router.replace({
                 name: "organization/racks",
-                params: { oid: this.$route.params.oid }
+                params: { oid: this.$route.params.oid },
               });
           }
         })
         .catch(err => {
           this.alert = this.graphQLErrors(err);
         });
-    }
+    },
   },
   mixins: [Error],
-  props: ["rid"]
+  props: ["rid"],
 };
 </script>

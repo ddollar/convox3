@@ -25,7 +25,7 @@ export default {
     processes: {
       query: require("@/queries/Organization/Rack/Processes.graphql"),
       pollInterval: 5000,
-      update: (data) => data.organization?.rack?.processes,
+      update: data => data.organization?.rack?.processes,
       variables() {
         return {
           oid: this.$route.params.oid,

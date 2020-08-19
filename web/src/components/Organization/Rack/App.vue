@@ -57,7 +57,7 @@ export default {
   apollo: {
     processes: {
       query: require("@/queries/Organization/Rack/App/Processes.graphql"),
-      update: (data) => data.organization?.rack?.app?.processes,
+      update: data => data.organization?.rack?.app?.processes,
       variables() {
         return {
           oid: this.$route.params.oid,
@@ -68,7 +68,7 @@ export default {
     },
     services: {
       query: require("@/queries/Organization/Rack/App/Services.graphql"),
-      update: (data) => data.organization?.rack?.app?.services,
+      update: data => data.organization?.rack?.app?.services,
       variables() {
         return {
           oid: this.$route.params.oid,

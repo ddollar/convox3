@@ -20,7 +20,7 @@ export default {
     resources: {
       query: require("@/queries/Organization/Rack/Resources.graphql"),
       pollInterval: 5000,
-      update: (data) => data.organization?.rack?.resources,
+      update: data => data.organization?.rack?.resources,
       variables() {
         return {
           oid: this.$route.params.oid,

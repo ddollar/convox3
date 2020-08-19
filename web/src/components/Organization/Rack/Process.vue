@@ -9,7 +9,9 @@
     <td>
       <code>{{ process.release }}</code>
     </td>
-    <td><Progress :current="process.cpu" color="#0DA542" style="width:100px;" /></td>
+    <td>
+      <Progress :current="process.cpu" color="#0DA542" style="width:100px;" />
+    </td>
     <td><Progress :current="process.mem" style="width:100px;" /></td>
     <td><Timeago v-if="process.started > 0" :datetime="datetime" /></td>
     <td>

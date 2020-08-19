@@ -5,7 +5,7 @@ export default {
       skip() {
         return !(this.$route.params.oid && this.$route.params.rid);
       },
-      update: (data) => data.organization?.rack,
+      update: data => data.organization?.rack,
       variables() {
         return {
           id: this.$route.params.rid,
