@@ -10,13 +10,13 @@
       </div>
       <Installing v-if="installing" :rack="rack" />
       <Uninstalling v-else-if="uninstalling" :rack="rack" />
-      <ul v-else-if="running" class="list-group list-group-flush">
+      <ul v-else class="list-group list-group-flush">
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">Apps</div>
             <i v-if="$apollo.queries.apps.loading" class="spinner"></i>
             <div v-else-if="appsError">--</div>
-            <div v-else>{{ $apollo.queries.apps.error }} {{ apps.length }}</div>
+            <div v-else>{{ apps.length }}</div>
           </div>
           <div class="flex-even p-3 border-right">
             <div class="font-weight-bold">CPU</div>
@@ -72,10 +72,13 @@ export default {
       error(error) {
         this.appsError = error;
       },
+      query: require("@/queries/Organization/Rack/Apps.graphql"),
+      result() {
+        this.appsError = null;
+      },
       skip() {
         return !this.running;
       },
-      query: require("@/queries/Organization/Rack/Apps.graphql"),
       update: data => data.organization?.rack?.apps,
       variables() {
         return {
@@ -88,10 +91,13 @@ export default {
       error(error) {
         this.capacityError = error;
       },
+      query: require("@/queries/Organization/Rack/Capacity.graphql"),
+      result() {
+        this.capacityError = null;
+      },
       skip() {
         return !this.running;
       },
-      query: require("@/queries/Organization/Rack/Capacity.graphql"),
       update: data => data.organization?.rack?.capacity,
       variables() {
         return {
@@ -106,6 +112,9 @@ export default {
       },
       pollInterval: 5000,
       query: require("@/queries/Organization/Rack/Status.graphql"),
+      result() {
+        this.statusError = null;
+      },
       update: data => data.organization?.rack?.status,
       variables() {
         return {
@@ -155,12 +164,12 @@ export default {
   },
   data() {
     return {
-      appsError: null,
+      appsError: true,
       capacity: {
         cpu: { total: 0, used: 0 },
         mem: { total: 0, used: 0 },
       },
-      capacityError: null,
+      capacityError: true,
       status: "unknown",
       statusError: null,
     };
