@@ -73,7 +73,12 @@ type CapacityMetric {
 
 type Engine {
   description: String!
-  name: String!
+  name: EngineName!
+}
+
+enum EngineName {
+  v2
+  v3
 }
 
 type Member {
@@ -167,6 +172,7 @@ type Rack {
   update_day: Int!
   update_frequency: UpdateFrequency!
   update_hour: Int!
+  uninstallable: Boolean!
 }
 
 enum RackStatus {

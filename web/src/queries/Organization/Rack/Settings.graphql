@@ -6,6 +6,7 @@ query Settings($oid: ID!, $id: ID!) {
       name
       provider
       runtime
+      uninstallable
       update_frequency
       update_day
       update_hour

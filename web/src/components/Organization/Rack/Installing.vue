@@ -9,7 +9,6 @@ export default {
       logs: {
         query: require("@/queries/Organization/Rack/Install/Logs.graphql"),
         skip() {
-          console.log("iii", this.rack);
           return this.rack.install == null;
         },
         variables() {
@@ -32,7 +31,6 @@ export default {
   methods: {
     scrollMonitor: function() {
       const el = this.$el;
-      console.log("el", el.scrollTop, el.scrollHeight, el.offsetHeight);
       el.dataset.bottom = el.scrollTop >= el.scrollHeight - el.offsetHeight;
     }
   },

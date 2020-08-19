@@ -261,6 +261,19 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	return s.Status, nil
 }
 
+func (r *Rack) Uninstallable(ctx context.Context) (bool, error) {
+	data, err := r.model.RackStateLoad(r.Rack.ID)
+	if err != nil {
+		return false, err
+	}
+
+	if len(data) == 0 {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 func (r *Rack) Updates(ctx context.Context) ([]*Update, error) {
 	return nil, nil
 }
