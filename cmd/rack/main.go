@@ -116,6 +116,13 @@ func uninstall(id string) error {
 		return errors.WithStack(err)
 	}
 
+	u.Started = time.Now().UTC()
+	u.Status = "running"
+
+	if err := m.UninstallSave(u); err != nil {
+		return err
+	}
+
 	w := writer(u.Key())
 	defer w.Close()
 
@@ -132,8 +139,7 @@ func uninstall(id string) error {
 	}
 
 	if err := mg.Uninstall(w); err != nil {
-		writeError(w, errors.WithStack(err))
-		return nil
+		return writeError(w, errors.WithStack(err))
 	}
 
 	if err := m.RackDelete(u.RackID); err != nil {
@@ -216,7 +222,7 @@ func write(key string, r io.Reader) {
 
 		buf = append(buf, data[0:n]...)
 
-		fmt.Print(string(buf))
+		fmt.Print(string(data[0:n]))
 		// fmt.Printf("writing %d bytes\n", len(buf))
 
 		if _, err := rack.ObjectStore(settings.App, key, bytes.NewReader(buf), structs.ObjectStoreOptions{}); err != nil {

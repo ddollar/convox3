@@ -1,0 +1,5 @@
+subscription Logs($oid: ID!, $uid: ID!) {
+  uninstall_logs(oid: $oid, uid: $uid) {
+    line
+  }
+}

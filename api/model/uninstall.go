@@ -2,8 +2,11 @@ package model
 
 import (
 	"fmt"
+	"io"
 	"time"
 
+	"github.com/convox/console/pkg/settings"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
 
@@ -50,6 +53,20 @@ func (m *Model) UninstallGet(id string) (*Uninstall, error) {
 	return u, nil
 }
 
+func (m *Model) UninstallLogs(id string) (io.ReadCloser, error) {
+	u, err := m.UninstallGet(id)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := m.rack.ObjectFetch(settings.App, u.Key())
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
+}
+
 func (m *Model) UninstallSave(u *Uninstall) error {
 	if err := m.storage.Put("uninstalls", u); err != nil {
 		return errors.WithStack(err)
@@ -72,6 +89,20 @@ func (m *Model) UninstallSucceed(id string) error {
 	}
 
 	return nil
+}
+
+func (u *Uninstall) Defaults() {
+	if u.ID == "" {
+		u.ID = uuid.New().String()
+	}
+
+	if u.Created.IsZero() {
+		u.Created = time.Now().UTC()
+	}
+
+	if u.Status == "" {
+		u.Status = "pending"
+	}
 }
 
 func (u *Uninstall) Key() string {

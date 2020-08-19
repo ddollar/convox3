@@ -267,11 +267,69 @@ func (r *Root) RackRemove(ctx context.Context, args RackRemoveArgs) (string, err
 		return "", err
 	}
 
-	if err := r.model.RackDelete(rr.ID); err != nil {
+	uninstall, err := rackUninstallable(r.model, rr.ID)
+	if err != nil {
 		return "", err
 	}
 
+	if uninstall {
+		if err := rackUninstall(ctx, r.model, string(args.Oid), rr.ID); err != nil {
+			return "", err
+		}
+	} else {
+		if err := r.model.RackDelete(rr.ID); err != nil {
+			return "", err
+		}
+	}
+
 	return rr.ID, nil
+}
+
+func rackUninstall(ctx context.Context, m model.Interface, oid, rid string) error {
+	r, err := authenticatedRack(ctx, m, oid, rid)
+	if err != nil {
+		return err
+	}
+
+	if r.Runtime == "" {
+		return fmt.Errorf("rack is not associated with a runtime integration")
+	}
+
+	u := &model.Uninstall{
+		Engine:         "v3",
+		OrganizationID: oid,
+		RackID:         rid,
+	}
+
+	if s, err := r.System(); err == nil {
+		u.Version = s.Version
+	}
+
+	if err := m.UninstallSave(u); err != nil {
+		return err
+	}
+
+	rr, err := m.RackGet(rid)
+	if err != nil {
+		return err
+	}
+
+	rr.Uninstall = u.ID
+
+	if err := m.RackSave(rr); err != nil {
+		return err
+	}
+
+	work := map[string]string{
+		"id":   u.ID,
+		"type": "uninstall",
+	}
+
+	if err := queue.New(settings.WorkerQueue).Enqueue(u.ID, r.Organization, work); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
 
 type RackUpdateArgs struct {

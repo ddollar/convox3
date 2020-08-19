@@ -8,6 +8,9 @@ query Racks($oid: ID!) {
       }
       name
       runtime
+      uninstall {
+        id
+      }
     }
   }
 }

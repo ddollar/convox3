@@ -5,10 +5,10 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"time"
 
-	"github.com/convox/console/api/model"
 	"github.com/convox/convox/pkg/structs"
 	"github.com/graph-gophers/graphql-go"
 )
@@ -33,7 +33,7 @@ func (r *Root) InstallLogs(ctx context.Context, args InstallLogsArgs) (chan *Log
 		return nil, err
 	}
 
-	go installLogs(ctx, r.model, string(args.Iid), ch)
+	go progressiveLogs(ctx, r.model.InstallLogs, string(args.Iid), ch)
 
 	return ch, nil
 }
@@ -66,10 +66,27 @@ func (r *Root) RackLogs(ctx context.Context, args RackLogsArgs) (chan *Log, erro
 	return ch, nil
 }
 
-func installLogs(ctx context.Context, m model.Interface, iid string, ch chan *Log) error {
-	pos := 0
+type UninstallLogsArgs struct {
+	Oid graphql.ID
+	Uid graphql.ID
+}
 
-	fmt.Printf("iid: %+v\n", iid)
+func (r *Root) UninstallLogs(ctx context.Context, args UninstallLogsArgs) (chan *Log, error) {
+	ch := make(chan *Log)
+
+	if _, err := authenticatedUninstall(ctx, r.model, string(args.Oid), string(args.Uid)); err != nil {
+		return nil, err
+	}
+
+	go progressiveLogs(ctx, r.model.UninstallLogs, string(args.Uid), ch)
+
+	return ch, nil
+}
+
+type LogsFunc func(id string) (io.ReadCloser, error)
+
+func progressiveLogs(ctx context.Context, fn LogsFunc, id string, ch chan *Log) error {
+	pos := 0
 
 	for {
 		time.Sleep(1 * time.Second)
@@ -78,7 +95,7 @@ func installLogs(ctx context.Context, m model.Interface, iid string, ch chan *Lo
 		case <-ctx.Done():
 			return nil
 		default:
-			r, err := m.InstallLogs(iid)
+			r, err := fn(id)
 			if err != nil {
 				fmt.Printf("err: %+v\n", err)
 				continue
@@ -105,6 +122,7 @@ func installLogs(ctx context.Context, m model.Interface, iid string, ch chan *Lo
 			pos = len(data)
 		}
 	}
+
 }
 
 func rackLogs(ctx context.Context, r *Rack, ch chan *Log) error {

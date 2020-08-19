@@ -89,6 +89,24 @@ func authenticatedRack(ctx context.Context, model model.Interface, oid, rid stri
 	return r, nil
 }
 
+func authenticatedUninstall(ctx context.Context, model model.Interface, oid, uid string) (*model.Uninstall, error) {
+	o, err := authenticatedOrganization(ctx, model, oid)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := model.UninstallGet(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	if u.OrganizationID != o.ID {
+		return nil, fmt.Errorf("invalid install")
+	}
+
+	return u, nil
+}
+
 func checkNonzero(errs []error, value interface{}, message string) []error {
 	if reflect.ValueOf(value).IsZero() {
 		errs = append(errs, errors.New(message))
@@ -150,6 +168,19 @@ func rackClient(ctx context.Context, host, password string) (*sdk.Client, error)
 	s.Client = s.Client.WithContext(ctx)
 
 	return s, nil
+}
+
+func rackUninstallable(m model.Interface, rid string) (bool, error) {
+	data, err := m.RackStateLoad(rid)
+	if err != nil {
+		return false, err
+	}
+
+	if len(data) == 0 {
+		return false, nil
+	}
+
+	return true, nil
 }
 
 func timeoutError(err error) error {

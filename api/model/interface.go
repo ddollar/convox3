@@ -26,6 +26,7 @@ type Interface interface {
 	RackUnlock(id string) error
 	TaskWriter(t Task) (*TaskWriter, error)
 	UninstallGet(id string) (*Uninstall, error)
+	UninstallLogs(id string) (io.ReadCloser, error)
 	UninstallSave(u *Uninstall) error
 	UpdateGet(id string) (*Update, error)
 	UpdateSave(u *Update) error

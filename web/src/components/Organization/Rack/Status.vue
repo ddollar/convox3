@@ -32,6 +32,8 @@ export default {
           return "text-success";
         case "updating":
           return "text-secondary";
+        case "uninstalling":
+          return "text-danger";
         default:
           return "text-danger";
       }
@@ -52,19 +54,21 @@ export default {
           return "fas fa-check-square";
         case "updating":
           return "fas fa-sync-alt fa-spin";
+        case "uninstalling":
+          return "fas fa-sync-alt fa-spin";
         default:
           return "fas fa-question-circle";
       }
-    },
+    }
   },
   props: {
     color: {
       type: Boolean,
-      default: false,
+      default: false
     },
     status: {
-      type: String,
-    },
-  },
+      type: String
+    }
+  }
 };
 </script>

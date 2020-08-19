@@ -9,9 +9,23 @@ div.logs {
   overflow-y: scroll;
   white-space: pre;
 
-  &.install {
+  &.install,
+  &.uninstall {
     border-radius: 0;
     font-size: 0.8em;
-    height: 193px;
+    height: 307px;
+
+    @include media-breakpoint-up(xxl) {
+      height: 194px;
+    }
   }
 }
+
+// @include media-breakpoint-up(xxl) {
+//   div.logs {
+//     &.install,
+//     &.uninstall {
+//       height: 194px;
+//     }
+//   }
+// }

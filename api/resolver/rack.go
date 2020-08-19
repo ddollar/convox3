@@ -237,12 +237,20 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	status, err := r.statusInstalling()
+	is, err := r.statusInstalling()
 	if err != nil {
 		return "", err
 	}
-	if status != "" {
-		return status, nil
+	if is != "" {
+		return is, nil
+	}
+
+	us, err := r.statusUninstalling()
+	if err != nil {
+		return "", err
+	}
+	if us != "" {
+		return us, nil
 	}
 
 	c, err := r.client(ctx)
@@ -261,17 +269,23 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	return s.Status, nil
 }
 
-func (r *Rack) Uninstallable(ctx context.Context) (bool, error) {
-	data, err := r.model.RackStateLoad(r.Rack.ID)
+func (r *Rack) Uninstall(ctx context.Context) (*Uninstall, error) {
+	if r.Rack.Uninstall == "" {
+		return nil, nil
+	}
+
+	u, err := authenticatedUninstall(ctx, r.model, r.Organization, r.Rack.Uninstall)
 	if err != nil {
-		return false, err
+		return nil, err
 	}
 
-	if len(data) == 0 {
-		return false, nil
-	}
+	uu := &Uninstall{u}
 
-	return true, nil
+	return uu, nil
+}
+
+func (r *Rack) Uninstallable(ctx context.Context) (bool, error) {
+	return rackUninstallable(r.model, r.Rack.ID)
 }
 
 func (r *Rack) Updates(ctx context.Context) ([]*Update, error) {
@@ -300,6 +314,7 @@ func (r *Rack) statusInstalling() (string, error) {
 	}
 
 	i, err := r.model.InstallGet(r.Rack.Install)
+	fmt.Printf("r.Rack.Name: %+v\n", r.Rack.Name)
 	fmt.Printf("i: %+v\n", i)
 	if err != nil {
 		return "", err
@@ -308,6 +323,28 @@ func (r *Rack) statusInstalling() (string, error) {
 	switch i.Status {
 	case "pending", "running", "starting":
 		return "installing", nil
+	case "failed":
+		return "failed", nil
+	default:
+		return "", nil
+	}
+}
+
+func (r *Rack) statusUninstalling() (string, error) {
+	if r.Rack.Uninstall == "" {
+		return "", nil
+	}
+
+	u, err := r.model.UninstallGet(r.Rack.Uninstall)
+	fmt.Printf("r.Rack.Name: %+v\n", r.Rack.Name)
+	fmt.Printf("u: %+v\n", u)
+	if err != nil {
+		return "", err
+	}
+
+	switch u.Status {
+	case "pending", "running", "starting":
+		return "uninstalling", nil
 	case "failed":
 		return "failed", nil
 	default:

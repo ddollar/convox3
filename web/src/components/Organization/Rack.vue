@@ -1,7 +1,7 @@
 <template>
   <div :class="`col-12 col-xl-6 col-xxl-4 rack clickable ${css}`" @click="goto()">
     <div class="card mb-4 border-bottom-0">
-      <div class="card-header d-flex bg-secondary text-light">
+      <div class="card-header d-flex bg-secondary text-light align-items-center">
         <div class="flex-grow-1">{{ rack.name }}</div>
         <div class="flex-shrink-0">
           <i v-if="$apollo.queries.status.loading" class="spinner"></i>
@@ -9,6 +9,7 @@
         </div>
       </div>
       <Installing v-if="installing" :rack="rack" />
+      <Uninstalling v-else-if="uninstalling" :rack="rack" />
       <ul v-else-if="running" class="list-group list-group-flush">
         <li class="list-group-item d-flex align-items-center p-0">
           <div class="flex-even p-3 border-right">
@@ -66,6 +67,9 @@ export default {
       error(error) {
         this.appsError = error;
       },
+      skip() {
+        return !this.running;
+      },
       query: require("@/queries/Organization/Rack/Apps.graphql"),
       update: data => data.organization?.rack?.apps,
       variables() {
@@ -78,6 +82,9 @@ export default {
     capacity: {
       error(error) {
         this.capacityError = error;
+      },
+      skip() {
+        return !this.running;
       },
       query: require("@/queries/Organization/Rack/Capacity.graphql"),
       update: data => data.organization?.rack?.capacity,
@@ -92,6 +99,7 @@ export default {
       error(error) {
         this.statusError = error;
       },
+      pollInterval: 5000,
       query: require("@/queries/Organization/Rack/Status.graphql"),
       update: data => data.organization?.rack?.status,
       variables() {
@@ -106,7 +114,9 @@ export default {
     Installing: () => import("@/components/Organization/Rack/Installing.vue"),
     Remove: () => import("@/components/Organization/Rack/Remove.vue"),
     Settings: () => import("@/components/Organization/Rack/Settings.vue"),
-    Status: () => import("@/components/Organization/Rack/Status.vue")
+    Status: () => import("@/components/Organization/Rack/Status.vue"),
+    Uninstalling: () =>
+      import("@/components/Organization/Rack/Uninstalling.vue")
   },
   computed: {
     css() {
@@ -124,6 +134,15 @@ export default {
     running() {
       switch (this.status) {
         case "running":
+          return true;
+        default:
+          return false;
+      }
+    },
+    uninstalling() {
+      switch (this.status) {
+        case "failed":
+        case "uninstalling":
           return true;
         default:
           return false;
@@ -148,6 +167,9 @@ export default {
     },
     goto() {
       switch (this.status) {
+        case "installing":
+        case "uninstalling":
+          break;
         case "failed":
         case "unknown":
           this.$bvModal.show(`rack-remove-${this.rack.id}`);

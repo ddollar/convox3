@@ -31,6 +31,7 @@ type Query {
 type Subscription {
   install_logs(oid: ID!, iid: ID!): Log!
   rack_logs(oid: ID!, rid: ID!, since: Int): Log!
+  uninstall_logs(oid: ID!, uid: ID!): Log!
 }
 
 enum Access {
@@ -172,6 +173,7 @@ type Rack {
   update_day: Int!
   update_frequency: UpdateFrequency!
   update_hour: Int!
+  uninstall: Uninstall
   uninstallable: Boolean!
 }
 
@@ -183,6 +185,7 @@ enum RackStatus {
   rollback
   running
   unknown
+  uninstalling
   updating
 }
 
@@ -217,6 +220,10 @@ type Service {
   domain: String!
   mem: Int!
   name: ID!
+}
+
+type Uninstall {
+  id: ID!
 }
 
 type Update {
