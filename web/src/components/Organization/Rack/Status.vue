@@ -24,6 +24,8 @@ export default {
           return "text-danger";
         case "failed":
           return "text-danger";
+        case "incomplete":
+          return "text-danger";
         case "installing":
           return "text-success";
         case "rollback":
@@ -45,6 +47,8 @@ export default {
         case "deleting":
           return "fas fa-sync-alt fa-spin";
         case "failed":
+          return "fas fa-times-circle";
+        case "incomplete":
           return "fas fa-times-circle";
         case "installing":
           return "fas fa-sync-alt fa-spin";

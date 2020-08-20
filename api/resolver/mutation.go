@@ -152,12 +152,6 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 		return "", collateErrors(errs)
 	}
 
-	fmt.Printf("args: %+v\n", args)
-
-	for _, p := range args.Parameters {
-		fmt.Printf("p: %+v\n", p)
-	}
-
 	u, err := currentUser(ctx)
 	if err != nil {
 		return "", err
@@ -182,8 +176,6 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 	}
 
 	name := reRackName.ReplaceAllString(args.Name, "")
-
-	fmt.Printf("name: %+v\n", name)
 
 	rs, err := r.model.OrganizationRacks(string(args.Oid))
 	if err != nil {
@@ -240,9 +232,6 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 	if err := r.model.RackSave(rr); err != nil {
 		return "", err
 	}
-
-	fmt.Printf("rr: %+v\n", rr)
-	fmt.Printf("in: %+v\n", in)
 
 	work := map[string]string{
 		"id":   in.ID,

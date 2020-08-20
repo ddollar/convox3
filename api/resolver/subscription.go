@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"time"
 
+	"github.com/convox/console/api/model"
 	"github.com/convox/convox/pkg/structs"
 	"github.com/graph-gophers/graphql-go"
 )
@@ -33,7 +34,9 @@ func (r *Root) InstallLogs(ctx context.Context, args InstallLogsArgs) (chan *Log
 		return nil, err
 	}
 
-	go progressiveLogs(ctx, r.model.InstallLogs, string(args.Iid), ch)
+	id := string(args.Iid)
+
+	go progressiveLogs(ctx, installLogs(r.model, id), installDone(r.model, id), ch)
 
 	return ch, nil
 }
@@ -78,14 +81,39 @@ func (r *Root) UninstallLogs(ctx context.Context, args UninstallLogsArgs) (chan 
 		return nil, err
 	}
 
-	go progressiveLogs(ctx, r.model.UninstallLogs, string(args.Uid), ch)
+	id := string(args.Uid)
+
+	go progressiveLogs(ctx, uninstallLogs(r.model, id), uninstallDone(r.model, id), ch)
 
 	return ch, nil
 }
 
-type LogsFunc func(id string) (io.ReadCloser, error)
+type DoneFunc func() (bool, error)
+type LogsFunc func() (io.ReadCloser, error)
 
-func progressiveLogs(ctx context.Context, fn LogsFunc, id string, ch chan *Log) error {
+func installDone(m model.Interface, id string) DoneFunc {
+	return func() (bool, error) {
+		i, err := m.InstallGet(id)
+		if err != nil {
+			return true, err
+		}
+
+		switch i.Status {
+		case "complete", "failed":
+			return true, nil
+		default:
+			return false, nil
+		}
+	}
+}
+
+func installLogs(m model.Interface, id string) LogsFunc {
+	return func() (io.ReadCloser, error) {
+		return m.InstallLogs(id)
+	}
+}
+
+func progressiveLogs(ctx context.Context, logs LogsFunc, done DoneFunc, ch chan *Log) error {
 	pos := 0
 
 	for {
@@ -95,7 +123,7 @@ func progressiveLogs(ctx context.Context, fn LogsFunc, id string, ch chan *Log) 
 		case <-ctx.Done():
 			return nil
 		default:
-			r, err := fn(id)
+			r, err := logs()
 			if err != nil {
 				fmt.Printf("err: %+v\n", err)
 				continue
@@ -111,7 +139,6 @@ func progressiveLogs(ctx context.Context, fn LogsFunc, id string, ch chan *Log) 
 			s := bufio.NewScanner(bytes.NewReader(data[pos:]))
 
 			for s.Scan() {
-				fmt.Printf("s.Text(): %+v\n", s.Text())
 				ch <- &Log{line: s.Text()}
 			}
 
@@ -120,6 +147,18 @@ func progressiveLogs(ctx context.Context, fn LogsFunc, id string, ch chan *Log) 
 			}
 
 			pos = len(data)
+
+			d, err := done()
+			if err != nil {
+				fmt.Printf("err: %+v\n", err)
+			}
+
+			fmt.Printf("d: %+v\n", d)
+
+			if d {
+				close(ch)
+				return nil
+			}
 		}
 	}
 
@@ -153,4 +192,26 @@ func rackLogs(ctx context.Context, r *Rack, ch chan *Log) error {
 	}
 
 	return nil
+}
+
+func uninstallDone(m model.Interface, id string) DoneFunc {
+	return func() (bool, error) {
+		i, err := m.UninstallGet(id)
+		if err != nil {
+			return true, err
+		}
+
+		switch i.Status {
+		case "complete", "failed":
+			return true, nil
+		default:
+			return false, nil
+		}
+	}
+}
+
+func uninstallLogs(m model.Interface, id string) LogsFunc {
+	return func() (io.ReadCloser, error) {
+		return m.UninstallLogs(id)
+	}
 }

@@ -2,7 +2,6 @@ package resolver
 
 import (
 	"context"
-	"fmt"
 	"sort"
 	"time"
 
@@ -237,20 +236,20 @@ func (r *Rack) Status(ctx context.Context) (string, error) {
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	is, err := r.statusInstalling()
-	if err != nil {
-		return "", err
-	}
-	if is != "" {
-		return is, nil
-	}
-
 	us, err := r.statusUninstalling()
 	if err != nil {
 		return "", err
 	}
 	if us != "" {
 		return us, nil
+	}
+
+	is, err := r.statusInstalling()
+	if err != nil {
+		return "", err
+	}
+	if is != "" {
+		return is, nil
 	}
 
 	c, err := r.client(ctx)
@@ -314,8 +313,6 @@ func (r *Rack) statusInstalling() (string, error) {
 	}
 
 	i, err := r.model.InstallGet(r.Rack.Install)
-	fmt.Printf("r.Rack.Name: %+v\n", r.Rack.Name)
-	fmt.Printf("i: %+v\n", i)
 	if err != nil {
 		return "", err
 	}
@@ -324,7 +321,7 @@ func (r *Rack) statusInstalling() (string, error) {
 	case "pending", "running", "starting":
 		return "installing", nil
 	case "failed":
-		return "failed", nil
+		return "incomplete", nil
 	default:
 		return "", nil
 	}
@@ -336,8 +333,6 @@ func (r *Rack) statusUninstalling() (string, error) {
 	}
 
 	u, err := r.model.UninstallGet(r.Rack.Uninstall)
-	fmt.Printf("r.Rack.Name: %+v\n", r.Rack.Name)
-	fmt.Printf("u: %+v\n", u)
 	if err != nil {
 		return "", err
 	}

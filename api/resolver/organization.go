@@ -49,8 +49,6 @@ func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) 
 
 	ris := []*Integration{}
 
-	fmt.Printf("args: %+v\n", args)
-
 	for _, i := range is {
 		if i.Kind == args.Kind {
 			if args.Provider == nil || *args.Provider == i.Provider {
@@ -58,8 +56,6 @@ func (o *Organization) Integrations(ctx context.Context, args IntegrationsArgs) 
 			}
 		}
 	}
-
-	fmt.Printf("ris: %+v\n", ris)
 
 	return ris, nil
 }

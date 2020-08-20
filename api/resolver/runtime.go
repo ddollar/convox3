@@ -46,8 +46,6 @@ func (r *Runtime) Parameters(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 
-	fmt.Printf("ps: %+v\n", ps)
-
 	return ps, nil
 }
 

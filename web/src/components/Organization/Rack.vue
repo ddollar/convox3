@@ -40,17 +40,13 @@
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                CPU/Memory Graph
-              </div>
+              >CPU/Memory Graph</div>
             </div>
             <div class="col-12 col-xxl-6 p-3 border-right border-bottom bg-light">
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                Network Graph
-              </div>
+              >Network Graph</div>
             </div>
           </div>
         </li>
@@ -137,7 +133,7 @@ export default {
     },
     installing() {
       switch (this.status) {
-        case "failed":
+        case "incomplete":
         case "installing":
           return true;
         default:
@@ -183,6 +179,7 @@ export default {
         case "installing":
         case "uninstalling":
           break;
+        case "incomplete":
         case "failed":
         case "unknown":
           this.$bvModal.show(`rack-remove-${this.rack.id}`);
