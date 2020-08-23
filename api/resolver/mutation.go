@@ -223,6 +223,10 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 		in.Params[p.Key] = p.Value
 	}
 
+	if v, ok := in.Params["release"]; ok {
+		in.Version = v
+	}
+
 	if err := r.model.InstallSave(in); err != nil {
 		return "", err
 	}
@@ -290,9 +294,9 @@ func rackUninstall(ctx context.Context, m model.Interface, oid, rid string) erro
 		RackID:         rid,
 	}
 
-	if s, err := r.System(); err == nil {
-		u.Version = s.Version
-	}
+	// if s, err := r.System(); err == nil {
+	// 	u.Version = s.Version
+	// }
 
 	if err := m.UninstallSave(u); err != nil {
 		return err

@@ -22,7 +22,6 @@ type Uninstall struct {
 	Pid      string    `dynamo:"pid"`
 	Started  time.Time `dynamo:"started"`
 	Status   string    `dynamo:"status"`
-	Version  string    `dynamo:"version"`
 }
 
 type Uninstalls []Uninstall

@@ -136,17 +136,19 @@ func progressiveLogs(ctx context.Context, logs LogsFunc, done DoneFunc, ch chan 
 				continue
 			}
 
-			s := bufio.NewScanner(bytes.NewReader(data[pos:]))
+			if len(data) > pos {
+				s := bufio.NewScanner(bytes.NewReader(data[pos:]))
 
-			for s.Scan() {
-				ch <- &Log{line: s.Text()}
+				for s.Scan() {
+					ch <- &Log{line: s.Text()}
+				}
+
+				if err := s.Err(); err != nil {
+					fmt.Printf("err: %+v\n", err)
+				}
+
+				pos = len(data)
 			}
-
-			if err := s.Err(); err != nil {
-				fmt.Printf("err: %+v\n", err)
-			}
-
-			pos = len(data)
 
 			d, err := done()
 			if err != nil {
