@@ -14,11 +14,7 @@
         <i v-if="$apollo.loading" class="spinner" />
       </div>
       <div class="mr-4 mb-4 order-3 order-lg-3">
-        <b-button v-if="page('apps')" variant="success">
-          <i class="fas fa-plus-circle mr-1" />
-          Create App
-        </b-button>
-        <slot name="nav"></slot>
+        <AppCreate v-if="page('apps')" />
       </div>
       <div class="mr-4 mb-4 order-4 order-lg-4">
         <nav class="nav nav-pills flex-nowrap">
@@ -49,6 +45,7 @@ import Rack from "@/mixins/Rack";
 
 export default {
   components: {
+    AppCreate: () => import("@/components/Organization/Rack/App/Create"),
     Remove: () => import("@/components/Organization/Rack/Remove"),
     Settings: () => import("@/components/Organization/Rack/Settings"),
   },

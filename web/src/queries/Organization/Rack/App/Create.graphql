@@ -1,0 +1,6 @@
+mutation Create($oid: ID!, $rid: ID!, $name: String!) {
+  app_create(oid: $oid, rid: $rid, name: $name) {
+    name
+    status
+  }
+}

@@ -8,6 +8,7 @@ import (
 	"github.com/convox/console/api/model"
 	"github.com/convox/console/pkg/queue"
 	"github.com/convox/console/pkg/settings"
+	"github.com/convox/convox/pkg/structs"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/pkg/errors"
 )
@@ -15,6 +16,36 @@ import (
 var (
 	reRackName = regexp.MustCompile(`^[a-z0-9-]$`)
 )
+
+type AppCreateArgs struct {
+	Oid  graphql.ID
+	Rid  graphql.ID
+	Name string
+}
+
+func (r *Root) AppCreate(ctx context.Context, args AppCreateArgs) (*App, error) {
+	rr, err := authenticatedRack(ctx, r.model, string(args.Oid), string(args.Rid))
+	if err != nil {
+		return nil, err
+	}
+
+	c, err := rackClient(ctx, rr.Host, rr.Password)
+	if err != nil {
+		return nil, err
+	}
+
+	a, err := c.AppCreate(args.Name, structs.AppCreateOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Printf("a: %+v\n", a)
+	fmt.Printf("err: %+v\n", err)
+
+	aa := &App{App: *a, rack: &Rack{Rack: *rr, model: r.model}}
+
+	return aa, nil
+}
 
 type InstanceTerminateArgs struct {
 	Oid graphql.ID
