@@ -56,6 +56,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 
 @import "@/styles/constant.scss";
 @import "@/styles/animation.scss";
+@import "@/styles/app.scss";
 @import "@/styles/color.scss";
 @import "@/styles/body.scss";
 @import "@/styles/card.scss";
@@ -63,6 +64,7 @@ $fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
 @import "@/styles/logs.scss";
 @import "@/styles/modal.scss";
 @import "@/styles/nav.scss";
+@import "@/styles/rack.scss";
 @import "@/styles/spinner.scss";
 @import "@/styles/table.scss";
 </style>

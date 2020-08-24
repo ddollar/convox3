@@ -10,4 +10,12 @@
   &.status-failed {
     filter: brightness(70%);
   }
+
+  .logs {
+    height: 307px;
+
+    @include media-breakpoint-up(xxl) {
+      height: 194px;
+    }
+  }
 }

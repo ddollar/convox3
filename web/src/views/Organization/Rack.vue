@@ -14,6 +14,13 @@
         <i v-if="$apollo.loading" class="spinner" />
       </div>
       <div class="mr-4 mb-4 order-3 order-lg-3">
+        <b-button v-if="page('apps')" variant="success">
+          <i class="fas fa-plus-circle mr-1" />
+          Create App
+        </b-button>
+        <slot name="nav"></slot>
+      </div>
+      <div class="mr-4 mb-4 order-4 order-lg-4">
         <nav class="nav nav-pills flex-nowrap">
           <router-link :to="route('apps')" class="nav-item nav-link">Apps</router-link>
           <router-link :to="route('instances')" class="nav-item nav-link">Instances</router-link>
@@ -23,7 +30,7 @@
           <router-link :to="route('updates')" class="nav-item nav-link">Updates</router-link>
         </nav>
       </div>
-      <div class="mb-4 order-2 order-lg-4">
+      <div class="mb-4 order-2 order-lg-5">
         <b-button variant="secondary" @click="settings()">
           <i class="fa fa-cog"></i>
         </b-button>
@@ -56,6 +63,9 @@ export default {
         name: "organization/racks",
         params: { oid: this.$route.params.oid },
       };
+    },
+    page(name) {
+      return this.$route.name == `organization/rack/${name}`;
     },
     route(page) {
       return {

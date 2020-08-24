@@ -3,7 +3,12 @@
     <div class="col-12 d-flex mb-4">
       <div class="flex-grow-1">
         <span class="dropdown mr-2">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+          >
             <Provider v-if="runtime" :kind="runtime.provider" :text="runtime.title" />
             <span v-else>All Racks</span>
           </button>
@@ -11,7 +16,13 @@
             <a class="dropdown-item" @click="filter(null)" href="#">All Racks</a>
             <div v-if="integrations.length > 0">
               <div class="dropdown-divider"></div>
-              <a v-for="integration in integrations" :key="integration.id" class="dropdown-item" @click="filter(integration)" href="#">
+              <a
+                v-for="integration in integrations"
+                :key="integration.id"
+                class="dropdown-item"
+                @click="filter(integration)"
+                href="#"
+              >
                 <Provider :kind="integration.provider" :text="integration.title" />
               </a>
             </div>
@@ -25,11 +36,13 @@
             Install
           </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <div v-if="integrations.length == 0" class="dropdown-item">
-              No Runtime Integrations
-            </div>
+            <div v-if="integrations.length == 0" class="dropdown-item">No Runtime Integrations</div>
             <div v-else>
-              <b-dropdown-item v-for="integration in integrations" :key="integration.id" @click="install(integration.id)">
+              <b-dropdown-item
+                v-for="integration in integrations"
+                :key="integration.id"
+                @click="install(integration.id)"
+              >
                 <Provider :kind="integration.provider" :text="integration.title" />
                 <Install :iid="integration.id" />
               </b-dropdown-item>
@@ -45,14 +58,24 @@
     </div>
     <div v-if="filteredRacks.length == 0" class="col-12">
       <div class="card">
-        <div class="card-body">No Racks Found</div>
+        <div class="card-body">
+          <span>This organization does not yet have any Racks. Use the</span>
+          <span class="text-success font-weight-bold ml-1">
+            <i class="fa fa-cloud-upload-alt"></i>
+            Install
+          </span>
+          <span>or</span>
+          <span class="text-success font-weight-bold ml-1">
+            <i class="fas fa-plus-circle"></i>
+            Import
+          </span>
+          <span>buttons above to add one.</span>
+        </div>
       </div>
     </div>
     <Rack v-else v-for="rack in filteredRacks" :key="rack.id" :rack="rack" />
   </div>
 </template>
-
-<style lang="scss" src="@/styles/rack.scss"></style>
 
 <script>
 import Organization from "@/mixins/Organization";

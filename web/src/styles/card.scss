@@ -10,6 +10,10 @@
   }
 }
 
+.card-group .cardi + .card {
+  border-left: 1px !important;
+}
+
 .card-header {
   font-size: 1.3em;
   font-weight: bold;

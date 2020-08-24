@@ -13,11 +13,6 @@ div.logs {
   &.uninstall {
     border-radius: 0;
     font-size: 0.8em;
-    height: 307px;
-
-    @include media-breakpoint-up(xxl) {
-      height: 194px;
-    }
   }
 }
 

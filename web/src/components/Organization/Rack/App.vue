@@ -21,7 +21,10 @@
           </div>
           <div class="flex-even p-3">
             <div class="font-weight-bold">Memory</div>
-            <i v-if="$apollo.queries.services.loading" class="fas fa-circle-notch fa-spin text-muted"></i>
+            <i
+              v-if="$apollo.queries.services.loading"
+              class="fas fa-circle-notch fa-spin text-muted"
+            ></i>
             <div v-else>{{ mem }}</div>
           </div>
         </li>
@@ -31,17 +34,13 @@
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                CPU/Memory Graph
-              </div>
+              >CPU/Memory Graph</div>
             </div>
             <div class="col-12 col-xxl-6 p-3 border-right border-bottom bg-light">
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                Network Graph
-              </div>
+              >Network Graph</div>
             </div>
           </div>
         </li>

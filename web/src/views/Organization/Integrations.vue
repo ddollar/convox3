@@ -6,8 +6,6 @@
   </div>
 </template>
 
-<style lang="scss" src="@/styles/rack.scss"></style>
-
 <script>
 import Organization from "@/mixins/Organization";
 
