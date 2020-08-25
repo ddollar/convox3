@@ -19,17 +19,17 @@ func (o *Organization) Id() graphql.ID {
 }
 
 func (o *Organization) Access(ctx context.Context) (string, error) {
-	u, err := currentUser(ctx)
+	uid, err := currentUid(ctx)
 	if err != nil {
 		return "", err
 	}
 
 	switch {
-	case common.SliceContains(o.Organization.Administrators, u.id):
+	case common.SliceContains(o.Organization.Administrators, uid):
 		return "administrator", nil
-	case common.SliceContains(o.Organization.Operators, u.id):
+	case common.SliceContains(o.Organization.Operators, uid):
 		return "operator", nil
-	case common.SliceContains(o.Organization.Users, u.id):
+	case common.SliceContains(o.Organization.Users, uid):
 		return "developer", nil
 	default:
 		return "", fmt.Errorf("no access")

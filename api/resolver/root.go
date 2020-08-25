@@ -53,12 +53,12 @@ func (r *Root) Organization(ctx context.Context, args OrganizationArgs) (*Organi
 }
 
 func (r *Root) Organizations(ctx context.Context) ([]*Organization, error) {
-	u, err := currentUser(ctx)
+	uid, err := currentUid(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	os, err := r.model.UserOrganizations(u.id)
+	os, err := r.model.UserOrganizations(uid)
 	if err != nil {
 		return nil, err
 	}

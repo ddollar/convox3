@@ -59,12 +59,12 @@ func authenticatedOrganization(ctx context.Context, model model.Interface, oid s
 		return nil, err
 	}
 
-	u, err := currentUser(ctx)
+	uid, err := currentUid(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	if !common.SliceContains(o.Users, u.id) {
+	if !common.SliceContains(o.Users, uid) {
 		return nil, fmt.Errorf("invalid authentication")
 	}
 
@@ -129,24 +129,25 @@ func collateErrors(errs []error) error {
 	return errors.New(strings.Join(es, ", "))
 }
 
-func currentUser(ctx context.Context) (*User, error) {
-	token, ok := ctx.Value(graphqlws.ContextAuthorization).(string)
+func currentUid(ctx context.Context) (string, error) {
+	key, ok := ctx.Value(graphqlws.ContextAuthorization).(string)
 	if !ok {
-		return nil, AuthenticationError{fmt.Errorf("no token")}
+		return "", AuthenticationError{fmt.Errorf("no key")}
 	}
 
 	var data map[string]string
 
-	if _, err := jwt.Verify([]byte(token), jwtHash, &data); err != nil {
-		return nil, err
+	if _, err := jwt.Verify([]byte(key), jwtHash, &data); err != nil {
+		return "", err
 	}
 
-	u := &User{
-		id:    data["id"],
-		email: data["email"],
+	uid := data["uid"]
+
+	if uid == "" {
+		return "", AuthenticationError{fmt.Errorf("no uid")}
 	}
 
-	return u, nil
+	return uid, nil
 }
 
 func rackClient(ctx context.Context, host, password string) (*sdk.Client, error) {

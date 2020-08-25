@@ -8,6 +8,7 @@ import (
 	"github.com/convox/console/api/model"
 	"github.com/convox/console/pkg/queue"
 	"github.com/convox/console/pkg/settings"
+	"github.com/convox/console/pkg/token"
 	"github.com/convox/convox/pkg/structs"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/pkg/errors"
@@ -82,13 +83,25 @@ func (r *Root) Login(ctx context.Context, args LoginArgs) (*Authentication, erro
 		return nil, err
 	}
 
-	u := User{
-		id:    mu.ID,
-		email: mu.Email,
+	ts, err := r.model.UserTokens(mu.ID)
+	if err != nil {
+		return nil, err
 	}
 
 	a := &Authentication{
-		user: u,
+		user: *mu,
+	}
+
+	if len(ts) == 0 {
+		s := &model.Session{
+			UserID: mu.ID,
+		}
+
+		if err := r.model.SessionSave(s); err != nil {
+			return nil, err
+		}
+
+		a.session = s
 	}
 
 	return a, nil
@@ -127,7 +140,7 @@ type RackImportArgs struct {
 }
 
 func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, error) {
-	u, err := currentUser(ctx)
+	uid, err := currentUid(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -149,7 +162,7 @@ func (r *Root) RackImport(ctx context.Context, args RackImportArgs) (*Rack, erro
 	}
 
 	rr := model.Rack{
-		Creator:      u.id,
+		Creator:      uid,
 		Organization: o.ID,
 		Name:         args.Name,
 		Host:         args.Hostname,
@@ -183,7 +196,7 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 		return "", collateErrors(errs)
 	}
 
-	u, err := currentUser(ctx)
+	uid, err := currentUid(ctx)
 	if err != nil {
 		return "", err
 	}
@@ -220,7 +233,7 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 	}
 
 	rr := &model.Rack{
-		Creator:      u.id,
+		Creator:      uid,
 		Name:         name,
 		Organization: string(args.Oid),
 		Provider:     i.Provider,
@@ -247,7 +260,7 @@ func (r *Root) RackInstall(ctx context.Context, args RackInstallArgs) (string, e
 		Provider:       i.Provider,
 		RackID:         rr.ID,
 		Region:         args.Region,
-		UserID:         u.id,
+		UserID:         uid,
 	}
 
 	for _, p := range args.Parameters {
@@ -392,4 +405,20 @@ func (r *Root) RackUpdate(ctx context.Context, args RackUpdateArgs) (string, err
 	}
 
 	return rr.ID, nil
+}
+
+func (r *Root) TokenAuthenticationRequest(ctx context.Context) (*TokenAuthenticationRequest, error) {
+	t := token.NewU2F(r.model)
+
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	data, chid, err := t.AuthenticationRequest(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	return &TokenAuthenticationRequest{id: chid, data: string(data)}, nil
 }

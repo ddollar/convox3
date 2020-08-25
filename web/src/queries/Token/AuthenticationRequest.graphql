@@ -1,0 +1,6 @@
+mutation Challenge {
+  token_authentication_request {
+    id
+    data
+  }
+}

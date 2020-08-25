@@ -5,6 +5,7 @@
         <div class="card-header">Login</div>
         <div class="position-relative d-flex">
           <div class="card-body">
+            <div v-if="alert" class="alert alert-danger" role="alert">{{ alert }}</div>
             <div class="form-group">
               <label for="login-email">Email</label>
               <input id="login-email" class="form-control" type="email" v-model="email" />
@@ -24,9 +25,9 @@
             <a href>Forgot Password</a>
           </div>
           <div class="flex-fill text-right">
-            <button id="login" class="btn btn-primary" @click="submit($event)">
+            <b-button id="login" variant="primary" @click="submit()">
               Login
-            </button>
+            </b-button>
           </div>
         </div>
       </div>
@@ -35,20 +36,21 @@
 </template>
 
 <script>
-import $ from "jquery";
-
 import Authentication from "@/mixins/Authentication";
+import Error from "@/mixins/Error";
+import u2f from "@/scripts/u2f";
 
 export default {
   data() {
     return {
+      alert: "",
       email: "",
       password: "",
     };
   },
   methods: {
-    submit(event) {
-      event.target.disabled = true;
+    submit() {
+      this.alert = "";
       this.$apollo
         .mutate({
           mutation: require("@/queries/Login.graphql"),
@@ -58,33 +60,33 @@ export default {
           },
         })
         .then(result => {
-          this.login(result.data.login.token);
-        })
-        .catch(error => {
-          var message = error.graphQLErrors.map(err => err.message).join(", ");
-          if (message != "") {
-            var alert = $("#login-alert");
-            alert.html(message);
-            alert.removeClass("d-none");
-            alert.addClass("d-flex");
-            alert.css("opacity", "0%");
-            alert.animate({ opacity: "100%" }, () => {
-              window.setTimeout(() => {
-                alert.animate({ opacity: "0%" }, () => {
-                  alert.removeClass("d-flex");
-                  alert.addClass("d-none");
-                });
-              }, 800);
+          console.log("result", result);
+          if (result.data.login.session === null) {
+            this.token_challenge();
+          } else {
+            this.login(result.data.login.key);
+            this.$router.push({
+              name: "home",
             });
           }
         })
-        .finally(() => {
-          this.$router.push({
-            name: "home",
-          });
+        .catch(err => {
+          this.alert = this.graphQLErrors(err);
+        });
+    },
+    token_challenge() {
+      this.$apollo
+        .mutate({
+          mutation: require("@/queries/Token/AuthenticationRequest.graphql"),
+        })
+        .then(async result => {
+          console.log("result", result);
+        })
+        .catch(err => {
+          console.log("err", err);
         });
     },
   },
-  mixins: [Authentication],
+  mixins: [Authentication, Error],
 };
 </script>

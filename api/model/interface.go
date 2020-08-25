@@ -3,6 +3,8 @@ package model
 import "io"
 
 type Interface interface {
+	ChallengeGet(id string) (*Challenge, error)
+	ChallengeSave(c *Challenge) error
 	InstallGet(id string) (*Install, error)
 	InstallLogs(id string) (io.ReadCloser, error)
 	InstallSave(i *Install) error
@@ -24,6 +26,9 @@ type Interface interface {
 	RackStateLoad(id string) ([]byte, error)
 	RackStateStore(id string, data []byte) error
 	RackUnlock(id string) error
+	SessionDelete(id string) error
+	SessionGet(id string) (*Session, error)
+	SessionSave(s *Session) error
 	TaskWriter(t Task) (*TaskWriter, error)
 	UninstallGet(id string) (*Uninstall, error)
 	UninstallLogs(id string) (io.ReadCloser, error)
@@ -34,5 +39,10 @@ type Interface interface {
 	UserGet(id string) (*User, error)
 	UserGetBatch(ids []string) (Users, error)
 	UserOrganizations(uid string) (Organizations, error)
+	UserTokens(uid string) (Tokens, error)
+	UserTokensByKind(uid, kind string) (Tokens, error)
+	TokenDelete(id string) error
+	TokenGet(id string) (*Token, error)
+	TokenSave(token *Token) error
 	WorkflowGet(id string) (*Workflow, error)
 }

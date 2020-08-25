@@ -285,6 +285,8 @@ github.com/stretchr/objx
 github.com/stretchr/testify/assert
 github.com/stretchr/testify/mock
 github.com/stretchr/testify/require
+# github.com/tstranex/u2f v1.0.0
+github.com/tstranex/u2f
 # github.com/vektra/mockery v0.0.0-20181123154057-e78b021dcbb5
 github.com/vektra/mockery/cmd/mockery
 github.com/vektra/mockery/mockery

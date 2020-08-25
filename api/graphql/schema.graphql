@@ -34,6 +34,7 @@ type Mutation {
     update_hour: Int!
   ): String!
   # signup(email: String!, password: String!): Authentication
+  token_authentication_request(): TokenAuthenticationRequest!
 }
 
 type Query {
@@ -71,7 +72,8 @@ enum AppStatus {
 }
 
 type Authentication {
-  token: String!
+  key: String!
+  session: Session
   user: User!
 }
 
@@ -234,6 +236,16 @@ type Service {
   domain: String!
   mem: Int!
   name: ID!
+}
+
+type Session {
+  id: ID!
+  expires: Int!
+}
+
+type TokenAuthenticationRequest {
+  id: String!
+  data: String!
 }
 
 type Uninstall {

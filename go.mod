@@ -13,7 +13,7 @@ require (
 	github.com/containerd/continuity v0.0.0-20200228182428-0f16d7a0959c // indirect
 	github.com/convox/convox v0.0.0-20200319135330-fa65d5bb20ba
 	github.com/convox/logger v0.0.0-20180522214415-e39179955b52
-	github.com/convox/rack v0.0.0-20200814202755-5c8d54aff12f
+	github.com/convox/rack v0.0.0-20200814202755-5c8d54aff12f // indirect
 	github.com/convox/raven-go v0.0.0-20181011222347-6ddc934f8a95
 	github.com/convox/stdapi v1.0.0
 	github.com/digitalocean/godo v1.42.0
@@ -34,6 +34,7 @@ require (
 	github.com/nlopes/slack v0.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.5.1
+	github.com/tstranex/u2f v1.0.0
 	github.com/vektra/mockery v0.0.0-20181123154057-e78b021dcbb5
 	github.com/xanzy/go-gitlab v0.11.3
 	golang.org/x/crypto v0.0.0-20200317142112-1b76d66859c6

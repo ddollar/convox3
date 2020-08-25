@@ -24,7 +24,7 @@ func (m *Model) UserAuthenticatePassword(email, password string) (*User, error) 
 	var us Users
 
 	if err := m.storage.GetIndex("users", "email-index", map[string]string{"email": email}, &us); err != nil {
-		return nil, errors.WithStack(err)
+		return nil, storage.NotFound("invalid authentication")
 	}
 	if len(us) < 1 {
 		return nil, storage.NotFound("invalid authentication")
@@ -84,6 +84,33 @@ func (m *Model) UserOrganizations(uid string) (Organizations, error) {
 	sort.Slice(os, os.Less)
 
 	return os, nil
+}
+
+func (m *Model) UserTokens(uid string) (Tokens, error) {
+	var ts Tokens
+
+	if err := m.storage.GetIndex("tokens", "user-id-index", map[string]string{"user-id": uid}, &ts); err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return ts, nil
+}
+
+func (m *Model) UserTokensByKind(uid, kind string) (Tokens, error) {
+	ts, err := m.UserTokens(uid)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	tsk := Tokens{}
+
+	for _, t := range ts {
+		if t.Kind == kind {
+			tsk = append(tsk, t)
+		}
+	}
+
+	return tsk, nil
 }
 
 func (us Users) Less(i, j int) bool {
