@@ -15,12 +15,3 @@ div.logs {
     font-size: 0.8em;
   }
 }
-
-// @include media-breakpoint-up(xxl) {
-//   div.logs {
-//     &.install,
-//     &.uninstall {
-//       height: 194px;
-//     }
-//   }
-// }

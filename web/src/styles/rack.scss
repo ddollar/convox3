@@ -11,7 +11,8 @@
     filter: brightness(70%);
   }
 
-  .logs {
+  .logs.install,
+  .logs.uninstall {
     height: 307px;
 
     @include media-breakpoint-up(xxl) {

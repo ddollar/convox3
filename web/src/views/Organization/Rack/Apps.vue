@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div v-if="apps.length == 0" class="col-12">
+    <div v-if="empty" class="col-12">
       <div class="card">
         <div class="card-body">
           <span>This Rack does not yet have any Apps. Use the</span>
@@ -43,6 +43,13 @@ export default {
   },
   components: {
     App: () => import("@/components/Organization/Rack/App"),
+  },
+  computed: {
+    empty() {
+      if (this.$apollo.queries.apps.loading) return false;
+      if (this.apps.length > 0) return false;
+      return true;
+    },
   },
   data() {
     return {
