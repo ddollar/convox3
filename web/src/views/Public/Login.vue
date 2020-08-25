@@ -32,6 +32,11 @@
         </div>
       </div>
     </div>
+    <b-modal id="token-authenticate" hide-header hide-footer>
+      <div class="d-flex justify-content-center mt-3 mb-3">
+        <h5 class="font-weight-bold mb-0">Please activate your security token now</h5>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -41,6 +46,10 @@ import Error from "@/mixins/Error";
 import u2f from "@/scripts/u2f";
 
 export default {
+  created() {
+    const tag = document.createElement("script");
+    tag.setAttribute("src", "/scripts/u2f.js");
+  },
   data() {
     return {
       alert: "",
@@ -62,7 +71,7 @@ export default {
         .then(result => {
           console.log("result", result);
           if (result.data.login.session === null) {
-            this.token_challenge();
+            this.token_authentication_request();
           } else {
             this.login(result.data.login.key);
             this.$router.push({
@@ -74,17 +83,28 @@ export default {
           this.alert = this.graphQLErrors(err);
         });
     },
-    token_challenge() {
+    token_authentication_request() {
       this.$apollo
         .mutate({
           mutation: require("@/queries/Token/AuthenticationRequest.graphql"),
         })
         .then(async result => {
           console.log("result", result);
+          const data = JSON.parse(result.data.token_authentication_request.data);
+          console.log("data", data);
+          this.$bvModal.show("token-authenticate");
+          u2f.sign(data.appId, data.challenge, data.registeredKeys, this.token_authentication_response, 30);
         })
         .catch(err => {
           console.log("err", err);
         });
+    },
+    token_authentication_response(token) {
+      console.log("token", token);
+      this.$bvModal.hide("token-authenticate");
+      if (token.errorCode > 0) {
+        this.alert = "token authentication failed";
+      }
     },
   },
   mixins: [Authentication, Error],

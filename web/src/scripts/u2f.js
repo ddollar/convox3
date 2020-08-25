@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 //Copyright 2014-2015 Google Inc. All rights reserved.
 
 //Use of this source code is governed by a BSD-style
@@ -574,6 +576,7 @@ if (u2f === undefined) {
    * @private
    */
   u2f.responseHandler_ = function(message) {
+    console.log("message", message);
     var response = message.data;
     var reqId = response["requestId"];
     if (!reqId || !u2f.callbackMap_[reqId]) {
