@@ -4,16 +4,19 @@ import (
 	"os"
 
 	"github.com/convox/console/pkg/common"
+	"github.com/gbrlsnchs/jwt/v3"
 )
 
 var (
-	App              = os.Getenv("APP")
-	AuditLogsBucket  = os.Getenv("AUDIT_LOGS_OBJECT_STORE")
-	Authentication   = os.Getenv("AUTHENTICATION")
-	Development      = os.Getenv("MODE") == "development"
-	DiscourseSsoKey  = os.Getenv("DISCOURSE_SSO_KEY")
-	ExternalHost     = common.CoalesceString(os.Getenv("TUNNEL_HOST"), os.Getenv("HOST"))
-	Host             = os.Getenv("HOST")
+	App             = os.Getenv("APP")
+	AuditLogsBucket = os.Getenv("AUDIT_LOGS_OBJECT_STORE")
+	Authentication  = os.Getenv("AUTHENTICATION")
+	Development     = os.Getenv("MODE") == "development"
+	DiscourseSsoKey = os.Getenv("DISCOURSE_SSO_KEY")
+	ExternalHost    = common.CoalesceString(os.Getenv("TUNNEL_HOST"), os.Getenv("HOST"))
+	Host            = os.Getenv("HOST")
+	// JwtHash          = jwt.NewHS256([]byte(os.Getenv("SESSION_KEY")))
+	JwtHash          = jwt.NewHS256([]byte("foo"))
 	LdapAddr         = os.Getenv("LDAP_ADDR")
 	LdapBind         = os.Getenv("LDAP_BIND")
 	LdapVerify       = os.Getenv("LDAP_VERIFY")

@@ -1,6 +1,8 @@
 package resolver
 
 import (
+	"time"
+
 	"github.com/convox/console/api/model"
 	"github.com/gbrlsnchs/jwt/v3"
 )
@@ -13,6 +15,11 @@ type Authentication struct {
 func (a Authentication) Key() (string, error) {
 	data := map[string]string{
 		"uid": a.user.ID,
+	}
+
+	if a.session != nil {
+		data["sid"] = a.session.ID
+		data["expires"] = a.session.Expires.Format(time.RFC3339)
 	}
 
 	key, err := jwt.Sign(data, jwtHash)
