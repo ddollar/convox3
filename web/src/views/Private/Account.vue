@@ -93,7 +93,8 @@ export default {
           u2f.register(data.appId, data.registerRequests, data.registeredKeys || [], this.token_register_response(req.id), 30);
         })
         .catch(err => {
-          console.log("err", err);
+          // TODO handle this error
+          alert(err);
         });
     },
     token_register_response(id) {
@@ -112,12 +113,12 @@ export default {
               data: JSON.stringify(token),
             },
           })
-          .then(result => {
+          .then(() => {
             modal.hide("token-register");
-            console.log("result", result);
           })
           .catch(err => {
-            console.log("err", err);
+            // TODO handle this error
+            alert(err);
           });
       };
     },

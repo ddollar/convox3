@@ -69,7 +69,6 @@ export default {
           },
         })
         .then(async result => {
-          console.log("result", result);
           await this.login(result.data.login.key);
           if (result.data.login.session === null) {
             this.token_authentication_request();
@@ -92,18 +91,19 @@ export default {
           this.$bvModal.show("token-authenticate");
           u2f.sign(data.appId, data.challenge, data.registeredKeys, this.token_authentication_response(req.id), 30);
         })
-        .catch(err => {
-          console.log("err", err);
+        .catch(() => {
+          this.alert = "invalid token";
         });
     },
     token_authentication_response(id) {
+      const that = this;
       const apollo = this.$apollo;
       const login = this.login;
       const modal = this.$bvModal;
       const router = this.$router;
       return function(token) {
         if (token.errorCode > 0) {
-          // handle error
+          that.alert = "invalid token";
           return;
         }
         apollo
@@ -119,8 +119,8 @@ export default {
             await login(result.data.token_authentication_response.key);
             router.push({ name: "home" });
           })
-          .catch(err => {
-            console.log("err", err);
+          .catch(() => {
+            that.alert = "invalid token";
           });
       };
     },

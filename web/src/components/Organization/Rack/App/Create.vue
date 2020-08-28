@@ -9,14 +9,7 @@
       <b-container fluid>
         <b-form-row>
           <label>App Name</label>
-          <input
-            v-model="name"
-            ref="name"
-            class="form-control"
-            type="text"
-            required
-            pattern="[a-z0-9-]"
-          />
+          <input v-model="name" ref="name" class="form-control" type="text" required pattern="[a-z0-9-]" />
         </b-form-row>
       </b-container>
       <template v-slot:modal-footer>
