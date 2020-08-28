@@ -1,4 +1,4 @@
-mutation Challenge {
+mutation AuthenticationRequest {
   token_authentication_request {
     id
     data

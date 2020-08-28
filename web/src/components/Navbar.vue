@@ -38,8 +38,14 @@
               Documentation
             </a>
           </li>
-          <li class="nav-item pr-4" v-show="authenticated">
-            <a class="nav-link" href="/logout" @click="logout">
+          <li class="nav-item pr-4" v-if="authenticated">
+            <router-link to="/account" class="nav-link">
+              <i class="fa fa-user mr-1" aria-hidden="true"></i>
+              Account
+            </router-link>
+          </li>
+          <li class="nav-item pr-4" v-if="authenticated">
+            <a class="nav-link" @click="logout()" href="/login">
               <i class="fa fa-sign-out mr-1" aria-hidden="true"></i>
               Logout
             </a>
@@ -53,12 +59,6 @@
 							</a>
 						</li>
 					{{ end }}
-					<li class="nav-item pr-4">
-						<a class="nav-link" href="/account">
-							<i class="fa fa-user mr-1" aria-hidden="true"></i>
-							Account
-						</a>
-					</li>
 				{{ end }} -->
         </ul>
       </div>

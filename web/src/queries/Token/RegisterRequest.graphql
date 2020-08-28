@@ -1,0 +1,6 @@
+mutation RegisterRequest {
+  token_register_request {
+    id
+    data
+  }
+}

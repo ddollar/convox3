@@ -71,3 +71,23 @@ func (r *Root) Organizations(ctx context.Context) ([]*Organization, error) {
 
 	return ros, nil
 }
+
+func (r *Root) Tokens(ctx context.Context) ([]*Token, error) {
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ts, err := r.model.UserTokens(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	rts := []*Token{}
+
+	for _, t := range ts {
+		rts = append(rts, &Token{Token: t})
+	}
+
+	return rts, nil
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="organization">
+  <div class="private">
     <Navbar>
       <Picker />
     </Navbar>
@@ -7,15 +7,6 @@
       <Sidebar />
 
       <main role="main" class="p-4 pt-4 flex-grow-1">
-        <!-- {{ range flashes }}
-				<div class="alert alert-{{.Kind}} alert-dismissible fade show" role="alert">
-					<strong>{{ .Message }}</strong>
-					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-        {{ end }}-->
-
         <router-view />
       </main>
 

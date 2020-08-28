@@ -17,7 +17,8 @@ export default {
           params: { oid: orgs[0].id },
         });
       }
-    } catch {
+    } catch (err) {
+      console.log("err", err);
       this.$router.push({
         name: "login",
       });

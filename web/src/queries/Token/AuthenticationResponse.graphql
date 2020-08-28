@@ -1,0 +1,12 @@
+mutation AuthenticationResponse($id: String!, $data: String!) {
+  token_authentication_response(id: $id, data: $data) {
+    key
+    session {
+      id
+      expires
+    }
+    user {
+      id
+    }
+  }
+}

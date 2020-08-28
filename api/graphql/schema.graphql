@@ -7,7 +7,7 @@ schema {
 type Mutation {
   app_create(oid: ID!, rid: ID!, name: String!): App!
   instance_terminate(oid: ID!, rid: ID!, iid: ID!): String!
-  login(email: String!, password: String!): Authentication
+  login(email: String!, password: String!): Authentication!
   process_stop(oid: ID!, rid: ID!, app: String!, pid: ID!): String!
   rack_import(
     oid: ID!
@@ -34,12 +34,16 @@ type Mutation {
     update_hour: Int!
   ): String!
   # signup(email: String!, password: String!): Authentication
-  token_authentication_request(): TokenAuthenticationRequest!
+  token_authentication_request(): TokenRequest!
+  token_authentication_response(id:String!, data:String!): Authentication!
+  token_register_request(): TokenRequest!
+  token_register_response(id:String!, data:String!): String!
 }
 
 type Query {
   organization(id: ID!): Organization!
   organizations: [Organization!]!
+  tokens: [Token!]!
 }
 
 type Subscription {
@@ -243,7 +247,13 @@ type Session {
   expires: Int!
 }
 
-type TokenAuthenticationRequest {
+type Token {
+  id: ID!
+  name: String!
+  used: Int!
+}
+
+type TokenRequest {
   id: String!
   data: String!
 }

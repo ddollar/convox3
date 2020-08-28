@@ -407,7 +407,7 @@ func (r *Root) RackUpdate(ctx context.Context, args RackUpdateArgs) (string, err
 	return rr.ID, nil
 }
 
-func (r *Root) TokenAuthenticationRequest(ctx context.Context) (*TokenAuthenticationRequest, error) {
+func (r *Root) TokenAuthenticationRequest(ctx context.Context) (*TokenRequest, error) {
 	t := token.NewU2F(r.model)
 
 	uid, err := currentUid(ctx)
@@ -420,5 +420,83 @@ func (r *Root) TokenAuthenticationRequest(ctx context.Context) (*TokenAuthentica
 		return nil, err
 	}
 
-	return &TokenAuthenticationRequest{id: chid, data: string(data)}, nil
+	return &TokenRequest{id: chid, data: string(data)}, nil
+}
+
+type TokenAuthenticationResponseArgs struct {
+	Id   string
+	Data string
+}
+
+func (r *Root) TokenAuthenticationResponse(ctx context.Context, args TokenAuthenticationResponseArgs) (*Authentication, error) {
+	fmt.Printf("args: %+v\n", args)
+
+	t := token.NewU2F(r.model)
+
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := t.AuthenticationResponse(uid, args.Id, []byte(args.Data)); err != nil {
+		return nil, err
+	}
+
+	u, err := r.model.UserGet(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	s := &model.Session{
+		UserID: uid,
+	}
+
+	if err := r.model.SessionSave(s); err != nil {
+		return nil, err
+	}
+
+	a := &Authentication{
+		session: s,
+		user:    *u,
+	}
+
+	return a, nil
+}
+
+func (r *Root) TokenRegisterRequest(ctx context.Context) (*TokenRequest, error) {
+	t := token.NewU2F(r.model)
+
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	data, chid, err := t.RegisterRequest(uid)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+
+	return &TokenRequest{id: chid, data: string(data)}, nil
+}
+
+type TokenRegisterResponseArgs struct {
+	Id   string
+	Data string
+}
+
+func (r *Root) TokenRegisterResponse(ctx context.Context, args TokenRegisterResponseArgs) (string, error) {
+	fmt.Printf("args: %+v\n", args)
+
+	t := token.NewU2F(r.model)
+
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	if err := t.RegisterResponse(uid, args.Id, []byte(args.Data)); err != nil {
+		return "", err
+	}
+
+	return "", nil
 }

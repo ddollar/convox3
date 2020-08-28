@@ -1,0 +1,3 @@
+mutation RegisterResponse($id: String!, $data: String!) {
+  token_register_response(id: $id, data: $data)
+}

@@ -68,15 +68,13 @@ export default {
             password: this.$data.password,
           },
         })
-        .then(result => {
+        .then(async result => {
           console.log("result", result);
+          await this.login(result.data.login.key);
           if (result.data.login.session === null) {
             this.token_authentication_request();
           } else {
-            this.login(result.data.login.key);
-            this.$router.push({
-              name: "home",
-            });
+            this.$router.push({ name: "home" });
           }
         })
         .catch(err => {
@@ -88,23 +86,43 @@ export default {
         .mutate({
           mutation: require("@/queries/Token/AuthenticationRequest.graphql"),
         })
-        .then(async result => {
-          console.log("result", result);
-          const data = JSON.parse(result.data.token_authentication_request.data);
-          console.log("data", data);
+        .then(result => {
+          const req = result.data.token_authentication_request;
+          const data = JSON.parse(req.data);
           this.$bvModal.show("token-authenticate");
-          u2f.sign(data.appId, data.challenge, data.registeredKeys, this.token_authentication_response, 30);
+          u2f.sign(data.appId, data.challenge, data.registeredKeys, this.token_authentication_response(req.id), 30);
         })
         .catch(err => {
           console.log("err", err);
         });
     },
-    token_authentication_response(token) {
-      console.log("token", token);
-      this.$bvModal.hide("token-authenticate");
-      if (token.errorCode > 0) {
-        this.alert = "token authentication failed";
-      }
+    token_authentication_response(id) {
+      const apollo = this.$apollo;
+      const login = this.login;
+      const modal = this.$bvModal;
+      const router = this.$router;
+      return function(token) {
+        if (token.errorCode > 0) {
+          // handle error
+          return;
+        }
+        apollo
+          .mutate({
+            mutation: require("@/queries/Token/AuthenticationResponse.graphql"),
+            variables: {
+              id: id,
+              data: JSON.stringify(token),
+            },
+          })
+          .then(async result => {
+            modal.hide("token-authenticate");
+            await login(result.data.token_authentication_response.key);
+            router.push({ name: "home" });
+          })
+          .catch(err => {
+            console.log("err", err);
+          });
+      };
     },
   },
   mixins: [Authentication, Error],
