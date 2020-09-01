@@ -39,10 +39,10 @@
             </a>
           </li>
           <li class="nav-item pr-4" v-if="authenticated">
-            <router-link to="/account" class="nav-link">
+            <a class="nav-link" @click="account()" href="#">
               <i class="fa fa-user mr-1" aria-hidden="true"></i>
               Account
-            </router-link>
+            </a>
           </li>
           <li class="nav-item pr-4" v-if="authenticated">
             <a class="nav-link" @click="logout()" href="/login">
@@ -63,6 +63,7 @@
         </ul>
       </div>
     </nav>
+    <Account />
   </header>
 </template>
 
@@ -76,6 +77,14 @@ nav.bg-dark {
 import Authentication from "@/mixins/Authentication";
 
 export default {
+  components: {
+    Account: () => import("@/components/Account.vue"),
+  },
+  methods: {
+    account() {
+      this.$bvModal.show("account");
+    },
+  },
   mixins: [Authentication],
 };
 </script>

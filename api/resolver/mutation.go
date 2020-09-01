@@ -463,6 +463,32 @@ func (r *Root) TokenAuthenticationResponse(ctx context.Context, args TokenAuthen
 	return a, nil
 }
 
+type TokenDeleteArgs struct {
+	Id graphql.ID
+}
+
+func (r *Root) TokenDelete(ctx context.Context, args TokenDeleteArgs) (string, error) {
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	t, err := r.model.TokenGet(string(args.Id))
+	if err != nil {
+		return "", err
+	}
+
+	if t.UserID != uid {
+		return "", fmt.Errorf("invalid token")
+	}
+
+	if err := r.model.TokenDelete(t.ID); err != nil {
+		return "", err
+	}
+
+	return t.ID, nil
+}
+
 func (r *Root) TokenRegisterRequest(ctx context.Context) (*TokenRequest, error) {
 	t := token.NewU2F(r.model)
 

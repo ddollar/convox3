@@ -36,6 +36,7 @@ type Mutation {
   # signup(email: String!, password: String!): Authentication
   token_authentication_request(): TokenRequest!
   token_authentication_response(id:String!, data:String!): Authentication!
+  token_delete(id: ID!): String!
   token_register_request(): TokenRequest!
   token_register_response(id:String!, data:String!): String!
 }
@@ -44,6 +45,7 @@ type Query {
   organization(id: ID!): Organization!
   organizations: [Organization!]!
   tokens: [Token!]!
+  user: User!
 }
 
 type Subscription {

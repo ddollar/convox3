@@ -91,3 +91,17 @@ func (r *Root) Tokens(ctx context.Context) ([]*Token, error) {
 
 	return rts, nil
 }
+
+func (r *Root) User(ctx context.Context) (*User, error) {
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := r.model.UserGet(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	return &User{*u}, nil
+}

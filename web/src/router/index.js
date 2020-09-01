@@ -29,11 +29,11 @@ const routes = [
     name: "private",
     component: () => import(/* webpackChunkName: "private" */ "@/views/Private.vue"),
     children: [
-      {
-        path: "/account",
-        name: "account",
-        component: () => import(/* webpackChunkName: "public/login" */ "@/views/Private/Account.vue"),
-      },
+      // {
+      //   path: "/account",
+      //   name: "account",
+      //   component: () => import(/* webpackChunkName: "public/login" */ "@/views/Private/Account.vue"),
+      // },
       {
         path: "/organizations/:oid",
         name: "organization",
