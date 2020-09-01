@@ -3,6 +3,7 @@
     <div class="card mb-3">
       <div class="card-header">Account Information</div>
       <ul class="list-group list-group-flush">
+        <div v-if="alert" class="alert alert-danger rounded-0 mb-0" role="alert">{{ alert }}</div>
         <li class="list-group-item d-flex align-items-center">
           <div class="flex-shrink-0"><label class="mb-0">Email</label></div>
           <div class="flex-grow-1 ml-3 mr-3">
@@ -74,6 +75,7 @@
 </template>
 
 <script>
+import Error from "@/mixins/Error";
 import u2f from "@/scripts/u2f";
 
 export default {
@@ -99,7 +101,25 @@ export default {
   },
   methods: {
     edit(editing) {
+      this.alert = "";
       this.editing = editing;
+    },
+    save() {
+      this.$apollo
+        .mutate({
+          mutation: require("@/queries/User/Update.graphql"),
+          variables: {
+            email: this.email,
+          },
+        })
+        .then(() => {
+          this.$apollo.queries.user.refetch();
+          this.alert = "";
+          this.editing = false;
+        })
+        .catch(err => {
+          this.alert = this.graphQLErrors(err);
+        });
     },
     token_delete(id) {
       this.$apollo
@@ -162,6 +182,10 @@ export default {
         }
       };
     },
+  },
+  mixins: [Error],
+  mounted() {
+    this.alert = "";
   },
 };
 </script>

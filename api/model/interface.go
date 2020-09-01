@@ -39,6 +39,7 @@ type Interface interface {
 	UserGet(id string) (*User, error)
 	UserGetBatch(ids []string) (Users, error)
 	UserOrganizations(uid string) (Organizations, error)
+	UserSave(u *User) error
 	UserTokens(uid string) (Tokens, error)
 	UserTokensByKind(uid, kind string) (Tokens, error)
 	TokenDelete(id string) error

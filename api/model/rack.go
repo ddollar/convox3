@@ -118,6 +118,14 @@ func (m *Model) RackRuntime(id string) (integration.Runtime, error) {
 	return ir, nil
 }
 
+func (m *Model) RackSave(r *Rack) error {
+	if err := m.storage.Put("racks", r); err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
+}
+
 func (m *Model) RackStateLoad(id string) ([]byte, error) {
 	r, err := m.RackGet(id)
 	if err != nil {
@@ -187,14 +195,6 @@ func (m *Model) RackUpdates(id string) (Updates, error) {
 	}
 
 	return us, nil
-}
-
-func (m *Model) RackSave(r *Rack) error {
-	if err := m.storage.Put("racks", r); err != nil {
-		return errors.WithStack(err)
-	}
-
-	return nil
 }
 
 func (r *Rack) Defaults() {

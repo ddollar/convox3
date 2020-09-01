@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 
@@ -84,6 +85,28 @@ func (m *Model) UserOrganizations(uid string) (Organizations, error) {
 	sort.Slice(os, os.Less)
 
 	return os, nil
+}
+
+func (m *Model) UserSave(u *User) error {
+	var us Users
+
+	if err := m.storage.GetIndex("users", "email-index", map[string]string{"email": u.Email}, &us); err != nil {
+		return err
+	}
+
+	fmt.Printf("us: %+v\n", us)
+
+	for _, uu := range us {
+		if uu.ID != u.ID {
+			return fmt.Errorf("email is already in use")
+		}
+	}
+
+	if err := m.storage.Put("users", u); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (m *Model) UserTokens(uid string) (Tokens, error) {

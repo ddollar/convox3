@@ -526,3 +526,29 @@ func (r *Root) TokenRegisterResponse(ctx context.Context, args TokenRegisterResp
 
 	return "", nil
 }
+
+type UserUpdateArgs struct {
+	Email *string
+}
+
+func (r *Root) UserUpdate(ctx context.Context, args UserUpdateArgs) (*User, error) {
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := r.model.UserGet(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	if args.Email != nil {
+		u.Email = *args.Email
+	}
+
+	if err := r.model.UserSave(u); err != nil {
+		return nil, err
+	}
+
+	return &User{*u}, nil
+}
