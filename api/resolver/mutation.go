@@ -551,6 +551,10 @@ func (r *Root) UserPasswordUpdate(ctx context.Context, args UserPasswordUpdateAr
 		return nil, err
 	}
 
+	if err := r.model.UserSave(u); err != nil {
+		return nil, err
+	}
+
 	return &User{*u}, nil
 }
 
