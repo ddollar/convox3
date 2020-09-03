@@ -3,28 +3,45 @@
     <div class="card mb-3">
       <div class="card-header">Account Information</div>
       <ul class="list-group list-group-flush">
-        <div v-if="alert" class="alert alert-danger rounded-0 mb-0" role="alert">{{ alert }}</div>
+        <div v-if="email_alert" class="alert alert-danger rounded-0 mb-0" role="alert">{{ email_alert }}</div>
         <li class="list-group-item d-flex align-items-center">
           <div class="flex-shrink-0"><label class="mb-0">Email</label></div>
           <div class="flex-grow-1 ml-3 mr-3">
-            <input v-if="editing" type="email" v-model="email" class="form-control" />
+            <input v-if="email_editing" type="email" v-model="email" class="form-control" />
             <code v-else class="text-secondary">{{ email }}</code>
           </div>
           <div class="flex-shrink-0">
-            <div v-if="editing">
-              <b-button variant="danger" @click="edit(false)" class="mr-2"><i class="fa fa-remove fa-fw"/></b-button>
-              <b-button variant="success" @click="save()"><i class="fas fa-check fa-fw"/></b-button>
+            <div v-if="email_editing">
+              <b-button variant="danger" @click="email_edit(false)" class="mr-2"><i class="fa fa-remove fa-fw"/></b-button>
+              <b-button variant="success" @click="email_save()"><i class="fas fa-check fa-fw"/></b-button>
             </div>
-            <b-button v-else variant="primary" @click="edit(true)"><i class="fas fa-edit fa-fw"/></b-button>
+            <b-button v-else variant="primary" @click="email_edit(true)"><i class="fas fa-edit fa-fw"/></b-button>
           </div>
         </li>
-        <li class="list-group-item d-flex align-items-center">
-          <div class="flex-shrink-0"><label class="mb-0">Password</label></div>
-          <div class="flex-grow-1 ml-3 mr-3"><code class="text-secondary">**********</code></div>
-          <div class="flex-shrink-0">
-            <b-button variant="primary">
-              <i class="fas fa-edit fa-fw" />
-            </b-button>
+        <div v-if="password_alert" class="alert alert-danger rounded-0 mb-0" role="alert">{{ password_alert }}</div>
+        <li class="list-group-item">
+          <div v-if="password_editing">
+            <div class="row d-flex align-items-center mb-3">
+              <div class="col-4"><label class="mb-0">Old Password</label></div>
+              <div class="col-8"><input ref="password_old" class="form-control" type="password" /></div>
+            </div>
+            <div class="row d-flex align-items-center mb-3">
+              <div class="col-4"><label class="mb-0">New Password</label></div>
+              <div class="col-8"><input ref="password_new" class="form-control" type="password" /></div>
+            </div>
+            <div class="d-flex justify-content-end">
+              <b-button variant="danger" @click="password_edit(false)"><i class="fa fa-ban mr-1" /> Cancel</b-button>
+              <b-button variant="success" class="ml-2" @click="password_save()"><i class="fa fa-check mr-1" /> Save</b-button>
+            </div>
+          </div>
+          <div v-else class="d-flex align-items-center">
+            <div class="flex-shrink-0"><label class="mb-0">Password</label></div>
+            <div class="flex-grow-1 ml-3 mr-3"><code class="text-secondary">**********</code></div>
+            <div class="flex-shrink-0">
+              <b-button variant="primary" @click="password_edit(true)">
+                <i class="fas fa-edit fa-fw" />
+              </b-button>
+            </div>
           </div>
         </li>
         <li class="list-group-item d-flex align-items-center">
@@ -69,7 +86,7 @@
       <div class="d-flex justify-content-center mt-3 mb-3">
         <h5 class="font-weight-bold mb-0">Please activate your security token now</h5>
       </div>
-      <div v-if="alert" class="alert alert-danger d-flex justify-content-center" role="alert">{{ alert }}</div>
+      <div v-if="token_alert" class="alert alert-danger d-flex justify-content-center" role="alert">{{ token_alert }}</div>
     </b-modal>
   </b-modal>
 </template>
@@ -94,17 +111,20 @@ export default {
   },
   data() {
     return {
-      alert: "",
-      editing: false,
       email: "",
+      email_alert: "",
+      email_editing: false,
+      password_alert: "",
+      password_editing: false,
+      token_alert: "",
     };
   },
   methods: {
-    edit(editing) {
-      this.alert = "";
-      this.editing = editing;
+    email_edit(editing) {
+      this.email_alert = "";
+      this.email_editing = editing;
     },
-    save() {
+    email_save() {
       this.$apollo
         .mutate({
           mutation: require("@/queries/User/Update.graphql"),
@@ -114,11 +134,33 @@ export default {
         })
         .then(() => {
           this.$apollo.queries.user.refetch();
-          this.alert = "";
-          this.editing = false;
+          this.email_alert = "";
+          this.email_editing = false;
         })
         .catch(err => {
-          this.alert = this.graphQLErrors(err);
+          this.email_alert = this.graphQLErrors(err);
+        });
+    },
+    password_edit(editing) {
+      this.password_alert = "";
+      this.password_editing = editing;
+    },
+    password_save() {
+      this.$apollo
+        .mutate({
+          mutation: require("@/queries/User/PasswordUpdate.graphql"),
+          variables: {
+            old: this.$refs.password_old.value,
+            new: this.$refs.password_new.value,
+          },
+        })
+        .then(() => {
+          this.$apollo.queries.user.refetch();
+          this.password_alert = "";
+          this.password_editing = false;
+        })
+        .catch(err => {
+          this.password_alert = this.graphQLErrors(err);
         });
     },
     token_delete(id) {
@@ -134,7 +176,7 @@ export default {
         });
     },
     token_register_request() {
-      this.alert = "";
+      this.token_alert = "";
       this.$apollo
         .mutate({
           mutation: require("@/queries/Token/RegisterRequest.graphql"),
@@ -155,13 +197,13 @@ export default {
           case 1:
           case 2:
           case 3:
-            that.alert = "invalid token";
+            that.token_alert = "invalid token";
             break;
           case 4:
-            that.alert = "token already registered";
+            that.token_alert = "token already registered";
             break;
           case 5:
-            that.alert = "timed out waiting for token";
+            that.token_alert = "timed out waiting for token";
             break;
           default:
             apollo
@@ -177,15 +219,12 @@ export default {
                 that.$apollo.queries.tokens.refetch();
               })
               .catch(() => {
-                that.alert = "invalid token";
+                that.token_alert = "invalid token";
               });
         }
       };
     },
   },
   mixins: [Error],
-  mounted() {
-    this.alert = "";
-  },
 };
 </script>

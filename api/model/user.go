@@ -37,7 +37,7 @@ func (m *Model) UserAuthenticatePassword(email, password string) (*User, error) 
 		return nil, storage.NotFound("invalid authentication")
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(u.passwordHash), []byte(password)); err != nil {
+	if !u.Authenticate(password) {
 		return nil, storage.NotFound("invalid authentication")
 	}
 
@@ -134,6 +134,25 @@ func (m *Model) UserTokensByKind(uid, kind string) (Tokens, error) {
 	}
 
 	return tsk, nil
+}
+
+func (u *User) Authenticate(password string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.passwordHash), []byte(password)); err != nil {
+		return false
+	}
+
+	return true
+}
+
+func (u *User) SetPassword(password string) error {
+	data, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	u.passwordHash = string(data)
+
+	return nil
 }
 
 func (us Users) Less(i, j int) bool {

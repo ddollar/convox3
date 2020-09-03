@@ -527,6 +527,33 @@ func (r *Root) TokenRegisterResponse(ctx context.Context, args TokenRegisterResp
 	return "", nil
 }
 
+type UserPasswordUpdateArgs struct {
+	Old string
+	New string
+}
+
+func (r *Root) UserPasswordUpdate(ctx context.Context, args UserPasswordUpdateArgs) (*User, error) {
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := r.model.UserGet(uid)
+	if err != nil {
+		return nil, err
+	}
+
+	if !u.Authenticate(args.Old) {
+		return nil, fmt.Errorf("old password is incorrect")
+	}
+
+	if err := u.SetPassword(args.New); err != nil {
+		return nil, err
+	}
+
+	return &User{*u}, nil
+}
+
 type UserUpdateArgs struct {
 	Email *string
 }
