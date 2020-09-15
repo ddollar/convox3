@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/convox/console/pkg/storage"
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -13,10 +15,17 @@ import (
 type User struct {
 	ID string `dynamo:"id"`
 
-	Email           string   `dynamo:"email"`
-	OrganizationIDs []string `dynamo:"organization-ids"`
+	CliToken        string    `dynamo:"api-key-hash,encrypted" json:"-"`
+	CliTokenCreated time.Time `dynamo:"api-key-created-at" json:"-"`
+	CliTokenUsed    time.Time `dynamo:"cli-authenticated" json:"-"`
+	Deleted         bool      `dynamo:"deleted" json:"-"`
+	Email           string    `dynamo:"email"`
+	LastActivity    time.Time `dynamo:"last-activity" json:"-"`
+	OrganizationIDs []string  `dynamo:"organization-ids"`
+	ResetUntil      time.Time `dynamo:"reset-until" json:"-"`
+	Superuser       bool      `dynamo:"superuser" json:"-"`
 
-	passwordHash string `dynamo:"password_hash" json:"-"`
+	passwordHash string `dynamo:"password_hash"`
 }
 
 type Users []User
@@ -142,6 +151,13 @@ func (u *User) Authenticate(password string) bool {
 	}
 
 	return true
+}
+
+func (u *User) CliTokenReset() error {
+	u.CliToken = strings.ReplaceAll(uuid.New().String(), "-", "")
+	u.CliTokenCreated = time.Now().UTC()
+
+	return nil
 }
 
 func (u *User) SetPassword(password string) error {

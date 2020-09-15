@@ -527,6 +527,28 @@ func (r *Root) TokenRegisterResponse(ctx context.Context, args TokenRegisterResp
 	return "", nil
 }
 
+func (r *Root) UserCliTokenReset(ctx context.Context) (string, error) {
+	uid, err := currentUid(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	u, err := r.model.UserGet(uid)
+	if err != nil {
+		return "", err
+	}
+
+	if err := u.CliTokenReset(); err != nil {
+		return "", err
+	}
+
+	if err := r.model.UserSave(u); err != nil {
+		return "", err
+	}
+
+	return u.CliToken, nil
+}
+
 type UserPasswordUpdateArgs struct {
 	Old string
 	New string

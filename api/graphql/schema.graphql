@@ -39,6 +39,7 @@ type Mutation {
   token_delete(id: ID!): String!
   token_register_request(): TokenRequest!
   token_register_response(id:String!, data:String!): String!
+  user_cli_token_reset(): String!
   user_password_update(old:String!, new:String!): User!
   user_update(email:String): User!
 }
