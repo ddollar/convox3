@@ -199,7 +199,7 @@ export default {
           this.$bvModal.show("cli-token");
         });
     },
-    copy_login_command(btn) {
+    copy_login_command() {
       this.$refs.login_command.select();
       document.execCommand("copy");
       $(this.$refs.copy_login_command).tooltip("show");
