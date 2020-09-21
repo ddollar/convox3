@@ -124,6 +124,49 @@ const routes = [
             ],
           },
           {
+            path: "racks/:rid/apps/:aid",
+            name: "organization/rack/app",
+            component: () => import(/* webpackChunkName: "organization/rack/app" */ "@/views/Private/Organization/Rack/App.vue"),
+            meta: { expand: true, role: "developer" },
+            beforeEnter: (to, from, next) => {
+              switch (to.name) {
+                case "organization/rack/app":
+                  router.push({ name: "organization/rack/app/services", params: to.params });
+                  break;
+                default:
+                  next();
+              }
+            },
+            children: [
+              {
+                path: "builds",
+                name: "organization/rack/app/builds",
+                component: Blank,
+                meta: { expand: true, role: "developer" },
+              },
+              {
+                path: "processes",
+                name: "organization/rack/app/processes",
+                component: () =>
+                  import(/* webpackChunkName: "organization/rack/app/processes" */ "@/views/Private/Organization/Rack/App/Processes.vue"),
+                meta: { expand: true, role: "developer" },
+              },
+              {
+                path: "releases",
+                name: "organization/rack/app/releases",
+                component: Blank,
+                meta: { expand: true, role: "developer" },
+              },
+              {
+                path: "services",
+                name: "organization/rack/app/services",
+                component: () =>
+                  import(/* webpackChunkName: "organization/rack/app/services" */ "@/views/Private/Organization/Rack/App/Services.vue"),
+                meta: { expand: true, role: "developer" },
+              },
+            ],
+          },
+          {
             path: "settings",
             name: "organization/settings",
             component: Blank,

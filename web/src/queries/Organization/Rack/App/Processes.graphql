@@ -9,7 +9,10 @@ query Processes($oid: ID!, $rid: ID!, $app: String!) {
           cpu
           id
           mem
+          release
           service
+          started
+          status
         }
       }
     }

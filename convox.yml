@@ -27,6 +27,7 @@ services:
       - HOST
       - LICENSE_KEY
       - RACK_KEY
+      - SESSION_KEY
       - TABLE_PREFIX
       - WORKER_QUEUE
     scale:

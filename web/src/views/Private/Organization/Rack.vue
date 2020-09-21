@@ -2,7 +2,7 @@
   <div class="rack pb-4">
     <div class="d-flex align-items-center flex-wrap">
       <div class="mb-4 order-0">
-        <router-link :to="back()" class="btn btn-dark">
+        <router-link :to="back()" class="btn btn-secondary">
           <i class="fa fa-chevron-circle-left mr-1"></i>
           All Racks
         </router-link>
