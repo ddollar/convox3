@@ -64,8 +64,10 @@ enum Access {
 }
 
 type App {
+  builds: [Build!]!
   name: String!
   processes: [Process!]!
+  releases: [Release!]!
   services: [Service!]!
   status: AppStatus!
 }
@@ -84,6 +86,24 @@ type Authentication {
   key: String!
   session: Session
   user: User!
+}
+
+type Build {
+  id: ID!
+  description: String!
+  ended: Int
+  logs: String!
+  manifest: String!
+  release: String
+  started: Int!
+  status: BuildStatus!
+}
+
+enum BuildStatus {
+  complete
+  failed
+  running
+  started
 }
 
 type Capacity {
@@ -212,6 +232,15 @@ enum RackStatus {
   unknown
   uninstalling
   updating
+}
+
+type Release {
+  id: ID!
+  build: Build
+  created: Int!
+  description: String!
+  env: String!
+  manifest: String!
 }
 
 type Resource {
