@@ -8,9 +8,12 @@
       <RelativeTime :time="build.started" />
     </td>
     <td>{{ build.ended }}</td>
+    <td>
+      <code>{{ build.release }}</code>
+    </td>
     <td>{{ build.status }}</td>
     <td>
-      <button class="btn btn-sm btn-secondary">MM</button>
+      <Manifest :manifest="build.manifest" :title="build.id" />
     </td>
   </tr>
 </template>
@@ -18,6 +21,7 @@
 <script>
 export default {
   components: {
+    Manifest: () => import("@/components/Manifest.vue"),
     RelativeTime: () => import("@/components/RelativeTime.vue"),
   },
   computed: {

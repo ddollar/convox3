@@ -1,18 +1,16 @@
-query Builds($oid: ID!, $rid: ID!, $app: String!) {
+query Releases($oid: ID!, $rid: ID!, $app: String!) {
   organization(id: $oid) {
     id
     rack(id: $rid) {
       id
       app(name: $app) {
         name
-        builds {
+        releases {
           id
+          build
+          created
           description
-          ended
           manifest
-          release
-          started
-          status
         }
       }
     }

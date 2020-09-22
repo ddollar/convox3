@@ -155,7 +155,8 @@ const routes = [
               {
                 path: "releases",
                 name: "organization/rack/app/releases",
-                component: Blank,
+                component: () =>
+                  import(/* webpackChunkName: "organization/rack/app/releases" */ "@/views/Private/Organization/Rack/App/Releases.vue"),
                 meta: { expand: true, role: "developer" },
               },
               {
