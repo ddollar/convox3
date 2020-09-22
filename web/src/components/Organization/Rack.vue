@@ -2,7 +2,10 @@
   <div :class="`col-12 col-xl-6 col-xxl-4 rack clickable ${css}`" @click="goto()">
     <div class="card mb-4 border-bottom-0">
       <div class="card-header d-flex bg-secondary text-light align-items-center">
-        <div class="flex-grow-1">{{ rack.name }}</div>
+        <div class="flex-grow-1">
+          <i class="fa fa-server mr-1" />
+          {{ rack.name }}
+        </div>
         <div class="flex-shrink-0">
           <i v-if="$apollo.queries.status.loading" class="spinner"></i>
           <Status v-else :status="status" color />
@@ -40,17 +43,13 @@
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                CPU/Memory Graph
-              </div>
+              >CPU/Memory Graph</div>
             </div>
             <div class="col-12 col-xxl-6 p-3 border-right border-bottom bg-light">
               <div
                 style="width: 100%; background-color: #fff; height: 80px; border: 1px #eee solid;"
                 class="d-flex align-items-center justify-content-center text-secondary"
-              >
-                Network Graph
-              </div>
+              >Network Graph</div>
             </div>
           </div>
         </li>

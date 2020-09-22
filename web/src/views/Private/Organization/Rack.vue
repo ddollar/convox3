@@ -8,7 +8,10 @@
         </router-link>
       </div>
       <div class="flex-fill ml-4 mr-4 mb-4 order-1">
-        <h4 class="font-weight-bold mb-0">{{ rack.name }}</h4>
+        <h4 class="font-weight-bold mb-0">
+          <i class="fa fa-server mr-1" />
+          {{ rack.name }}
+        </h4>
       </div>
       <div class="mr-3 mb-4 order-lg-2" style="font-size: 1.4em; font-weight: bold;">
         <i v-if="$apollo.loading" class="spinner" />

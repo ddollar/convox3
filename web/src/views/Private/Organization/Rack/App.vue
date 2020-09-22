@@ -3,12 +3,16 @@
     <div class="d-flex align-items-center flex-wrap">
       <div class="mb-4 order-0">
         <router-link :to="back()" class="btn btn-secondary">
-          <i class="fa fa-chevron-circle-left mr-1"></i>
+          <i class="fa fa-chevron-circle-left mr-2"></i>
+          <i class="fa fa-server mr-1" />
           <span v-if="rack">{{ rack.name }}</span>
         </router-link>
       </div>
       <div class="flex-fill ml-4 mr-4 mb-4 order-1">
-        <h4 class="font-weight-bold mb-0">{{ $route.params.aid }}</h4>
+        <h4 class="font-weight-bold mb-0">
+          <i class="fa far fa-window-maximize mr-1" />
+          {{ $route.params.aid }}
+        </h4>
       </div>
       <div class="mr-3 mb-4 order-lg-2" style="font-size: 1.4em; font-weight: bold;">
         <i v-if="$apollo.loading" class="spinner" />
