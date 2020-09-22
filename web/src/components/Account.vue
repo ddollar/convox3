@@ -111,8 +111,7 @@
             <code>{{ token.name }}</code>
           </div>
           <div class="flex-shrink-0 text-secondary">
-            <Timeago v-if="token.used > 0" :datetime="token.used * 1000" />
-            <div v-else>never</div>
+            <RelativeTime :time="token.used" zero="never" />
           </div>
           <div class="flex-shrink-0 ml-3">
             <b-button variant="danger" class="pl-2 pr-2" @click="token_delete(token.id)">
@@ -175,6 +174,9 @@ export default {
         this.email = user.email;
       },
     },
+  },
+  components: {
+    RelativeTime: () => import("@/components/RelativeTime.vue"),
   },
   data() {
     return {

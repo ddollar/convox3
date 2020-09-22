@@ -1,41 +1,26 @@
 package resolver
 
 import (
-	"context"
-	"time"
-
 	"github.com/convox/convox/pkg/structs"
 	"github.com/graph-gophers/graphql-go"
 )
 
 type Release struct {
 	structs.Release
-	app *App
 }
 
 func (r *Release) Id() graphql.ID {
 	return graphql.ID(r.Release.Id)
 }
 
-func (r *Release) Build(ctx context.Context) (*Build, error) {
+func (r *Release) Build() *string {
 	if r.Release.Build == "" {
-		return nil, nil
+		return nil
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
-	defer cancel()
+	s := r.Release.Build
 
-	c, err := r.app.rack.client(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	b, err := c.BuildGet(r.app.App.Name, r.Release.Build)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Build{*b}, nil
+	return &s
 }
 
 func (r *Release) Created() int32 {

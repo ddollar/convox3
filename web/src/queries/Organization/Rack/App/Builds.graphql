@@ -1,0 +1,18 @@
+query Services($oid: ID!, $rid: ID!, $app: String!) {
+  organization(id: $oid) {
+    id
+    rack(id: $rid) {
+      id
+      app(name: $app) {
+        name
+        builds {
+          id
+          description
+          ended
+          started
+          status
+        }
+      }
+    }
+  }
+}

@@ -236,7 +236,7 @@ enum RackStatus {
 
 type Release {
   id: ID!
-  build: Build
+  build: String
   created: Int!
   description: String!
   env: String!

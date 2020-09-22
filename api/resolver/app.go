@@ -82,10 +82,7 @@ func (a *App) Releases(ctx context.Context) ([]*Release, error) {
 	rrs := []*Release{}
 
 	for _, r := range rs {
-		rrs = append(rrs, &Release{
-			Release: r,
-			app:     a,
-		})
+		rrs = append(rrs, &Release{r})
 	}
 
 	return rrs, nil

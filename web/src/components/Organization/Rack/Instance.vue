@@ -7,10 +7,14 @@
     <td>
       <Progress :current="instance.cpu" color="#0DA542" style="width:100px;" />
     </td>
-    <td><Progress :current="instance.mem" style="width:100px;" /></td>
+    <td>
+      <Progress :current="instance.mem" style="width:100px;" />
+    </td>
     <td>{{ instance.private }}</td>
     <td>{{ instance.public }}</td>
-    <td><Timeago v-if="instance.started > 0" :datetime="datetime" /></td>
+    <td>
+      <RelativeTime :time="instance.started" />
+    </td>
     <td>
       <button class="btn btn-danger btn-sm" @click="terminate(instance.id, $event)">
         <i class="fa fa-times"></i>
@@ -23,11 +27,9 @@
 export default {
   components: {
     Progress: () => import("@/components/Progress.vue"),
+    RelativeTime: () => import("@/components/RelativeTime.vue"),
   },
   computed: {
-    datetime() {
-      return new Date(this.instance.started * 1000);
-    },
     id() {
       return `instance-${this._uid}`;
     },

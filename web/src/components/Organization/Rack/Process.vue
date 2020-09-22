@@ -12,8 +12,12 @@
     <td>
       <Progress :current="process.cpu" color="#0DA542" style="width:100px;" />
     </td>
-    <td><Progress :current="process.mem" style="width:100px;" /></td>
-    <td><Timeago v-if="process.started > 0" :datetime="datetime" /></td>
+    <td>
+      <Progress :current="process.mem" style="width:100px;" />
+    </td>
+    <td>
+      <RelativeTime :time="process.started" />
+    </td>
     <td>
       <button class="btn btn-danger btn-sm" @click="stop(process.app, process.id, $event)">
         <i class="fa fa-times"></i>
@@ -26,11 +30,9 @@
 export default {
   components: {
     Progress: () => import("@/components/Progress.vue"),
+    RelativeTime: () => import("@/components/RelativeTime.vue"),
   },
   computed: {
-    datetime() {
-      return new Date(this.process.started * 1000);
-    },
     id() {
       return `process-${this._uid}`;
     },
