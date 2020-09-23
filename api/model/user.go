@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/convox/console/pkg/crypt"
 	"github.com/convox/console/pkg/storage"
 	"github.com/google/uuid"
 	"github.com/pkg/errors"
@@ -15,8 +16,8 @@ import (
 type User struct {
 	ID string `dynamo:"id"`
 
-	CliToken        string    `dynamo:"api-key-hash,encrypted" json:"-"`
 	CliTokenCreated time.Time `dynamo:"api-key-created-at" json:"-"`
+	CliTokenHash    string    `dynamo:"api-key-hash" json:"-"`
 	CliTokenUsed    time.Time `dynamo:"cli-authenticated" json:"-"`
 	Deleted         bool      `dynamo:"deleted" json:"-"`
 	Email           string    `dynamo:"email"`
@@ -153,11 +154,13 @@ func (u *User) Authenticate(password string) bool {
 	return true
 }
 
-func (u *User) CliTokenReset() error {
-	u.CliToken = strings.ReplaceAll(uuid.New().String(), "-", "")
-	u.CliTokenCreated = time.Now().UTC()
+func (u *User) CliTokenReset() (string, error) {
+	token := strings.ReplaceAll(uuid.New().String(), "-", "")
 
-	return nil
+	u.CliTokenCreated = time.Now().UTC()
+	u.CliTokenHash = crypt.OneWay(token)
+
+	return token, nil
 }
 
 func (u *User) SetPassword(password string) error {

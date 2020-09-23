@@ -538,7 +538,8 @@ func (r *Root) UserCliTokenReset(ctx context.Context) (string, error) {
 		return "", err
 	}
 
-	if err := u.CliTokenReset(); err != nil {
+	token, err := u.CliTokenReset()
+	if err != nil {
 		return "", err
 	}
 
@@ -546,7 +547,7 @@ func (r *Root) UserCliTokenReset(ctx context.Context) (string, error) {
 		return "", err
 	}
 
-	return u.CliToken, nil
+	return token, nil
 }
 
 type UserPasswordUpdateArgs struct {
