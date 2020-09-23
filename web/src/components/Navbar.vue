@@ -2,7 +2,10 @@
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <a class="navbar-brand" href="/">
-        <img src="/images/logo.png" style="height:32px; margin-top:-6px; margin-bottom:-4px; margin-left: -2px;" />
+        <img
+          src="/images/logo.png"
+          style="height:32px; margin-top:-6px; margin-bottom:-4px; margin-left: -2px;"
+        />
       </a>
       <button
         class="navbar-toggler"
@@ -28,7 +31,7 @@
 								{{ template "checklist" $cl }}
 							</div>
 						</li>
-					{{ end }} -->
+          {{ end }}-->
           <li class="nav-item pr-4">
             <slot></slot>
           </li>
@@ -59,11 +62,11 @@
 							</a>
 						</li>
 					{{ end }}
-				{{ end }} -->
+          {{ end }}-->
         </ul>
       </div>
     </nav>
-    <Account />
+    <Account v-if="authenticated" />
   </header>
 </template>
 
