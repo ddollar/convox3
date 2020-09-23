@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  background-color: #e3e6e9;
+  background-color: rgb(99, 103, 107);
   padding-top: 3rem;
 }
 
@@ -16,4 +16,10 @@ body,
 
 button > * {
   pointer-events: none;
+}
+
+#app {
+  background-color: #e3e6e9;
+  border-right: 1px rgb(16, 25, 33) solid;
+  max-width: 1920px;
 }
