@@ -13,13 +13,27 @@ body,
 .container-fluid > .row {
   height: 100%;
 }
-
-button > * {
+h button > * {
   pointer-events: none;
 }
 
 #app {
   background-color: #e3e6e9;
-  border-right: 1px rgb(16, 25, 33) solid;
-  max-width: 1920px;
 }
+
+// max width
+// body {
+//   #app {
+//     border-left: 1px rgb(16, 25, 33) solid;
+//     border-right: 1px rgb(16, 25, 33) solid;
+//     max-width: 1920px;
+//     margin-left: auto;
+//     margin-right: auto;
+//   }
+
+//   nav.navbar {
+//     max-width: 1920px;
+//     margin-left: auto;
+//     margin-right: auto;
+//   }
+// }
