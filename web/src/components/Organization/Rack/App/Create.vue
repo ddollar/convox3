@@ -1,8 +1,7 @@
 <template>
   <div>
-    <b-button variant="success" v-b-modal.app-create>
-      <i class="fas fa-plus-circle mr-1" />
-      Create App
+    <b-button variant="success" v-b-modal.app-create size="sm">
+      <i class="fas fa-plus-circle" />
     </b-button>
     <b-modal id="app-create" title="Create App" @shown="focus()" @hide="clear()">
       <div v-if="alert" class="alert alert-danger" role="alert">{{ alert }}</div>

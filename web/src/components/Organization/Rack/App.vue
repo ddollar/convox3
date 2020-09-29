@@ -1,5 +1,18 @@
 <template>
-  <div class="col-12 col-xl-6 col-xxl-4 app clickable" @click="goto()">
+  <tr :id="id" class="clickable" @click="goto()">
+    <td>
+      <code>{{ app.name }}</code>
+    </td>
+    <td>{{ app.status }}</td>
+    <td class="text-right"><Async :loading="$apollo.queries.processes.loading" :value="processes.length" /></td>
+    <td class="text-right"><Async :loading="$apollo.queries.services.loading" :value="cpu" /></td>
+    <td class="text-right"><Async :loading="$apollo.queries.services.loading" :value="mem" /></td>
+    <td>
+      <b-button variant="danger" size="sm"><i class="fa fa-times" style="font-size:1.1em; padding-left:2px; padding-right:2px;"/></b-button>
+    </td>
+  </tr>
+
+  <!-- <div class="col-12 col-xl-6 col-xxl-4 app clickable" @click="goto()">
     <div class="card mb-4 border-bottom-0">
       <div class="card-header d-flex bg-light">
         <div class="flex-grow-1">
@@ -49,7 +62,7 @@
         </li>
       </ul>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -81,7 +94,8 @@ export default {
     },
   },
   components: {
-    Status: () => import("@/components/Organization/Rack/App/Status.vue"),
+    Async: () => import("@/components/Async.vue"),
+    // Status: () => import("@/components/Organization/Rack/App/Status.vue"),
   },
   computed: {
     cpu() {

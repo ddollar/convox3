@@ -1,19 +1,21 @@
 <template>
-  <div class="row">
-    <div v-if="empty" class="col-12">
-      <div class="card">
-        <div class="card-body">
-          <span>This Rack does not yet have any Apps. Use the</span>
-          <span class="text-success font-weight-bold ml-2 mr-1">
-            <i class="fas fa-plus-circle"></i>
-            Create App
-          </span>
-          <span>button above to create one.</span>
-        </div>
-      </div>
-    </div>
-    <App v-for="app in apps" :key="app.id" :app="app" />
-  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="expand">App</th>
+        <th scope="col">Status</th>
+        <th scope="col" class="text-right">Processes</th>
+        <th scope="col" class="text-right">CPU</th>
+        <th scope="col" class="text-right">Memory</th>
+        <th scope="col">
+          <Create />
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <App v-for="app in apps" :key="app.id" :app="app" />
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -33,6 +35,7 @@ export default {
   },
   components: {
     App: () => import("@/components/Organization/Rack/App"),
+    Create: () => import("@/components/Organization/Rack/App/Create"),
   },
   computed: {
     empty() {

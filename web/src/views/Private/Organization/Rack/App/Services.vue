@@ -2,7 +2,7 @@
   <table class="table">
     <thead>
       <tr>
-        <th scope="col" class="expand">Name</th>
+        <th scope="col" class="expand">Service</th>
         <th scope="col">Count</th>
         <th scope="col">CPU</th>
         <th scope="col">Memory</th>
