@@ -1,0 +1,3 @@
+mutation Delete($oid: ID!, $uid: ID!) {
+  member_delete(oid: $oid, uid: $uid)
+}

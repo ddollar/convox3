@@ -6,6 +6,7 @@ import (
 	"regexp"
 
 	"github.com/convox/console/api/model"
+	"github.com/convox/console/pkg/helpers"
 	"github.com/convox/console/pkg/queue"
 	"github.com/convox/console/pkg/settings"
 	"github.com/convox/console/pkg/token"
@@ -105,6 +106,39 @@ func (r *Root) Login(ctx context.Context, args LoginArgs) (*Authentication, erro
 	}
 
 	return a, nil
+}
+
+type MemberDeleteArgs struct {
+	Oid graphql.ID
+	Uid graphql.ID
+}
+
+func (r *Root) MemberDelete(ctx context.Context, args MemberDeleteArgs) (string, error) {
+	cuid, err := currentUid(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	o, err := authenticatedOrganization(ctx, r.model, string(args.Oid))
+	if err != nil {
+		return "", err
+	}
+
+	uid := string(args.Uid)
+
+	if uid == cuid && len(o.Administrators) == 1 && o.Administrators[0] == uid {
+		return "", fmt.Errorf("can not remove the last administrator")
+	}
+
+	o.Administrators = helpers.SliceRemove(o.Administrators, uid)
+	o.Operators = helpers.SliceRemove(o.Operators, uid)
+	o.Users = helpers.SliceRemove(o.Users, uid)
+
+	if err := r.model.OrganizationSave(o); err != nil {
+		return "", err
+	}
+
+	return uid, nil
 }
 
 type ProcessStopArgs struct {

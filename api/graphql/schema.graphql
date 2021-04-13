@@ -8,6 +8,7 @@ type Mutation {
   app_create(oid: ID!, rid: ID!, name: String!): App!
   instance_terminate(oid: ID!, rid: ID!, iid: ID!): String!
   login(email: String!, password: String!): Authentication!
+  member_delete(oid: ID!, uid: ID!): String!
   process_stop(oid: ID!, rid: ID!, app: String!, pid: ID!): String!
   rack_import(
     oid: ID!
